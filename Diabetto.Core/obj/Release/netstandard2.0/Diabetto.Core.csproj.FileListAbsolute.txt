@@ -1,0 +1,10 @@
+C:\projects\Diabetto\Diabetto.Core\bin\Release\netstandard2.0\Diabetto.Core.deps.json
+C:\projects\Diabetto\Diabetto.Core\bin\Release\netstandard2.0\Diabetto.Core.dll
+C:\projects\Diabetto\Diabetto.Core\bin\Release\netstandard2.0\Diabetto.Core.pdb
+C:\projects\Diabetto\Diabetto.Core\obj\Release\netstandard2.0\Diabetto.Core.Resources.Strings.resources
+C:\projects\Diabetto\Diabetto.Core\obj\Release\netstandard2.0\Diabetto.Core.csproj.GenerateResource.cache
+C:\projects\Diabetto\Diabetto.Core\obj\Release\netstandard2.0\Diabetto.Core.csproj.CoreCompileInputs.cache
+C:\projects\Diabetto\Diabetto.Core\obj\Release\netstandard2.0\Diabetto.Core.AssemblyInfoInputs.cache
+C:\projects\Diabetto\Diabetto.Core\obj\Release\netstandard2.0\Diabetto.Core.AssemblyInfo.cs
+C:\projects\Diabetto\Diabetto.Core\obj\Release\netstandard2.0\Diabetto.Core.dll
+C:\projects\Diabetto\Diabetto.Core\obj\Release\netstandard2.0\Diabetto.Core.pdb
