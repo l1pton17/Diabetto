@@ -1,5 +1,19 @@
-﻿using Diabetto.Core.Models;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
+using System.Reactive;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
+using Diabetto.Core.Models;
+using Diabetto.Core.MvxInteraction.ProductMeasures;
+using Diabetto.Core.Services;
 using Diabetto.Core.ViewModels.Core;
+using Diabetto.Core.ViewModels.ProductMeasureUnits;
+using DynamicData;
+using MvvmCross.Navigation;
+using MvvmCross.ViewModels;
+using ReactiveUI;
 
 namespace Diabetto.Core.ViewModels.ProductMeasures
 {
@@ -13,12 +27,216 @@ namespace Diabetto.Core.ViewModels.ProductMeasures
         }
     }
 
+    public sealed class ProductSearchItemViewModel : MvxReactiveViewModel
+    {
+        private bool _isNew;
+        public bool IsNew
+        {
+            get => _isNew;
+            set => SetProperty(ref _isNew, value);
+        }
+
+        private string _name;
+        public string Name
+        {
+            get => _name;
+            set => SetProperty(ref _name, value);
+        }
+
+        private int _id;
+        public int Id
+        {
+            get => _id;
+            set => SetProperty(ref _id, value);
+        }
+    }
+
     public sealed class AddProductMeasureViewModel : MvxReactiveViewModel<AddProductMeasureParameter, ProductMeasure>
     {
+        private readonly IProductService _productService;
+        private readonly IProductMeasureUnitService _productMeasureUnitService;
+        private readonly IMvxNavigationService _navigationService;
+
+        private int _measureId;
+        public int MeasureId
+        {
+            get => _measureId;
+            set => SetProperty(ref _measureId, value);
+        }
+
+        private string _searchQuery;
+        public string SearchQuery
+        {
+            get => _searchQuery;
+            set => SetProperty(ref _searchQuery, value);
+        }
+
+        private readonly MvxInteraction<AddNewProductMeasureInteraction> _addNewInteraction;
+        public IMvxInteraction<AddNewProductMeasureInteraction> AddNewInteraction => _addNewInteraction;
+
+        private readonly MvxInteraction<AddProductMeasureInteraction> _addInteraction;
+        public IMvxInteraction<AddProductMeasureInteraction> AddInteraction => _addInteraction;
+
+        public SourceList<ProductSearchItemViewModel> SearchResults { get; }
+
+        public ReactiveCommand<string, ImmutableArray<ProductSearchItemViewModel>> SearchCommand { get; }
+
+        public ReactiveCommand<ProductSearchItemViewModel, Unit> ProductSelectedCommand { get; }
+
+        public AddProductMeasureViewModel(
+            IMvxNavigationService navigationService,
+            IProductService productService,
+            IProductMeasureUnitService productMeasureUnitService
+        )
+        {
+            _productService = productService ?? throw new ArgumentNullException(nameof(productService));
+            _productMeasureUnitService = productMeasureUnitService ?? throw new ArgumentNullException(nameof(productMeasureUnitService));
+            _navigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
+            _addNewInteraction = new MvxInteraction<AddNewProductMeasureInteraction>();
+            _addInteraction = new MvxInteraction<AddProductMeasureInteraction>();
+
+            SearchResults = new SourceList<ProductSearchItemViewModel>();
+
+            SearchCommand = ReactiveCommand.CreateFromTask<string, ImmutableArray<ProductSearchItemViewModel>>(Search);
+
+            SearchCommand
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(
+                    items =>
+                    {
+                        SearchResults.Clear();
+                        SearchResults.AddRange(items);
+                    });
+
+            this.WhenAnyValue(v => v.SearchQuery)
+                .Throttle(TimeSpan.FromMilliseconds(100))
+                .DistinctUntilChanged()
+                .InvokeCommand(this, v => v.SearchCommand);
+
+            ProductSelectedCommand = ReactiveCommand.CreateFromTask<ProductSearchItemViewModel>(ProductSelected);
+        }
+
         /// <inheritdoc />
         public override void Prepare(AddProductMeasureParameter parameter)
         {
-            throw new System.NotImplementedException();
+            MeasureId = parameter.MeasureId;
+        }
+
+        private async Task ProductSelected(ProductSearchItemViewModel item)
+        {
+            if (item.IsNew)
+            {
+                var interaction = new AddNewProductMeasureInteraction
+                {
+                    ProductName = item.Name,
+                    Callback = AddNewInteractionCompleted
+                };
+
+                _addNewInteraction.Raise(interaction);
+            }
+            else
+            {
+                var units = await _productMeasureUnitService.GetByProductId(item.Id);
+
+                var unitViewModels = units
+                    .Select(
+                        u =>
+                        {
+                            var viewModel = new ProductMeasureUnitViewModel();
+                            viewModel.Prepare(u);
+
+                            return viewModel;
+                        })
+                    .ToList();
+
+                var interaction = new AddProductMeasureInteraction
+                {
+                    Units = unitViewModels,
+                    ProductId = item.Id,
+                    Callback = AddInteractionCompleted
+                };
+
+                _addInteraction.Raise(interaction);
+            }
+        }
+
+        private async Task AddInteractionCompleted(AddProductMeasureInteractionResult result)
+        {
+            if (result == null)
+            {
+                return;
+            }
+
+            var productMeasure = new ProductMeasure
+            {
+                Amount = result.Amount,
+                ProductMeasureUnitId = result.Unit.Id,
+                ProductMeasureUnit = result.Unit.Extract(),
+                MeasureId = MeasureId
+            };
+
+            await _navigationService.Close(this, productMeasure);
+        }
+
+        private async Task AddNewInteractionCompleted(AddNewProductMeasureInteractionResult result)
+        {
+            if (result == null)
+            {
+                return;
+            }
+
+            var product = new Product
+            {
+                Name = result.ProductName,
+                Units = new List<ProductMeasureUnit>
+                {
+                    new ProductMeasureUnit
+                    {
+                        Name = "gramms",
+                        ShortName = "g",
+                        Carbohydrates = result.Carbohydrates
+                    }
+                }
+            };
+
+            await _productService.AddAsync(product);
+
+            var unit = product.Units[0];
+
+            var productMeasure = new ProductMeasure
+            {
+                Amount = result.Amount,
+                ProductMeasureUnitId = unit.Id,
+                ProductMeasureUnit = unit,
+                MeasureId = MeasureId
+            };
+
+            await _navigationService.Close(this, productMeasure);
+        }
+
+        private async Task<ImmutableArray<ProductSearchItemViewModel>> Search(string query)
+        {
+            var items = await _productService.GetByNameAsync(query);
+
+            if (items.Count == 0)
+            {
+                return ImmutableArray.Create(
+                    new ProductSearchItemViewModel
+                    {
+                        Name = query,
+                        IsNew = true
+                    });
+            }
+
+            return items
+                .Select(
+                    v => new ProductSearchItemViewModel
+                    {
+                        Id = v.Id,
+                        Name = v.Name,
+                        IsNew = false
+                    })
+                .ToImmutableArray();
         }
     }
 }

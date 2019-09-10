@@ -16,7 +16,7 @@ namespace Diabetto.Core.Models
         [Column("product_id")]
         public int ProductId { get; set; }
 
-        [ManyToOne(CascadeOperations = CascadeOperation.All)]
+        [ManyToOne(CascadeOperations = CascadeOperation.CascadeRead)]
         public Product Product { get; set; }
 
         [Column("name")]

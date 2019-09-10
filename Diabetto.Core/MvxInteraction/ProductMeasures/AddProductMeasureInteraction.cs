@@ -1,24 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Diabetto.Core.ViewModels.ProductMeasureUnits;
 
 namespace Diabetto.Core.MvxInteraction.ProductMeasures
 {
-    public sealed class EditProductMeasureInteractionResult
+    public sealed class AddProductMeasureInteractionResult
     {
+        public int ProductId { get; set; }
+
         public ProductMeasureUnitViewModel Unit { get; set; }
 
         public int Amount { get; set; }
     }
 
-    public sealed class EditProductMeasureInteraction
+    public sealed class AddProductMeasureInteraction
     {
-        public Action<EditProductMeasureInteractionResult> Callback { get; set; }
+        public Func<AddProductMeasureInteractionResult, Task> Callback { get; set; }
 
         public List<ProductMeasureUnitViewModel> Units { get; set; }
 
-        public ProductMeasureUnitViewModel SelectedUnit { get; set; }
-
-        public int SelectedAmount { get; set; }
+        public int ProductId { get; set; }
     }
 }

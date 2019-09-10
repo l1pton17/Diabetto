@@ -6,6 +6,7 @@ using Diabetto.Core.Models;
 using Diabetto.Core.Services;
 using Diabetto.Core.ViewModelResults;
 using Diabetto.Core.ViewModels.Core;
+using DynamicData;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using ReactiveUI;
@@ -36,8 +37,8 @@ namespace Diabetto.Core.ViewModels.Measures
             set => SetProperty(ref _date, value);
         }
 
-        private ReactiveList<Measure> _measures;
-        public ReactiveList<Measure> Measures
+        private SourceList<Measure> _measures;
+        public SourceList<Measure> Measures
         {
             get => _measures;
             set => SetProperty(ref _measures, value);
@@ -60,7 +61,7 @@ namespace Diabetto.Core.ViewModels.Measures
             _navigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
             _measureService = measureService ?? throw new ArgumentNullException(nameof(measureService));
             _timeProvider = timeProvider ?? throw new ArgumentNullException(nameof(timeProvider));
-            Measures = new ReactiveList<Measure>();
+            Measures = new SourceList<Measure>();
             SelectedCommand = ReactiveCommand.CreateFromTask<Measure>(MeasureSelected);
             AddCommand = ReactiveCommand.CreateFromTask(Add);
             DeleteCommand = ReactiveCommand.CreateFromTask<Measure>(Delete);

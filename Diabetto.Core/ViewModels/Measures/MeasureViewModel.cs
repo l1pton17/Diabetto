@@ -12,10 +12,10 @@ using Diabetto.Core.ViewModelResults;
 using Diabetto.Core.ViewModels.Core;
 using Diabetto.Core.ViewModels.ProductMeasures;
 using Diabetto.Core.ViewModels.ProductMeasureUnits;
+using DynamicData;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using ReactiveUI;
-using ReactiveUI.Legacy;
 
 namespace Diabetto.Core.ViewModels.Measures
 {
@@ -91,9 +91,9 @@ namespace Diabetto.Core.ViewModels.Measures
             set => SetProperty(ref _breadUnits, value);
         }
 
-        public ReactiveList<ProductMeasureViewModel> ProductMeasures { get; }
+        public SourceList<ProductMeasureViewModel> ProductMeasures { get; }
 
-        public ReactiveCommand<Unit, ProductMeasureViewModel> AddProductMeasureCommand { get; }
+        public ReactiveCommand<Unit, Unit> AddProductMeasureCommand { get; }
 
         public ReactiveCommand<ProductMeasureViewModel, Unit> DeleteProductMeasureCommand { get; }
 
@@ -127,10 +127,7 @@ namespace Diabetto.Core.ViewModels.Measures
 
             Tags = new List<Tag>();
 
-            ProductMeasures = new ReactiveList<ProductMeasureViewModel>
-            {
-                ChangeTrackingEnabled = true
-            };
+            ProductMeasures = new SourceList<ProductMeasureViewModel>();
 
             SaveCommand = ReactiveCommand
                 .CreateFromTask(
@@ -145,10 +142,12 @@ namespace Diabetto.Core.ViewModels.Measures
                                 LongInsulin = LongInsulin,
                                 ShortInsulin = ShortInsulin,
                                 BreadUnits = BreadUnits,
-                                Products = ProductMeasures
+                                Products = ProductMeasures.Items
                                     .Select(v => v.Extract())
                                     .ToList()
                             })));
+
+            AddProductMeasureCommand = ReactiveCommand.CreateFromTask(AddProductMeasure);
 
             DeleteProductMeasureCommand = ReactiveCommand
                 .Create<ProductMeasureViewModel>(v => ProductMeasures.Remove(v));
@@ -167,6 +166,12 @@ namespace Diabetto.Core.ViewModels.Measures
             {
                 return;
             }
+
+            var itemViewModel = new ProductMeasureViewModel();
+
+            itemViewModel.Prepare(result);
+
+            ProductMeasures.Add(itemViewModel);
         }
 
         private async Task ProductMeasureSelected(ProductMeasureViewModel productMeasure)
@@ -194,13 +199,13 @@ namespace Diabetto.Core.ViewModels.Measures
                 SelectedAmount = selectedAmount,
                 Callback = r =>
                 {
-                    if (!r.HasValue)
+                    if (r == null)
                     {
                         return;
                     }
 
-                    productMeasure.Amount = r.Value.Amount;
-                    productMeasure.Unit.Prepare(r.Value.Unit.Extract());
+                    productMeasure.Amount = r.Amount;
+                    productMeasure.Unit.Prepare(r.Unit.Extract());
                 }
             };
 
@@ -220,17 +225,18 @@ namespace Diabetto.Core.ViewModels.Measures
 
             ProductMeasures.Clear();
 
-            ProductMeasures.AddRange(
-                parameter.Products
-                    .Select(
-                        v =>
-                        {
-                            var viewModel = new ProductMeasureViewModel();
+            ProductMeasures
+                .AddRange(
+                    parameter.Products
+                        .Select(
+                            v =>
+                            {
+                                var viewModel = new ProductMeasureViewModel();
 
-                            viewModel.Prepare(v);
+                                viewModel.Prepare(v);
 
-                            return viewModel;
-                        }));
+                                return viewModel;
+                            }));
         }
     }
 }

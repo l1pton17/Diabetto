@@ -23,7 +23,7 @@ namespace Diabetto.Core.Models
         [ForeignKey(typeof(ProductCategory))]
         public int? ProductCategoryId { get; set; }
 
-        [ManyToOne(CascadeOperations = CascadeOperation.All)]
+        [ManyToOne(CascadeOperations = CascadeOperation.CascadeRead)]
         public ProductCategory ProductCategory { get; set; }
 
         [OneToMany(CascadeOperations = CascadeOperation.All)]
