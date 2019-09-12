@@ -1,7 +1,7 @@
 ﻿using Cirrious.FluentLayouts.Touch;
 using Diabetto.Core.ViewModels.Measures;
 using Diabetto.iOS.Converters;
-using Diabetto.iOS.Sources;
+using Diabetto.iOS.Sources.Measures;
 using Foundation;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;

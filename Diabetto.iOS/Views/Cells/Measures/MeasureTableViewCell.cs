@@ -6,7 +6,7 @@ using Foundation;
 using MvvmCross.Binding.BindingContext;
 using UIKit;
 
-namespace Diabetto.iOS.Views.Cells
+namespace Diabetto.iOS.Views.Cells.Measures
 {
     public partial class MeasureTableViewCell : BaseTableViewCell
     {

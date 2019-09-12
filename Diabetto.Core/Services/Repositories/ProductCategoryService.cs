@@ -1,7 +1,7 @@
 ﻿using Diabetto.Core.Models;
 using SQLite;
 
-namespace Diabetto.Core.Services
+namespace Diabetto.Core.Services.Repositories
 {
     internal interface IProductCategoryService
     {

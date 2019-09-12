@@ -1,10 +1,11 @@
 ﻿using Diabetto.Core.Models;
 using Diabetto.iOS.ViewModels;
 using Diabetto.iOS.Views.Cells;
+using Diabetto.iOS.Views.Cells.Measures;
 using Foundation;
 using UIKit;
 
-namespace Diabetto.iOS.Sources
+namespace Diabetto.iOS.Sources.Measures
 {
     public sealed class MeasureTableViewSource : MvxDeleteTableViewSource<Measure>
     {
@@ -15,7 +16,7 @@ namespace Diabetto.iOS.Sources
             : base(tableView)
         {
             DeselectAutomatically = true;
-            tableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
+            tableView.SeparatorStyle = UITableViewCellSeparatorStyle.SingleLine;
 
             tableView.RegisterNibForCellReuse(
                 MeasureTableViewCell.Nib,

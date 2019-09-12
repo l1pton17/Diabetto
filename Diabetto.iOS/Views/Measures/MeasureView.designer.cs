@@ -15,6 +15,10 @@ namespace Diabetto.iOS.Views.Measures
     {
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIButton AddButton { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIStackView DatePickerRow { get; set; }
 
         [Outlet]
@@ -51,6 +55,10 @@ namespace Diabetto.iOS.Views.Measures
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UITableView ProductsTableView { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIButton SaveButton { get; set; }
 
         [Outlet]
@@ -67,6 +75,11 @@ namespace Diabetto.iOS.Views.Measures
 
         void ReleaseDesignerOutlets ()
         {
+            if (AddButton != null) {
+                AddButton.Dispose ();
+                AddButton = null;
+            }
+
             if (DatePickerRow != null) {
                 DatePickerRow.Dispose ();
                 DatePickerRow = null;
@@ -110,6 +123,11 @@ namespace Diabetto.iOS.Views.Measures
             if (LongInsulinValueLabel != null) {
                 LongInsulinValueLabel.Dispose ();
                 LongInsulinValueLabel = null;
+            }
+
+            if (ProductsTableView != null) {
+                ProductsTableView.Dispose ();
+                ProductsTableView = null;
             }
 
             if (SaveButton != null) {

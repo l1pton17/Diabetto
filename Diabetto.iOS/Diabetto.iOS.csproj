@@ -77,6 +77,7 @@
   <ItemGroup>
     <Compile Include="AppDelegate.cs" />
     <Compile Include="Combiners\InsulinMvxValueCombiner.cs" />
+    <Compile Include="Combiners\StringJoinCombiner.cs" />
     <Compile Include="Constants\NumberFormats.cs" />
     <Compile Include="Controls\Calendar\DTCalendarCell.cs" />
     <Compile Include="Controls\Calendar\DTCalendarMonthCollectionView.cs" />
@@ -97,7 +98,8 @@
     <Compile Include="LinkerPleaseInclude.cs" />
     <Compile Include="MvxBindings\NetworkIndicatorTargetBinding.cs" />
     <Compile Include="Setup.cs" />
-    <Compile Include="Sources\MeasureTableViewSource.cs" />
+    <Compile Include="Sources\Measures\MeasureTableViewSource.cs" />
+    <Compile Include="Sources\ProductMeasures\ProductMeasureTableViewSource.cs" />
     <Compile Include="UINoCursorTextField.cs" />
     <Compile Include="UINoCursorTextField.designer.cs">
       <DependentUpon>UINoCursorTextField.cs</DependentUpon>
@@ -108,9 +110,13 @@
     <Compile Include="Views\Calendars\MonthHeaderView.cs" />
     <Compile Include="Views\Calendars\MonthView.cs" />
     <Compile Include="Views\Cells\BaseTableViewCell.cs" />
-    <Compile Include="Views\Cells\MeasureTableViewCell.cs" />
-    <Compile Include="Views\Cells\MeasureTableViewCell.designer.cs">
+    <Compile Include="Views\Cells\Measures\MeasureTableViewCell.cs" />
+    <Compile Include="Views\Cells\Measures\MeasureTableViewCell.designer.cs">
       <DependentUpon>MeasureTableViewCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Cells\ProductMeasures\ProductMeasureTableViewCell.cs" />
+    <Compile Include="Views\Cells\ProductMeasures\ProductMeasureTableViewCell.designer.cs">
+      <DependentUpon>ProductMeasureTableViewCell.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\MainView.cs" />
     <Compile Include="Views\Measures\MeasuresView.cs" />
@@ -123,8 +129,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="Entitlements.plist" />
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
-    <InterfaceDefinition Include="Views\Cells\MeasureTableViewCell.xib" />
+    <InterfaceDefinition Include="Views\Cells\Measures\MeasureTableViewCell.xib" />
     <InterfaceDefinition Include="Views\Measures\MeasureView.storyboard" />
+    <InterfaceDefinition Include="Views\Cells\ProductMeasures\ProductMeasureTableViewCell.xib" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -189,7 +196,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
-    <Folder Include="Views\ProductMeasures\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Diabetto.Core\Diabetto.Core.csproj">

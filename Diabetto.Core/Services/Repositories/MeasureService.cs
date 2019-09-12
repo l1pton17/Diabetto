@@ -6,7 +6,7 @@ using Diabetto.Core.Models;
 using SQLite;
 using SQLiteNetExtensions.Extensions;
 
-namespace Diabetto.Core.Services
+namespace Diabetto.Core.Services.Repositories
 {
     public interface IMeasureService
     {

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Diabetto.Core.Models;
 using Diabetto.Core.MvxInteraction.ProductMeasures;
-using Diabetto.Core.Services;
+using Diabetto.Core.Services.Repositories;
 using Diabetto.Core.ViewModelResults;
 using Diabetto.Core.ViewModels.Core;
 using Diabetto.Core.ViewModels.ProductMeasures;
@@ -21,7 +21,7 @@ namespace Diabetto.Core.ViewModels.Measures
 {
     public class MeasureViewModel : MvxReactiveViewModel<Measure, EditResult<Measure>>
     {
-        private readonly IProductMeasureService _productMeasureService;
+        private readonly IProductMeasureViewModelFactory _productMeasureViewModelFactory;
         private readonly IProductMeasureUnitService _productMeasureUnitService;
         private readonly IMvxNavigationService _navigationService;
 
@@ -107,14 +107,13 @@ namespace Diabetto.Core.ViewModels.Measures
 
         public MeasureViewModel(
             IMvxNavigationService navigationService,
-            IProductMeasureService productMeasureService,
-            IProductMeasureUnitService productMeasureUnitService
+            IProductMeasureUnitService productMeasureUnitService,
+            IProductMeasureViewModelFactory productMeasureViewModelFactory
         )
         {
             _navigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
-            _productMeasureService = productMeasureService ?? throw new ArgumentNullException(nameof(productMeasureService));
             _productMeasureUnitService = productMeasureUnitService ?? throw new ArgumentNullException(nameof(productMeasureUnitService));
-
+            _productMeasureViewModelFactory = productMeasureViewModelFactory ?? throw new ArgumentNullException(nameof(productMeasureViewModelFactory));
             _editProductMeasureInteraction = new MvxInteraction<EditProductMeasureInteraction>();
 
             this.WhenAnyValue(v => v.Level)
@@ -167,7 +166,7 @@ namespace Diabetto.Core.ViewModels.Measures
                 return;
             }
 
-            var itemViewModel = new ProductMeasureViewModel();
+            var itemViewModel = _productMeasureViewModelFactory.Create();
 
             itemViewModel.Prepare(result);
 
@@ -231,7 +230,7 @@ namespace Diabetto.Core.ViewModels.Measures
                         .Select(
                             v =>
                             {
-                                var viewModel = new ProductMeasureViewModel();
+                                var viewModel = _productMeasureViewModelFactory.Create();
 
                                 viewModel.Prepare(v);
 

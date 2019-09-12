@@ -1,5 +1,6 @@
 ﻿using System;
 using Diabetto.Core.Services;
+using Diabetto.Core.Services.Repositories;
 using DynamicData;
 using MvvmCross.Navigation;
 

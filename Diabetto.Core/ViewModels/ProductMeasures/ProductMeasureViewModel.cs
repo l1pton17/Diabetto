@@ -1,7 +1,10 @@
-﻿using Diabetto.Core.Models;
+﻿using System.Reactive.Linq;
+using Diabetto.Core.Models;
+using Diabetto.Core.Services;
 using Diabetto.Core.ViewModelResults;
 using Diabetto.Core.ViewModels.Core;
 using Diabetto.Core.ViewModels.ProductMeasureUnits;
+using ReactiveUI;
 
 namespace Diabetto.Core.ViewModels.ProductMeasures
 {
@@ -35,11 +38,20 @@ namespace Diabetto.Core.ViewModels.ProductMeasures
             set => SetProperty(ref _productName, value);
         }
 
+        private readonly ObservableAsPropertyHelper<float> _breadUnits;
+        public float BreadUnits => _breadUnits.Value;
+
         public ProductMeasureUnitViewModel Unit { get; }
 
-        public ProductMeasureViewModel()
+        public ProductMeasureViewModel(IBreadUnitsCalculator breadUnitsCalculator)
         {
             Unit = new ProductMeasureUnitViewModel();
+
+            this.WhenAnyValue(v => v.Amount)
+                .CombineLatest(
+                    Unit.WhenAnyValue(v => v.Carbohydrates),
+                    (amount, carbs) => breadUnitsCalculator.Calculate(amount, carbs))
+                .ToProperty(this, v => v.BreadUnits, out _breadUnits);
         }
 
         /// <inheritdoc />

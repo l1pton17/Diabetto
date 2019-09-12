@@ -7,7 +7,7 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Diabetto.Core.Models;
 using Diabetto.Core.MvxInteraction.ProductMeasures;
-using Diabetto.Core.Services;
+using Diabetto.Core.Services.Repositories;
 using Diabetto.Core.ViewModels.Core;
 using Diabetto.Core.ViewModels.ProductMeasureUnits;
 using DynamicData;

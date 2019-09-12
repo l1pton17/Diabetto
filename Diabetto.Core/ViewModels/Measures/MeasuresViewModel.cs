@@ -4,6 +4,7 @@ using System.Reactive;
 using System.Threading.Tasks;
 using Diabetto.Core.Models;
 using Diabetto.Core.Services;
+using Diabetto.Core.Services.Repositories;
 using Diabetto.Core.ViewModelResults;
 using Diabetto.Core.ViewModels.Core;
 using DynamicData;

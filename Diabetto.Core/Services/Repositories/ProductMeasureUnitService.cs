@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Diabetto.Core.Models;
 using SQLite;
 
-namespace Diabetto.Core.Services
+namespace Diabetto.Core.Services.Repositories
 {
     public interface IProductMeasureUnitService
     {

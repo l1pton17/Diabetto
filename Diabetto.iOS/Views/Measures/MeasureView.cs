@@ -3,6 +3,7 @@ using System;
 using Diabetto.Core.ViewModels.Measures;
 using Diabetto.iOS.Converters;
 using Diabetto.iOS.Extensions;
+using Diabetto.iOS.Sources.ProductMeasures;
 using Foundation;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Platforms.Ios.Binding.Views;
@@ -24,6 +25,7 @@ namespace Diabetto.iOS.Views.Measures
 
         private bool _datePickerVisible;
         private bool _levelRowVisible;
+        private ProductMeasureTableViewSource _productsSource;
 
         public MeasureView(IntPtr handle) : base(handle)
         {
@@ -46,6 +48,8 @@ namespace Diabetto.iOS.Views.Measures
 
             this.HideKeyboardWhenTappedAround();
 
+            _productsSource = new ProductMeasureTableViewSource(ProductsTableView);
+            
             var set = this.CreateBindingSet<MeasureView, MeasureViewModel>();
 
             set.Bind(SaveButton)
@@ -93,6 +97,18 @@ namespace Diabetto.iOS.Views.Measures
             set.Bind(tagPickerViewModel)
                 .For(v => v.SelectedItem)
                 .To(v => v.Tag);
+
+            set.Bind(_productsSource)
+                .For(v => v.ItemsSource)
+                .To(v => v.ProductMeasures);
+
+            set.Bind(_productsSource)
+                .For(v => v.SelectionChangedCommand)
+                .To(v => v.ProductMeasureSelectedCommand);
+
+            set.Bind(_productsSource)
+                .For(v => v.DeleteItemCommand)
+                .To(v => v.DeleteProductMeasureCommand);
 
             set.Apply();
         }
