@@ -55,6 +55,9 @@ namespace Diabetto.iOS.Views.Measures
             set.Bind(SaveButton)
                 .To(v => v.SaveCommand);
 
+            set.Bind(AddProductMeasureButton)
+                .To(v => v.AddProductMeasureCommand);
+
             set.Bind(DateValuePicker)
                 .To(v => v.Date);
 

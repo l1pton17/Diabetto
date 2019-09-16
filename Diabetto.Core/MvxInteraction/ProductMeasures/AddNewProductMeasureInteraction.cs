@@ -7,7 +7,7 @@ namespace Diabetto.Core.MvxInteraction.ProductMeasures
     {
         public string ProductName { get; set; }
 
-        public int Carbohydrates { get; set; }
+        public float Carbohydrates { get; set; }
 
         public int Amount { get; set; }
     }

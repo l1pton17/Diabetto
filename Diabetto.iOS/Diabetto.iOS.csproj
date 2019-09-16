@@ -99,11 +99,13 @@
     <Compile Include="MvxBindings\NetworkIndicatorTargetBinding.cs" />
     <Compile Include="Setup.cs" />
     <Compile Include="Sources\Measures\MeasureTableViewSource.cs" />
+    <Compile Include="Sources\Products\ProductSearchResultsTableViewSource.cs" />
     <Compile Include="Sources\ProductMeasures\ProductMeasureTableViewSource.cs" />
     <Compile Include="UINoCursorTextField.cs" />
     <Compile Include="UINoCursorTextField.designer.cs">
       <DependentUpon>UINoCursorTextField.cs</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\Dialogs\AddProductMeasureUIPickerViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\PickerDialogViewModel.cs" />
     <Compile Include="ViewModels\MvxDeleteTableViewSource.cs" />
     <Compile Include="Views\Calendars\CalendarView.cs" />
@@ -118,11 +120,19 @@
     <Compile Include="Views\Cells\ProductMeasures\ProductMeasureTableViewCell.designer.cs">
       <DependentUpon>ProductMeasureTableViewCell.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\Cells\Products\ProductSearchResultTableViewCell.cs" />
+    <Compile Include="Views\Cells\Products\ProductSearchResultTableViewCell.designer.cs">
+      <DependentUpon>ProductSearchResultTableViewCell.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainView.cs" />
     <Compile Include="Views\Measures\MeasuresView.cs" />
     <Compile Include="Views\Measures\MeasureView.cs" />
     <Compile Include="Views\Measures\MeasureView.designer.cs">
       <DependentUpon>MeasureView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ProductMeasures\AddProductMeasureView.cs" />
+    <Compile Include="Views\ProductMeasures\AddProductMeasureView.designer.cs">
+      <DependentUpon>AddProductMeasureView.cs</DependentUpon>
     </Compile>
     <None Include="Info.plist" />
     <Compile Include="Main.cs" />
@@ -132,6 +142,7 @@
     <InterfaceDefinition Include="Views\Cells\Measures\MeasureTableViewCell.xib" />
     <InterfaceDefinition Include="Views\Measures\MeasureView.storyboard" />
     <InterfaceDefinition Include="Views\Cells\ProductMeasures\ProductMeasureTableViewCell.xib" />
+    <InterfaceDefinition Include="Views\Cells\Products\ProductSearchResultTableViewCell.xib" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

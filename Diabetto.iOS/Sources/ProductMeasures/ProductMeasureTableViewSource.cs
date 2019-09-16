@@ -8,8 +8,6 @@ namespace Diabetto.iOS.Sources.ProductMeasures
 {
     public sealed class ProductMeasureTableViewSource : MvxDeleteTableViewSource<ProductMeasureViewModel>
     {
-        private static readonly NSString ProductMeasureCellIdentifier = new NSString(nameof(ProductMeasureTableViewCell));
-
         /// <inheritdoc />
         public ProductMeasureTableViewSource(UITableView tableView)
             : base(tableView)
@@ -19,7 +17,7 @@ namespace Diabetto.iOS.Sources.ProductMeasures
 
             tableView.RegisterNibForCellReuse(
                 ProductMeasureTableViewCell.Nib,
-                ProductMeasureCellIdentifier);
+                ProductMeasureTableViewCell.Key);
         }
 
         /// <inheritdoc />
@@ -29,7 +27,7 @@ namespace Diabetto.iOS.Sources.ProductMeasures
             object item
         )
         {
-            return TableView.DequeueReusableCell(ProductMeasureCellIdentifier);
+            return TableView.DequeueReusableCell(ProductMeasureTableViewCell.Key);
         }
     }
 }

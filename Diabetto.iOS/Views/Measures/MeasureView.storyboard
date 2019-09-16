@@ -328,7 +328,7 @@
                         <outlet property="LevelRow" destination="2303" id="name-outlet-2303"/>
                         <outlet property="TagTextField" destination="6344" id="name-outlet-6344"/>
                         <outlet property="ProductsTableView" destination="8296" id="name-outlet-8296"/>
-                        <outlet property="AddButton" destination="8301" id="name-outlet-8301"/>
+                        <outlet property="AddProductMeasureButton" destination="8301" id="name-outlet-8301"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="251" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -15,7 +15,7 @@ namespace Diabetto.iOS.Views.Measures
     {
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UIButton AddButton { get; set; }
+        UIKit.UIButton AddProductMeasureButton { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
@@ -75,9 +75,9 @@ namespace Diabetto.iOS.Views.Measures
 
         void ReleaseDesignerOutlets ()
         {
-            if (AddButton != null) {
-                AddButton.Dispose ();
-                AddButton = null;
+            if (AddProductMeasureButton != null) {
+                AddProductMeasureButton.Dispose ();
+                AddProductMeasureButton = null;
             }
 
             if (DatePickerRow != null) {

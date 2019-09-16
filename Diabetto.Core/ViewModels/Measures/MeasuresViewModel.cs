@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Diabetto.Core.Models;
 using Diabetto.Core.Services;
@@ -8,10 +9,10 @@ using Diabetto.Core.Services.Repositories;
 using Diabetto.Core.ViewModelResults;
 using Diabetto.Core.ViewModels.Core;
 using DynamicData;
+using DynamicData.Binding;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using ReactiveUI;
-using ReactiveUI.Legacy;
 
 namespace Diabetto.Core.ViewModels.Measures
 {
@@ -38,12 +39,9 @@ namespace Diabetto.Core.ViewModels.Measures
             set => SetProperty(ref _date, value);
         }
 
-        private SourceList<Measure> _measures;
-        public SourceList<Measure> Measures
-        {
-            get => _measures;
-            set => SetProperty(ref _measures, value);
-        }
+        private readonly SourceList<Measure> _measuresSource;
+
+        public IObservableCollection<Measure> Measures { get; }
 
         public ReactiveCommand<Unit, Unit> AddCommand { get; }
 
@@ -62,7 +60,15 @@ namespace Diabetto.Core.ViewModels.Measures
             _navigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
             _measureService = measureService ?? throw new ArgumentNullException(nameof(measureService));
             _timeProvider = timeProvider ?? throw new ArgumentNullException(nameof(timeProvider));
-            Measures = new SourceList<Measure>();
+            _measuresSource = new SourceList<Measure>();
+            Measures = new ObservableCollectionExtended<Measure>();
+
+            _measuresSource
+                .Connect()
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Bind(Measures)
+                .Subscribe();
+
             SelectedCommand = ReactiveCommand.CreateFromTask<Measure>(MeasureSelected);
             AddCommand = ReactiveCommand.CreateFromTask(Add);
             DeleteCommand = ReactiveCommand.CreateFromTask<Measure>(Delete);
@@ -118,8 +124,8 @@ namespace Diabetto.Core.ViewModels.Measures
         {
             var result = await _measureService.GetAsync(Date);
 
-            Measures.Clear();
-            Measures.AddRange(result.OrderBy(v => v.Date));
+            _measuresSource.Clear();
+            _measuresSource.AddRange(result.OrderBy(v => v.Date));
         }
     }
 }

@@ -11,6 +11,7 @@ using Diabetto.Core.Services.Repositories;
 using Diabetto.Core.ViewModels.Core;
 using Diabetto.Core.ViewModels.ProductMeasureUnits;
 using DynamicData;
+using DynamicData.Binding;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using ReactiveUI;
@@ -77,7 +78,8 @@ namespace Diabetto.Core.ViewModels.ProductMeasures
         private readonly MvxInteraction<AddProductMeasureInteraction> _addInteraction;
         public IMvxInteraction<AddProductMeasureInteraction> AddInteraction => _addInteraction;
 
-        public SourceList<ProductSearchItemViewModel> SearchResults { get; }
+        private readonly SourceList<ProductSearchItemViewModel> _searchResults;
+        public IObservableCollection<ProductSearchItemViewModel> SearchResults { get; }
 
         public ReactiveCommand<string, ImmutableArray<ProductSearchItemViewModel>> SearchCommand { get; }
 
@@ -95,7 +97,14 @@ namespace Diabetto.Core.ViewModels.ProductMeasures
             _addNewInteraction = new MvxInteraction<AddNewProductMeasureInteraction>();
             _addInteraction = new MvxInteraction<AddProductMeasureInteraction>();
 
-            SearchResults = new SourceList<ProductSearchItemViewModel>();
+            _searchResults = new SourceList<ProductSearchItemViewModel>();
+            SearchResults = new ObservableCollectionExtended<ProductSearchItemViewModel>();
+
+            _searchResults
+                .Connect()
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Bind(SearchResults)
+                .Subscribe();
 
             SearchCommand = ReactiveCommand.CreateFromTask<string, ImmutableArray<ProductSearchItemViewModel>>(Search);
 
@@ -104,12 +113,12 @@ namespace Diabetto.Core.ViewModels.ProductMeasures
                 .Subscribe(
                     items =>
                     {
-                        SearchResults.Clear();
-                        SearchResults.AddRange(items);
+                        _searchResults.Clear();
+                        _searchResults.AddRange(items);
                     });
 
             this.WhenAnyValue(v => v.SearchQuery)
-                .Throttle(TimeSpan.FromMilliseconds(100))
+                .Throttle(TimeSpan.FromMilliseconds(300))
                 .DistinctUntilChanged()
                 .InvokeCommand(this, v => v.SearchCommand);
 
@@ -192,8 +201,8 @@ namespace Diabetto.Core.ViewModels.ProductMeasures
                 {
                     new ProductMeasureUnit
                     {
-                        Name = "gramms",
-                        ShortName = "g",
+                        Name = "grams",
+                        ShortName = "gr",
                         Carbohydrates = result.Carbohydrates
                     }
                 }
@@ -218,25 +227,29 @@ namespace Diabetto.Core.ViewModels.ProductMeasures
         {
             var items = await _productService.GetByNameAsync(query);
 
-            if (items.Count == 0)
-            {
-                return ImmutableArray.Create(
-                    new ProductSearchItemViewModel
-                    {
-                        Name = query,
-                        IsNew = true
-                    });
-            }
+            var hasExactMatch = items.Any(v => v.Name.Equals(query, StringComparison.OrdinalIgnoreCase));
 
-            return items
+            var searchItems = items
                 .Select(
                     v => new ProductSearchItemViewModel
                     {
                         Id = v.Id,
                         Name = v.Name,
                         IsNew = false
-                    })
-                .ToImmutableArray();
+                    });
+
+            if (!hasExactMatch)
+            {
+                searchItems = searchItems
+                    .Prepend(
+                        new ProductSearchItemViewModel
+                        {
+                            Name = query,
+                            IsNew = true
+                        });
+            }
+
+            return searchItems.ToImmutableArray();
         }
     }
 }

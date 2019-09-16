@@ -38,6 +38,8 @@ namespace Diabetto.iOS.Views.Measures
             _source = new MeasureTableViewSource(_tableView);
             _tableView.Source = _source;
 
+            NavigationItem.RightBarButtonItem = new UIBarButtonItem(UIBarButtonSystemItem.Add);
+
             View.AddSubview(_tableView);
             View.SubviewsDoNotTranslateAutoresizingMaskIntoConstraints();
 
