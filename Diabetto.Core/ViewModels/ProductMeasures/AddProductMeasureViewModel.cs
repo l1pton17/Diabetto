@@ -7,8 +7,10 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Diabetto.Core.Models;
 using Diabetto.Core.MvxInteraction.ProductMeasures;
+using Diabetto.Core.Services;
 using Diabetto.Core.Services.Repositories;
 using Diabetto.Core.ViewModels.Core;
+using Diabetto.Core.ViewModels.ProductMeasures.Dialogs;
 using Diabetto.Core.ViewModels.ProductMeasureUnits;
 using DynamicData;
 using DynamicData.Binding;
@@ -57,6 +59,7 @@ namespace Diabetto.Core.ViewModels.ProductMeasures
         private readonly IProductService _productService;
         private readonly IProductMeasureUnitService _productMeasureUnitService;
         private readonly IMvxNavigationService _navigationService;
+        private readonly IDialogService _dialogService;
 
         private int _measureId;
         public int MeasureId
@@ -88,11 +91,13 @@ namespace Diabetto.Core.ViewModels.ProductMeasures
         public AddProductMeasureViewModel(
             IMvxNavigationService navigationService,
             IProductService productService,
-            IProductMeasureUnitService productMeasureUnitService
+            IProductMeasureUnitService productMeasureUnitService,
+            IDialogService dialogService
         )
         {
             _productService = productService ?? throw new ArgumentNullException(nameof(productService));
             _productMeasureUnitService = productMeasureUnitService ?? throw new ArgumentNullException(nameof(productMeasureUnitService));
+            _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
             _navigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
             _addNewInteraction = new MvxInteraction<AddNewProductMeasureInteraction>();
             _addInteraction = new MvxInteraction<AddProductMeasureInteraction>();
@@ -135,6 +140,29 @@ namespace Diabetto.Core.ViewModels.ProductMeasures
         {
             if (item.IsNew)
             {
+                var source = new AddProductMeasurePickerViewModel();
+
+                var isOk = await _dialogService.Show(source);
+
+                if (!isOk)
+                {
+                    return;
+                }
+
+                var productMeasure = new ProductMeasure
+                {
+                    Amount = result.Amount,
+                    ProductMeasureUnitId = unit.Id,
+                    ProductMeasureUnit = unit,
+                    MeasureId = MeasureId
+                };
+
+
+                await _productService.AddAsync(product);
+
+                var unit = product.Units[0];
+                await _navigationService.Close(this, productMeasure);
+
                 var interaction = new AddNewProductMeasureInteraction
                 {
                     ProductName = item.Name,
