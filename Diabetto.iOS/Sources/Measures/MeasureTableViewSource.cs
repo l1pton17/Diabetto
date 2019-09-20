@@ -1,6 +1,5 @@
 ﻿using Diabetto.Core.Models;
 using Diabetto.iOS.ViewModels;
-using Diabetto.iOS.Views.Cells;
 using Diabetto.iOS.Views.Cells.Measures;
 using Foundation;
 using UIKit;

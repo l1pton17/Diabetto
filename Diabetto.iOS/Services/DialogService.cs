@@ -12,7 +12,7 @@ namespace Diabetto.iOS.Services
         {
             var tcs = new TaskCompletionSource<bool>();
             var dialog = new PickerDialog<PickerDialogViewModel>();
-            var pickerViewModel = new PickerDialogViewModel(source);
+            var pickerViewModel = new PickerDialogViewModel(dialog, source);
 
             dialog
                 .Show(

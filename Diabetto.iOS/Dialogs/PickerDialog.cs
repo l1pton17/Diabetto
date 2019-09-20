@@ -29,11 +29,16 @@ namespace Diabetto.iOS.Dialogs
         private String _doneButtonTitle;
 
         private bool _isDialogShown; // flag to show whether dialog is opened
-        private UIPickerView _pickerView;
 
         /* Vars */
         private String _title;
         private UILabel _titleLabel;
+        private UIPickerView _pickerView;
+
+        public void ReloadAllComponents()
+        {
+            _pickerView.ReloadAllComponents();
+        }
 
         public void Show(
             string title,

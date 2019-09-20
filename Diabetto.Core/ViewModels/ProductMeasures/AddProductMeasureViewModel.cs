@@ -6,16 +6,13 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Diabetto.Core.Models;
-using Diabetto.Core.MvxInteraction.ProductMeasures;
 using Diabetto.Core.Services;
 using Diabetto.Core.Services.Repositories;
 using Diabetto.Core.ViewModels.Core;
 using Diabetto.Core.ViewModels.ProductMeasures.Dialogs;
-using Diabetto.Core.ViewModels.ProductMeasureUnits;
 using DynamicData;
 using DynamicData.Binding;
 using MvvmCross.Navigation;
-using MvvmCross.ViewModels;
 using ReactiveUI;
 
 namespace Diabetto.Core.ViewModels.ProductMeasures
@@ -75,13 +72,6 @@ namespace Diabetto.Core.ViewModels.ProductMeasures
             set => SetProperty(ref _searchQuery, value);
         }
 
-        private readonly MvxInteraction<AddNewProductMeasureInteraction> _addNewInteraction;
-        public IMvxInteraction<AddNewProductMeasureInteraction> AddNewInteraction => _addNewInteraction;
-
-        private readonly MvxInteraction<AddProductMeasureInteraction> _addInteraction;
-        public IMvxInteraction<AddProductMeasureInteraction> AddInteraction => _addInteraction;
-
-        private readonly SourceList<ProductSearchItemViewModel> _searchResults;
         public IObservableCollection<ProductSearchItemViewModel> SearchResults { get; }
 
         public ReactiveCommand<string, ImmutableArray<ProductSearchItemViewModel>> SearchCommand { get; }
@@ -99,13 +89,11 @@ namespace Diabetto.Core.ViewModels.ProductMeasures
             _productMeasureUnitService = productMeasureUnitService ?? throw new ArgumentNullException(nameof(productMeasureUnitService));
             _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
             _navigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
-            _addNewInteraction = new MvxInteraction<AddNewProductMeasureInteraction>();
-            _addInteraction = new MvxInteraction<AddProductMeasureInteraction>();
 
-            _searchResults = new SourceList<ProductSearchItemViewModel>();
+            var searchResults = new SourceList<ProductSearchItemViewModel>();
             SearchResults = new ObservableCollectionExtended<ProductSearchItemViewModel>();
 
-            _searchResults
+            searchResults
                 .Connect()
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(SearchResults)
@@ -118,8 +106,8 @@ namespace Diabetto.Core.ViewModels.ProductMeasures
                 .Subscribe(
                     items =>
                     {
-                        _searchResults.Clear();
-                        _searchResults.AddRange(items);
+                        searchResults.Clear();
+                        searchResults.AddRange(items);
                     });
 
             this.WhenAnyValue(v => v.SearchQuery)
@@ -149,106 +137,58 @@ namespace Diabetto.Core.ViewModels.ProductMeasures
                     return;
                 }
 
+                var product = new Product
+                {
+                    Name = item.Name,
+                    Units = new List<ProductMeasureUnit>
+                    {
+                        new ProductMeasureUnit
+                        {
+                            IsGrams = true,
+                            Name = source.SelectedItem2,
+                            ShortName = source.SelectedItem2[0].ToString(),
+                            Carbohydrates = source.SelectedItem3
+                        }
+                    }
+                };
+
+                await _productService.AddAsync(product);
+
+                var unit = product.Units[0];
+
                 var productMeasure = new ProductMeasure
                 {
-                    Amount = result.Amount,
+                    Amount = source.SelectedItem1,
                     ProductMeasureUnitId = unit.Id,
                     ProductMeasureUnit = unit,
                     MeasureId = MeasureId
                 };
 
-
-                await _productService.AddAsync(product);
-
-                var unit = product.Units[0];
                 await _navigationService.Close(this, productMeasure);
-
-                var interaction = new AddNewProductMeasureInteraction
-                {
-                    ProductName = item.Name,
-                    Callback = AddNewInteractionCompleted
-                };
-
-                _addNewInteraction.Raise(interaction);
             }
             else
             {
                 var units = await _productMeasureUnitService.GetByProductId(item.Id);
 
-                var unitViewModels = units
-                    .Select(
-                        u =>
-                        {
-                            var viewModel = new ProductMeasureUnitViewModel();
-                            viewModel.Prepare(u);
+                var source = new SelectProductMeasureUnitPickerViewModel(units);
 
-                            return viewModel;
-                        })
-                    .ToList();
+                var isOk = await _dialogService.Show(source);
 
-                var interaction = new AddProductMeasureInteraction
+                if (!isOk)
                 {
-                    Units = unitViewModels,
-                    ProductId = item.Id,
-                    Callback = AddInteractionCompleted
+                    return;
+                }
+
+                var productMeasure = new ProductMeasure
+                {
+                    Amount = source.SelectedItem1,
+                    ProductMeasureUnitId = source.SelectedItem2.Id,
+                    ProductMeasureUnit = source.SelectedItem2,
+                    MeasureId = MeasureId
                 };
 
-                _addInteraction.Raise(interaction);
+                await _navigationService.Close(this, productMeasure);
             }
-        }
-
-        private async Task AddInteractionCompleted(AddProductMeasureInteractionResult result)
-        {
-            if (result == null)
-            {
-                return;
-            }
-
-            var productMeasure = new ProductMeasure
-            {
-                Amount = result.Amount,
-                ProductMeasureUnitId = result.Unit.Id,
-                ProductMeasureUnit = result.Unit.Extract(),
-                MeasureId = MeasureId
-            };
-
-            await _navigationService.Close(this, productMeasure);
-        }
-
-        private async Task AddNewInteractionCompleted(AddNewProductMeasureInteractionResult result)
-        {
-            if (result == null)
-            {
-                return;
-            }
-
-            var product = new Product
-            {
-                Name = result.ProductName,
-                Units = new List<ProductMeasureUnit>
-                {
-                    new ProductMeasureUnit
-                    {
-                        Name = "grams",
-                        ShortName = "gr",
-                        Carbohydrates = result.Carbohydrates
-                    }
-                }
-            };
-
-            await _productService.AddAsync(product);
-
-            var unit = product.Units[0];
-
-            var productMeasure = new ProductMeasure
-            {
-                Amount = result.Amount,
-                ProductMeasureUnitId = unit.Id,
-                ProductMeasureUnit = unit,
-                MeasureId = MeasureId
-            };
-
-            await _navigationService.Close(this, productMeasure);
         }
 
         private async Task<ImmutableArray<ProductSearchItemViewModel>> Search(string query)

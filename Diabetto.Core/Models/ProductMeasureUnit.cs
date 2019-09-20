@@ -28,6 +28,9 @@ namespace Diabetto.Core.Models
         [Column("carbohydrates")]
         public float Carbohydrates { get; set; }
 
+        [Column("is_grams")]
+        public bool IsGrams { get; set; }
+
         [Column("fats")]
         public float? Fats { get; set; }
 

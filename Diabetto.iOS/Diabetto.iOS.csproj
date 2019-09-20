@@ -97,6 +97,7 @@
     <Compile Include="Extensions\UIViewControllerExtensions.cs" />
     <Compile Include="LinkerPleaseInclude.cs" />
     <Compile Include="MvxBindings\NetworkIndicatorTargetBinding.cs" />
+    <Compile Include="Services\DialogService.cs" />
     <Compile Include="Setup.cs" />
     <Compile Include="Sources\Measures\MeasureTableViewSource.cs" />
     <Compile Include="Sources\Products\ProductSearchResultsTableViewSource.cs" />

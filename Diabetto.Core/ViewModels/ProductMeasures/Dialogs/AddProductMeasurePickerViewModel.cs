@@ -1,6 +1,6 @@
 ﻿using System.Linq;
+using Diabetto.Core.Common;
 using Diabetto.Core.ViewModels.Dialogs;
-using DynamicData;
 
 namespace Diabetto.Core.ViewModels.ProductMeasures.Dialogs
 {
@@ -10,15 +10,15 @@ namespace Diabetto.Core.ViewModels.ProductMeasures.Dialogs
         public AddProductMeasurePickerViewModel()
             : base("Add")
         {
-            Item1Source
+            Item1Values
                 .AddRange(
                     Enumerable
                         .Range(1, 1000)
                         .Select(v => v * 10));
 
-            Item2Source.Add("grams");
+            Item2Values.Add(ProductMeasureUnitConstants.DefaultUnitName);
 
-            Item3Source
+            Item3Values
                 .AddRange(
                     Enumerable
                         .Range(1, 1000)

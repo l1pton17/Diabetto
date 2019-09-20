@@ -1,5 +1,7 @@
 ﻿using System;
 using Diabetto.Core.ViewModels.Dialogs;
+using Diabetto.iOS.Dialogs;
+using MvvmCross.WeakSubscription;
 using UIKit;
 
 namespace Diabetto.iOS.ViewModels.Dialogs
@@ -7,12 +9,19 @@ namespace Diabetto.iOS.ViewModels.Dialogs
     public sealed class PickerDialogViewModel : UIPickerViewModel
     {
         private readonly IDialogPickerViewModel _source;
+        private readonly PickerDialog<PickerDialogViewModel> _dialog;
 
         /// <inheritdoc />
         public PickerDialogViewModel(
+            PickerDialog<PickerDialogViewModel> dialog,
             IDialogPickerViewModel source)
         {
             _source = source ?? throw new ArgumentNullException(nameof(source));
+            _dialog = dialog ?? throw new ArgumentNullException(nameof(dialog));
+
+            _source.WeakSubscribe(
+                nameof(IDialogPickerViewModel.ItemsChanged),
+                OnItemsChanged);
         }
 
         public override nint GetComponentCount(UIPickerView pickerView)
@@ -43,6 +52,11 @@ namespace Diabetto.iOS.ViewModels.Dialogs
         public override nfloat GetRowHeight(UIPickerView pickerView, nint component)
         {
             return 40f;
+        }
+
+        private void OnItemsChanged(object sender, EventArgs eventArgs)
+        {
+            _dialog.ReloadAllComponents();
         }
     }
 }
