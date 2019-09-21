@@ -49,7 +49,9 @@ namespace Diabetto.iOS.Views.Measures
             this.HideKeyboardWhenTappedAround();
 
             _productsSource = new ProductMeasureTableViewSource(ProductsTableView);
-            
+
+            ProductsTableView.Source = _productsSource;
+
             var set = this.CreateBindingSet<MeasureView, MeasureViewModel>();
 
             set.Bind(SaveButton)

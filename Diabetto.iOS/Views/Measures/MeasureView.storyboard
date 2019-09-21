@@ -272,13 +272,54 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <prototypes>
-                                                        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="8297">
-                                                            <rect key="frame" x="0.0" y="28" width="374" height="44"/>
+                                                        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="8297" customClass="ProductMeasureTableViewCell" rowHeight="60" reuseIdentifier="ProductMeasureTableViewCell">
+                                                            <rect key="frame" x="0.0" y="28" width="374" height="60"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="8297" id="8298">
-                                                                <rect key="frame" x="0.0" y="0.0" width="374" height="43.5"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="374" height="59.5"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
+                                                                <subviews>
+                                                                    <stackView opaque="NO" contentMode="scaleToFill" id="22251" translatesAutoresizingMaskIntoConstraints="NO" distribution="fillEqually">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="374" height="59.5"/>
+                                                                        <subviews>
+                                                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" id="22391" translatesAutoresizingMaskIntoConstraints="NO" distribution="fillEqually">
+                                                                                <rect key="frame" x="0.0" y="0.0" width="187" height="59.5"/>
+                                                                                <subviews>
+                                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="22702" translatesAutoresizingMaskIntoConstraints="NO">
+                                                                                        <rect key="frame" x="0.0" y="0.0" width="187" height="30"/>
+                                                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                                        <nil key="textColor"/>
+                                                                                        <nil key="highlightedColor"/>
+                                                                                    </label>
+                                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="22734" translatesAutoresizingMaskIntoConstraints="NO">
+                                                                                        <rect key="frame" x="0.0" y="30" width="187" height="29.5"/>
+                                                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                                        <nil key="textColor"/>
+                                                                                        <nil key="highlightedColor"/>
+                                                                                    </label>
+                                                                                </subviews>
+                                                                            </stackView>
+                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="22718" translatesAutoresizingMaskIntoConstraints="NO">
+                                                                                <rect key="frame" x="187" y="0.0" width="187" height="59.5"/>
+                                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                                <nil key="textColor"/>
+                                                                                <nil key="highlightedColor"/>
+                                                                            </label>
+                                                                        </subviews>
+                                                                    </stackView>
+                                                                </subviews>
+                                                                <constraints>
+                                                                    <constraint id="23120" firstAttribute="trailing" secondItem="22251" secondAttribute="trailing"/>
+                                                                    <constraint id="23129" firstItem="22251" firstAttribute="leading" secondItem="8298" secondAttribute="leading"/>
+                                                                    <constraint id="23130" firstItem="22251" firstAttribute="top" secondItem="8298" secondAttribute="top"/>
+                                                                    <constraint id="23131" firstAttribute="bottom" secondItem="22251" secondAttribute="bottom"/>
+                                                                </constraints>
                                                             </tableViewCellContentView>
+                                                            <connections>
+                                                                <outlet property="ProductNameLabel" destination="22702" id="name-outlet-22702"/>
+                                                                <outlet property="AmountLabel" destination="22734" id="name-outlet-22734"/>
+                                                                <outlet property="ProductBreadUnitLabel" destination="22718" id="name-outlet-22718"/>
+                                                            </connections>
                                                         </tableViewCell>
                                                     </prototypes>
                                                 </tableView>

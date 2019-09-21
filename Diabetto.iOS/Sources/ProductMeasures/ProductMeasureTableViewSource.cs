@@ -14,10 +14,6 @@ namespace Diabetto.iOS.Sources.ProductMeasures
         {
             DeselectAutomatically = true;
             tableView.SeparatorStyle = UITableViewCellSeparatorStyle.SingleLine;
-
-            tableView.RegisterNibForCellReuse(
-                ProductMeasureTableViewCell.Nib,
-                ProductMeasureTableViewCell.Key);
         }
 
         /// <inheritdoc />

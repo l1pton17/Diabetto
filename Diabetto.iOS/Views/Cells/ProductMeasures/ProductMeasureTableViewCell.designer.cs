@@ -19,7 +19,7 @@ namespace Diabetto.iOS.Views.Cells.ProductMeasures
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UILabel ProductBreadUnitsLabel { get; set; }
+        UIKit.UILabel ProductBreadUnitLabel { get; set; }
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
@@ -32,9 +32,9 @@ namespace Diabetto.iOS.Views.Cells.ProductMeasures
                 AmountLabel = null;
             }
 
-            if (ProductBreadUnitsLabel != null) {
-                ProductBreadUnitsLabel.Dispose ();
-                ProductBreadUnitsLabel = null;
+            if (ProductBreadUnitLabel != null) {
+                ProductBreadUnitLabel.Dispose ();
+                ProductBreadUnitLabel = null;
             }
 
             if (ProductNameLabel != null) {

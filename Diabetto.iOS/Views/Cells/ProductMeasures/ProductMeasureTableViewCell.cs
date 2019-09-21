@@ -10,12 +10,6 @@ namespace Diabetto.iOS.Views.Cells.ProductMeasures
     public partial class ProductMeasureTableViewCell : BaseTableViewCell
     {
         public static readonly NSString Key = new NSString(nameof(ProductMeasureTableViewCell));
-        public static readonly UINib Nib;
-
-        static ProductMeasureTableViewCell()
-        {
-            Nib = UINib.FromName(Key, NSBundle.MainBundle);
-        }
 
         protected ProductMeasureTableViewCell(IntPtr handle) : base(handle)
         {
@@ -35,7 +29,7 @@ namespace Diabetto.iOS.Views.Cells.ProductMeasures
                             v => v.Amount,
                             v => v.Unit.ShortName);
 
-                    set.Bind(ProductBreadUnitsLabel)
+                    set.Bind(ProductBreadUnitLabel)
                         .For(v => v.Text)
                         .To(v => v.BreadUnits);
 

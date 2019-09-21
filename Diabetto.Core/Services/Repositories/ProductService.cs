@@ -9,6 +9,8 @@ namespace Diabetto.Core.Services.Repositories
 {
     public interface IProductService
     {
+        Task<Product> GetAsync(int id);
+
         Task<List<Product>> GetByNameAsync(string name);
 
         Task AddAsync(Product value);
@@ -22,6 +24,17 @@ namespace Diabetto.Core.Services.Repositories
             : base(connectionStringHolder.DatabaseFilePath)
         {
             CreateTable<Product>();
+        }
+
+        /// <inheritdoc />
+        public Task<Product> GetAsync(int id)
+        {
+            lock (_lockObject)
+            {
+                var result = this.GetWithChildren<Product>(id);
+
+                return Task.FromResult(result);
+            }
         }
 
         /// <inheritdoc />

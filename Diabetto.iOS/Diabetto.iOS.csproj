@@ -142,7 +142,6 @@
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
     <InterfaceDefinition Include="Views\Cells\Measures\MeasureTableViewCell.xib" />
     <InterfaceDefinition Include="Views\Measures\MeasureView.storyboard" />
-    <InterfaceDefinition Include="Views\Cells\ProductMeasures\ProductMeasureTableViewCell.xib" />
     <InterfaceDefinition Include="Views\Cells\Products\ProductSearchResultTableViewCell.xib" />
   </ItemGroup>
   <ItemGroup>

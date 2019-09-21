@@ -12,11 +12,11 @@ using Diabetto.Core.ViewModelResults;
 using Diabetto.Core.ViewModels.Core;
 using Diabetto.Core.ViewModels.ProductMeasures;
 using Diabetto.Core.ViewModels.ProductMeasureUnits;
-using DynamicData;
-using DynamicData.Binding;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using ReactiveUI;
+using ReactiveUI.Legacy;
+#pragma warning disable 618
 
 namespace Diabetto.Core.ViewModels.Measures
 {
@@ -92,8 +92,7 @@ namespace Diabetto.Core.ViewModels.Measures
             set => SetProperty(ref _breadUnits, value);
         }
 
-        private readonly SourceList<ProductMeasureViewModel> _productMeasuresSource;
-        public IObservableCollection<ProductMeasureViewModel> ProductMeasures { get; }
+        public ReactiveList<ProductMeasureViewModel> ProductMeasures { get; }
 
         public ReactiveCommand<Unit, Unit> AddProductMeasureCommand { get; }
 
@@ -128,14 +127,7 @@ namespace Diabetto.Core.ViewModels.Measures
 
             Tags = new List<Tag>();
 
-            _productMeasuresSource = new SourceList<ProductMeasureViewModel>();
-            ProductMeasures = new ObservableCollectionExtended<ProductMeasureViewModel>();
-
-            _productMeasuresSource
-                .Connect()
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .Bind(ProductMeasures)
-                .Subscribe();
+            ProductMeasures = new ReactiveList<ProductMeasureViewModel>();
 
             SaveCommand = ReactiveCommand
                 .CreateFromTask(
@@ -158,7 +150,7 @@ namespace Diabetto.Core.ViewModels.Measures
             AddProductMeasureCommand = ReactiveCommand.CreateFromTask(AddProductMeasure);
 
             DeleteProductMeasureCommand = ReactiveCommand
-                .Create<ProductMeasureViewModel>(v => _productMeasuresSource.Remove(v));
+                .Create<ProductMeasureViewModel>(v => ProductMeasures.Remove(v));
 
             ProductMeasureSelectedCommand = ReactiveCommand
                 .CreateFromTask<ProductMeasureViewModel>(ProductMeasureSelected);
@@ -178,7 +170,7 @@ namespace Diabetto.Core.ViewModels.Measures
 
             itemViewModel.Prepare(result);
 
-            _productMeasuresSource.Add(itemViewModel);
+            ProductMeasures.Add(itemViewModel);
         }
 
         private async Task ProductMeasureSelected(ProductMeasureViewModel productMeasure)
@@ -230,9 +222,9 @@ namespace Diabetto.Core.ViewModels.Measures
             LongInsulin = parameter.LongInsulin;
             ShortInsulin = parameter.ShortInsulin;
 
-            _productMeasuresSource.Clear();
+            ProductMeasures.Clear();
 
-            _productMeasuresSource
+            ProductMeasures
                 .AddRange(
                     parameter.Products
                         .Select(

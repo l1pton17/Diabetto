@@ -1,9 +1,12 @@
-﻿using System.Reactive.Linq;
+﻿using System;
+using System.Reactive.Linq;
 using Diabetto.Core.Models;
 using Diabetto.Core.Services;
+using Diabetto.Core.Services.Repositories;
 using Diabetto.Core.ViewModelResults;
 using Diabetto.Core.ViewModels.Core;
 using Diabetto.Core.ViewModels.ProductMeasureUnits;
+using MvvmCross.Logging;
 using ReactiveUI;
 
 namespace Diabetto.Core.ViewModels.ProductMeasures
@@ -31,21 +34,49 @@ namespace Diabetto.Core.ViewModels.ProductMeasures
             set => SetProperty(ref _amount, value);
         }
 
-        private string _productName;
-        public string ProductName
-        {
-            get => _productName;
-            set => SetProperty(ref _productName, value);
-        }
+        private readonly ObservableAsPropertyHelper<string> _productName;
+        public string ProductName => _productName.Value;
 
         private readonly ObservableAsPropertyHelper<float> _breadUnits;
         public float BreadUnits => _breadUnits.Value;
 
         public ProductMeasureUnitViewModel Unit { get; }
 
-        public ProductMeasureViewModel(IBreadUnitsCalculator breadUnitsCalculator)
+        public ReactiveCommand<int, string> LoadProductNameCommand { get; }
+
+        public ProductMeasureViewModel(
+            IMvxLogProvider logProvider,
+            IProductService productService,
+            IBreadUnitsCalculator breadUnitsCalculator)
         {
+            var logger = logProvider.GetLogFor<ProductMeasureViewModel>();
+
             Unit = new ProductMeasureUnitViewModel();
+
+            LoadProductNameCommand = ReactiveCommand.CreateFromTask<int, string>(
+                async id =>
+                {
+                    try
+                    {
+                        var product = await productService.GetAsync(id);
+
+                        return product.Name;
+                    }
+                    catch (Exception e)
+                    {
+                        logger.ErrorException("While loading product name", e);
+
+                        return null;
+                    }
+                });
+
+            Unit.WhenAnyValue(v => v.ProductId)
+                .Where(v => v > 0)
+                .InvokeCommand(this, v => v.LoadProductNameCommand);
+
+            LoadProductNameCommand
+                .Where(v => v != null)
+                .ToProperty(this, v => v.ProductName, out _productName);
 
             this.WhenAnyValue(v => v.Amount)
                 .CombineLatest(
@@ -61,7 +92,6 @@ namespace Diabetto.Core.ViewModels.ProductMeasures
             Amount = parameter.Amount;
             MeasureId = parameter.MeasureId;
             Unit.Prepare(parameter.ProductMeasureUnit);
-            ProductName = parameter.ProductMeasureUnit.Product.Name;
         }
 
         public ProductMeasure Extract()
