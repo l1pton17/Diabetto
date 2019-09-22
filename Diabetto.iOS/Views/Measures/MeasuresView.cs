@@ -73,7 +73,8 @@ namespace Diabetto.iOS.Views.Measures
                 .For(v => v.SelectionChangedCommand)
                 .To(vm => vm.SelectedCommand);
 
-            bindingSet.Bind(_source)
+            bindingSet
+                .Bind(_source)
                 .For(v => v.DeleteItemCommand)
                 .To(vm => vm.DeleteCommand);
 
@@ -86,7 +87,7 @@ namespace Diabetto.iOS.Views.Measures
                         new NSDateFormatter
                         {
                             TimeStyle = NSDateFormatterStyle.None,
-                            DateFormat = "MMMM yyyy"
+                            DateFormat = "dd MMMM yyyy"
                         }));
 
             bindingSet.Apply();

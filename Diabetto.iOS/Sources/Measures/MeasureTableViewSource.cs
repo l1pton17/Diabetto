@@ -1,12 +1,11 @@
-﻿using Diabetto.Core.Models;
-using Diabetto.iOS.ViewModels;
+﻿using Diabetto.Core.ViewModels.Measures;
 using Diabetto.iOS.Views.Cells.Measures;
 using Foundation;
 using UIKit;
 
 namespace Diabetto.iOS.Sources.Measures
 {
-    public sealed class MeasureTableViewSource : MvxDeleteTableViewSource<Measure>
+    public sealed class MeasureTableViewSource : MvxDeleteTableViewSource<MeasureCellViewModel>
     {
         private static readonly NSString MeasureCellIdentifier = new NSString("MeasureCell");
 
