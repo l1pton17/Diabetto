@@ -181,7 +181,7 @@ namespace Diabetto.Core.ViewModels.Dialogs
         public DialogPickerOption<TItem2> SelectedItem2
         {
             get => _selectedItem2;
-            protected set => this.RaiseAndSetIfChanged(ref _selectedItem2, value);
+            set => this.RaiseAndSetIfChanged(ref _selectedItem2, value);
         }
 
         /// <inheritdoc />
@@ -278,7 +278,7 @@ namespace Diabetto.Core.ViewModels.Dialogs
         public DialogPickerOption<TItem3> SelectedItem3
         {
             get => _selectedItem3;
-            protected set => this.RaiseAndSetIfChanged(ref _selectedItem3, value);
+            set => this.RaiseAndSetIfChanged(ref _selectedItem3, value);
         }
 
         protected DialogPickerViewModel(string title)
