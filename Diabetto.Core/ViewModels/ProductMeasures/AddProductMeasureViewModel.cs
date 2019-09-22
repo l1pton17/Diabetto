@@ -54,7 +54,6 @@ namespace Diabetto.Core.ViewModels.ProductMeasures
     public sealed class AddProductMeasureViewModel : MvxReactiveViewModel<AddProductMeasureParameter, ProductMeasure>
     {
         private readonly IProductService _productService;
-        private readonly IProductMeasureUnitService _productMeasureUnitService;
         private readonly IMvxNavigationService _navigationService;
         private readonly IDialogService _dialogService;
 
@@ -81,12 +80,10 @@ namespace Diabetto.Core.ViewModels.ProductMeasures
         public AddProductMeasureViewModel(
             IMvxNavigationService navigationService,
             IProductService productService,
-            IProductMeasureUnitService productMeasureUnitService,
             IDialogService dialogService
         )
         {
             _productService = productService ?? throw new ArgumentNullException(nameof(productService));
-            _productMeasureUnitService = productMeasureUnitService ?? throw new ArgumentNullException(nameof(productMeasureUnitService));
             _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
             _navigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
 
@@ -173,9 +170,8 @@ namespace Diabetto.Core.ViewModels.ProductMeasures
             }
             else
             {
-                var units = await _productMeasureUnitService.GetByProductId(item.Id);
-
-                var source = new SelectProductMeasureUnitPickerViewModel(units);
+                var product = await _productService.GetAsync(item.Id);
+                var source = new SelectProductMeasureUnitPickerViewModel(product.Units);
 
                 var isOk = await _dialogService.ShowPicker(source);
 

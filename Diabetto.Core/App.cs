@@ -2,6 +2,7 @@
 using Diabetto.Core.Services;
 using Diabetto.Core.Services.Repositories;
 using Diabetto.Core.ViewModels.Calendars;
+using Diabetto.Core.ViewModels.Measures;
 using Diabetto.Core.ViewModels.ProductMeasures;
 using MvvmCross;
 using MvvmCross.IoC;
@@ -29,11 +30,10 @@ namespace Diabetto.Core
 
             Mvx.IoCProvider.LazyConstructAndRegisterSingleton<IMonthViewModelFactory, MonthViewModelFactory>();
             Mvx.IoCProvider.LazyConstructAndRegisterSingleton<IProductMeasureViewModelFactory, ProductMeasureViewModelFactory>();
+            Mvx.IoCProvider.LazyConstructAndRegisterSingleton<IMeasureCellViewModelFactory, MeasureCellViewModelFactory>();
 
             Mvx.IoCProvider.ConstructAndRegisterSingleton<IMeasureService, MeasureService>();
             Mvx.IoCProvider.ConstructAndRegisterSingleton<IProductCategoryService, ProductCategoryService>();
-            Mvx.IoCProvider.ConstructAndRegisterSingleton<IProductMeasureService, ProductMeasureService>();
-            Mvx.IoCProvider.ConstructAndRegisterSingleton<IProductMeasureUnitService, ProductMeasureUnitService>();
             Mvx.IoCProvider.ConstructAndRegisterSingleton<IProductService, ProductService>();
             Mvx.IoCProvider.ConstructAndRegisterSingleton<ITagService, TagService>();
 

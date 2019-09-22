@@ -30,6 +30,7 @@ namespace Diabetto.Core.ViewModels.Measures
         private readonly IMeasureService _measureService;
         private readonly IMvxNavigationService _navigationService;
         private readonly ITimeProvider _timeProvider;
+        private readonly IMeasureCellViewModelFactory _cellViewModelFactory;
 
         private DateTime _date;
         public DateTime Date
@@ -38,13 +39,13 @@ namespace Diabetto.Core.ViewModels.Measures
             set => SetProperty(ref _date, value);
         }
 
-        public ReactiveList<Measure> Measures { get; }
+        public ReactiveList<MeasureCellViewModel> Measures { get; }
 
         public ReactiveCommand<Unit, Unit> AddCommand { get; }
 
-        public ReactiveCommand<Measure, Unit> SelectedCommand { get; }
+        public ReactiveCommand<MeasureCellViewModel, Unit> SelectedCommand { get; }
 
-        public ReactiveCommand<Measure, Unit> DeleteCommand { get; }
+        public ReactiveCommand<MeasureCellViewModel, Unit> DeleteCommand { get; }
 
         private MvxNotifyTask _loadTask;
         public MvxNotifyTask LoadTask
@@ -56,18 +57,19 @@ namespace Diabetto.Core.ViewModels.Measures
         public MeasuresViewModel(
             IMvxNavigationService navigationService,
             IMeasureService measureService,
-            ITimeProvider timeProvider
+            ITimeProvider timeProvider,
+            IMeasureCellViewModelFactory cellViewModelFactory
         )
         {
             _navigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
             _measureService = measureService ?? throw new ArgumentNullException(nameof(measureService));
             _timeProvider = timeProvider ?? throw new ArgumentNullException(nameof(timeProvider));
+            _cellViewModelFactory = cellViewModelFactory ?? throw new ArgumentNullException(nameof(cellViewModelFactory));
+            Measures = new ReactiveList<MeasureCellViewModel>();
 
-            Measures = new ReactiveList<Measure>();
-
-            SelectedCommand = ReactiveCommand.CreateFromTask<Measure>(MeasureSelected);
+            SelectedCommand = ReactiveCommand.CreateFromTask<MeasureCellViewModel>(MeasureSelected);
             AddCommand = ReactiveCommand.CreateFromTask(Add);
-            DeleteCommand = ReactiveCommand.CreateFromTask<Measure>(Delete);
+            DeleteCommand = ReactiveCommand.CreateFromTask<MeasureCellViewModel>(Delete);
         }
 
         /// <inheritdoc />
@@ -83,7 +85,7 @@ namespace Diabetto.Core.ViewModels.Measures
             return Task.CompletedTask;
         }
 
-        private async Task Delete(Measure measure)
+        private async Task Delete(MeasureCellViewModel measure)
         {
             await _measureService.DeleteAsync(measure.Id);
             LoadTask = MvxNotifyTask.Create(LoadMeasures);
@@ -105,7 +107,7 @@ namespace Diabetto.Core.ViewModels.Measures
             }
         }
 
-        private async Task MeasureSelected(Measure selectedMeasure)
+        private async Task MeasureSelected(MeasureCellViewModel selectedMeasure)
         {
             var measure = await _measureService.GetAsync(selectedMeasure.Id);
             var result = await _navigationService.Navigate<MeasureViewModel, Measure, EditResult<Measure>>(measure);
@@ -122,7 +124,12 @@ namespace Diabetto.Core.ViewModels.Measures
             var result = await _measureService.GetAsync(Date);
 
             Measures.Clear();
-            Measures.AddRange(result.OrderBy(v => v.Date));
+
+            Measures
+                .AddRange(
+                    result
+                        .OrderBy(v => v.Date)
+                        .Select(v => _cellViewModelFactory.Create(v)));
         }
     }
 }

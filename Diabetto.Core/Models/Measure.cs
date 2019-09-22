@@ -17,9 +17,6 @@ namespace Diabetto.Core.Models
         [Indexed]
         public DateTime Date { get; set; }
 
-        [Column("bread_units")]
-        public float BreadUnits { get; set; }
-
         [ForeignKey(typeof(Tag))]
         [Column("tag_id")]
         public int? TagId { get; set; }

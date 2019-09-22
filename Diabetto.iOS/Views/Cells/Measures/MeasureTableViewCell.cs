@@ -1,5 +1,5 @@
 ﻿using System;
-using Diabetto.Core.Models;
+using Diabetto.Core.ViewModels.Measures;
 using Diabetto.iOS.Combiners;
 using Diabetto.iOS.Converters;
 using Foundation;
@@ -34,7 +34,7 @@ namespace Diabetto.iOS.Views.Cells.Measures
             this.DelayBind(
                 () =>
                 {
-                    var set = this.CreateBindingSet<MeasureTableViewCell, Measure>();
+                    var set = this.CreateBindingSet<MeasureTableViewCell, MeasureCellViewModel>();
 
                     set.Bind(TimeLabel)
                         .For(v => v.Text)

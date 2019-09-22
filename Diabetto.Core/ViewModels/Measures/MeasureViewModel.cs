@@ -21,7 +21,7 @@ namespace Diabetto.Core.ViewModels.Measures
     public class MeasureViewModel : MvxReactiveViewModel<Measure, EditResult<Measure>>
     {
         private readonly IProductMeasureViewModelFactory _productMeasureViewModelFactory;
-        private readonly IProductMeasureUnitService _productMeasureUnitService;
+        private readonly IProductService _productService;
         private readonly IMvxNavigationService _navigationService;
         private readonly IDialogService _dialogService;
         private readonly ITagService _tagService;
@@ -78,13 +78,6 @@ namespace Diabetto.Core.ViewModels.Measures
             set => SetProperty(ref _shortInsulin, value);
         }
 
-        private float _breadUnits;
-        public float BreadUnits
-        {
-            get => _breadUnits;
-            set => SetProperty(ref _breadUnits, value);
-        }
-
         private readonly ObservableAsPropertyHelper<int> _productCount;
         public int ProductCount => _productCount.Value;
 
@@ -105,17 +98,17 @@ namespace Diabetto.Core.ViewModels.Measures
 
         public MeasureViewModel(
             IMvxNavigationService navigationService,
-            IProductMeasureUnitService productMeasureUnitService,
             IProductMeasureViewModelFactory productMeasureViewModelFactory,
             IDialogService dialogService,
-            ITagService tagService
+            ITagService tagService,
+            IProductService productService
         )
         {
             _navigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
-            _productMeasureUnitService = productMeasureUnitService ?? throw new ArgumentNullException(nameof(productMeasureUnitService));
             _productMeasureViewModelFactory = productMeasureViewModelFactory ?? throw new ArgumentNullException(nameof(productMeasureViewModelFactory));
             _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
             _tagService = tagService ?? throw new ArgumentNullException(nameof(tagService));
+            _productService = productService ?? throw new ArgumentNullException(nameof(productService));
 
             this.WhenAnyValue(v => v.Level)
                 .Where(v => v > 0)
@@ -167,7 +160,6 @@ namespace Diabetto.Core.ViewModels.Measures
                                 TagId = Tag?.Id,
                                 LongInsulin = LongInsulin,
                                 ShortInsulin = ShortInsulin,
-                                BreadUnits = BreadUnits,
                                 Products = ProductMeasures
                                     .Select(v => v.Extract())
                                     .ToList()
@@ -219,8 +211,8 @@ namespace Diabetto.Core.ViewModels.Measures
 
         private async Task ProductMeasureSelected(ProductMeasureViewModel productMeasure)
         {
-            var units = await _productMeasureUnitService.GetByProductId(productMeasure.Unit.ProductId);
-            var source = new SelectProductMeasureUnitPickerViewModel(units);
+            var product = await _productService.GetAsync(productMeasure.Unit.ProductId);
+            var source = new SelectProductMeasureUnitPickerViewModel(product.Units);
 
             source.SelectedItem2 = source.Item2Values.First(v => v.Item.Id == productMeasure.Unit.Id);
             source.SelectedItem1 = source.Item1Values.First(v => v.Item == productMeasure.Amount);
@@ -243,7 +235,6 @@ namespace Diabetto.Core.ViewModels.Measures
             Date = parameter.Date;
             Level = parameter.Level ?? 0;
             HasLevel = true;
-            BreadUnits = parameter.BreadUnits;
             LongInsulin = parameter.LongInsulin;
             ShortInsulin = parameter.ShortInsulin;
             Tag = parameter.Tag;

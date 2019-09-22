@@ -31,6 +31,7 @@ namespace Diabetto.Core.Services.Repositories
             : base(connectionStringHolder.DatabaseFilePath)
         {
             CreateTable<Measure>();
+            CreateTable<ProductMeasure>();
         }
 
         /// <inheritdoc />
@@ -100,7 +101,7 @@ namespace Diabetto.Core.Services.Repositories
                 var endDate = beginDate.AddDays(1);
 
                 var values = this
-                    .GetAllWithChildren<Measure>(v => v.Date >= beginDate && v.Date <= endDate, recursive: false)
+                    .GetAllWithChildren<Measure>(v => v.Date >= beginDate && v.Date <= endDate, recursive: true)
                     .Select(v => FixDateTime(v))
                     .ToList();
 

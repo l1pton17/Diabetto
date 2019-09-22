@@ -24,6 +24,7 @@ namespace Diabetto.Core.Services.Repositories
             : base(connectionStringHolder.DatabaseFilePath)
         {
             CreateTable<Product>();
+            CreateTable<ProductMeasureUnit>();
         }
 
         /// <inheritdoc />

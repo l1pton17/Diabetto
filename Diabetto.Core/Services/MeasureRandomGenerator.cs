@@ -36,7 +36,6 @@ namespace Diabetto.Core.Services
             return new Measure
             {
                 Id = Interlocked.Increment(ref _id),
-                BreadUnits = _random.Next(0, 100) / 10.0f,
                 Date = DateTime.UtcNow
                     .Date
                     .AddDays(-_random.Next(0, 3))
