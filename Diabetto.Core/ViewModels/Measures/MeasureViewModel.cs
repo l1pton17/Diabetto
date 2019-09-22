@@ -4,14 +4,12 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Diabetto.Core.Models;
-using Diabetto.Core.MvxInteraction.ProductMeasures;
 using Diabetto.Core.Services;
 using Diabetto.Core.Services.Repositories;
 using Diabetto.Core.ViewModelResults;
 using Diabetto.Core.ViewModels.Core;
 using Diabetto.Core.ViewModels.ProductMeasures;
 using Diabetto.Core.ViewModels.ProductMeasures.Dialogs;
-using Diabetto.Core.ViewModels.ProductMeasureUnits;
 using Diabetto.Core.ViewModels.Tags.Dialogs;
 using MvvmCross.Navigation;
 using ReactiveUI;
@@ -87,6 +85,12 @@ namespace Diabetto.Core.ViewModels.Measures
             set => SetProperty(ref _breadUnits, value);
         }
 
+        private readonly ObservableAsPropertyHelper<int> _productCount;
+        public int ProductCount => _productCount.Value;
+
+        private readonly ObservableAsPropertyHelper<float> _totalBreadUnits;
+        public float TotalBreadUnits => _totalBreadUnits.Value;
+
         public ReactiveList<ProductMeasureViewModel> ProductMeasures { get; }
 
         public ReactiveCommand<Unit, Unit> AddProductMeasureCommand { get; }
@@ -121,7 +125,33 @@ namespace Diabetto.Core.ViewModels.Measures
                 .Select(v => v.Item2 ? v.Item1 : (int?) null)
                 .ToProperty(this, v => v.NullableLevel, out _nullableLevel);
 
-            ProductMeasures = new ReactiveList<ProductMeasureViewModel>();
+            ProductMeasures = new ReactiveList<ProductMeasureViewModel>
+            {
+                ChangeTrackingEnabled = true
+            };
+
+            ProductMeasures
+                .CountChanged
+                .ToProperty(
+                    this,
+                    v => v.ProductCount,
+                    out _productCount,
+                    initialValue: 0);
+
+            ProductMeasures
+                .ItemChanged
+                .Select(_ => Unit.Default)
+                .Merge(ProductMeasures.Changed.Select(_ => Unit.Default))
+                .Select(
+                    _ => ProductMeasures
+                        .Select(v => v.BreadUnits)
+                        .DefaultIfEmpty(0)
+                        .Sum())
+                .ToProperty(
+                    this,
+                    v => v.TotalBreadUnits,
+                    out _totalBreadUnits,
+                    initialValue: 0.0f);
 
             SaveCommand = ReactiveCommand
                 .CreateFromTask(

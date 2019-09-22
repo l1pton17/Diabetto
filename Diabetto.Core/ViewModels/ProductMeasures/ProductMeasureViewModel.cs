@@ -101,6 +101,7 @@ namespace Diabetto.Core.ViewModels.ProductMeasures
                 Id = Id,
                 Amount = Amount,
                 MeasureId = MeasureId,
+                ProductMeasureUnit = Unit.Extract(),
                 ProductMeasureUnitId = Unit.Id
             };
         }

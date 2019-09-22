@@ -24,7 +24,7 @@ namespace Diabetto.Core.Models
         [Column("tag_id")]
         public int? TagId { get; set; }
 
-        [ManyToOne(CascadeOperations = CascadeOperation.CascadeRead | CascadeOperation.CascadeInsert)]
+        [ManyToOne(CascadeOperations = CascadeOperation.CascadeRead)]
         public Tag Tag { get; set; }
 
         [OneToMany(CascadeOperations = CascadeOperation.All)]

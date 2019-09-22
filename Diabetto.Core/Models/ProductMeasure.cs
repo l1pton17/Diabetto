@@ -24,7 +24,7 @@ namespace Diabetto.Core.Models
         [Column("amount")]
         public int Amount { get; set; }
 
-        [ManyToOne(CascadeOperations = CascadeOperation.All)]
+        [ManyToOne(CascadeOperations = CascadeOperation.CascadeRead | CascadeOperation.CascadeInsert)]
         public ProductMeasureUnit ProductMeasureUnit { get; set; }
     }
 }

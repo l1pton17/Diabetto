@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive;
-using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Diabetto.Core.Models;
 using Diabetto.Core.Services;
 using Diabetto.Core.Services.Repositories;
 using Diabetto.Core.ViewModelResults;
 using Diabetto.Core.ViewModels.Core;
-using DynamicData;
-using DynamicData.Binding;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using ReactiveUI;
+using ReactiveUI.Legacy;
+#pragma warning disable 618
 
 namespace Diabetto.Core.ViewModels.Measures
 {
@@ -39,9 +38,7 @@ namespace Diabetto.Core.ViewModels.Measures
             set => SetProperty(ref _date, value);
         }
 
-        private readonly SourceList<Measure> _measuresSource;
-
-        public IObservableCollection<Measure> Measures { get; }
+        public ReactiveList<Measure> Measures { get; }
 
         public ReactiveCommand<Unit, Unit> AddCommand { get; }
 
@@ -49,7 +46,12 @@ namespace Diabetto.Core.ViewModels.Measures
 
         public ReactiveCommand<Measure, Unit> DeleteCommand { get; }
 
-        public MvxNotifyTask LoadTask { get; private set; }
+        private MvxNotifyTask _loadTask;
+        public MvxNotifyTask LoadTask
+        {
+            get => _loadTask;
+            private set => SetProperty(ref _loadTask, value);
+        }
 
         public MeasuresViewModel(
             IMvxNavigationService navigationService,
@@ -60,14 +62,8 @@ namespace Diabetto.Core.ViewModels.Measures
             _navigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
             _measureService = measureService ?? throw new ArgumentNullException(nameof(measureService));
             _timeProvider = timeProvider ?? throw new ArgumentNullException(nameof(timeProvider));
-            _measuresSource = new SourceList<Measure>();
-            Measures = new ObservableCollectionExtended<Measure>();
 
-            _measuresSource
-                .Connect()
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .Bind(Measures)
-                .Subscribe();
+            Measures = new ReactiveList<Measure>();
 
             SelectedCommand = ReactiveCommand.CreateFromTask<Measure>(MeasureSelected);
             AddCommand = ReactiveCommand.CreateFromTask(Add);
@@ -80,17 +76,17 @@ namespace Diabetto.Core.ViewModels.Measures
             Date = parameter.Day;
         }
 
-        public override async Task Initialize()
+        public override Task Initialize()
         {
-            await LoadMeasures();
             LoadTask = MvxNotifyTask.Create(LoadMeasures);
-            await base.Initialize();
+
+            return Task.CompletedTask;
         }
 
         private async Task Delete(Measure measure)
         {
             await _measureService.DeleteAsync(measure.Id);
-            await LoadMeasures();
+            LoadTask = MvxNotifyTask.Create(LoadMeasures);
         }
 
         private async Task Add()
@@ -105,18 +101,19 @@ namespace Diabetto.Core.ViewModels.Measures
             if (result?.Save == true)
             {
                 await _measureService.AddAsync(result.Entity);
-                await LoadMeasures();
+                LoadTask = MvxNotifyTask.Create(LoadMeasures);
             }
         }
 
         private async Task MeasureSelected(Measure selectedMeasure)
         {
-            var result = await _navigationService.Navigate<MeasureViewModel, Measure, EditResult<Measure>>(selectedMeasure);
+            var measure = await _measureService.GetAsync(selectedMeasure.Id);
+            var result = await _navigationService.Navigate<MeasureViewModel, Measure, EditResult<Measure>>(measure);
 
             if (result?.Save == true)
             {
                 await _measureService.EditAsync(result.Entity);
-                await LoadMeasures();
+                LoadTask = MvxNotifyTask.Create(LoadMeasures);
             }
         }
 
@@ -124,8 +121,8 @@ namespace Diabetto.Core.ViewModels.Measures
         {
             var result = await _measureService.GetAsync(Date);
 
-            _measuresSource.Clear();
-            _measuresSource.AddRange(result.OrderBy(v => v.Date));
+            Measures.Clear();
+            Measures.AddRange(result.OrderBy(v => v.Date));
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using Diabetto.Core.ViewModels.ProductMeasures;
 using Diabetto.iOS.Combiners;
+using Diabetto.iOS.Converters;
 using Foundation;
 using MvvmCross.Binding.BindingContext;
 using UIKit;
@@ -31,7 +32,8 @@ namespace Diabetto.iOS.Views.Cells.ProductMeasures
 
                     set.Bind(ProductBreadUnitLabel)
                         .For(v => v.Text)
-                        .To(v => v.BreadUnits);
+                        .To(v => v.BreadUnits)
+                        .WithConversion(BreadUnitsMvxValueConverter.Instance);
 
                     set.Apply();
                 });

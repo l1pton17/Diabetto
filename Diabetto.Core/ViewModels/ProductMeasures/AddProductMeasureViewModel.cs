@@ -116,6 +116,8 @@ namespace Diabetto.Core.ViewModels.ProductMeasures
                 .InvokeCommand(this, v => v.SearchCommand);
 
             ProductSelectedCommand = ReactiveCommand.CreateFromTask<ProductSearchItemViewModel>(ProductSelected);
+
+            SearchQuery = String.Empty;
         }
 
         /// <inheritdoc />
@@ -132,7 +134,10 @@ namespace Diabetto.Core.ViewModels.ProductMeasures
 
                 var isOk = await _dialogService.ShowPicker(source);
 
-                if (!isOk)
+                var isInvalidSelection = source.SelectedItem1.Item == 0
+                    || source.SelectedItem2.Item == null;
+
+                if (!isOk || isInvalidSelection)
                 {
                     return;
                 }
@@ -174,7 +179,10 @@ namespace Diabetto.Core.ViewModels.ProductMeasures
 
                 var isOk = await _dialogService.ShowPicker(source);
 
-                if (!isOk)
+                var isInvalidSelection = source.SelectedItem1.Item == 0
+                    || source.SelectedItem2.Item == null;
+
+                if (!isOk || isInvalidSelection)
                 {
                     return;
                 }
@@ -206,7 +214,7 @@ namespace Diabetto.Core.ViewModels.ProductMeasures
                         IsNew = false
                     });
 
-            if (!hasExactMatch)
+            if (!hasExactMatch && !String.IsNullOrWhiteSpace(query))
             {
                 searchItems = searchItems
                     .Prepend(

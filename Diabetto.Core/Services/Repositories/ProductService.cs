@@ -42,11 +42,25 @@ namespace Diabetto.Core.Services.Repositories
         {
             lock (_lockObject)
             {
-                var results = Table<Product>()
-                    .Where(v => v.Name.StartsWith(name, StringComparison.OrdinalIgnoreCase))
-                    .ToList();
+                if (String.IsNullOrWhiteSpace(name))
+                {
+                    var results = Table<Product>()
+                        .OrderBy(v => v.Id)
+                        .Take(10)
+                        .ToList();
 
-                return Task.FromResult(results);
+                    return Task.FromResult(results);
+                }
+                else
+                {
+                    var results = Table<Product>()
+                        .Where(v => v.Name.StartsWith(name, StringComparison.OrdinalIgnoreCase))
+                        .OrderBy(v => v.Id)
+                        .Take(10)
+                        .ToList();
+
+                    return Task.FromResult(results);
+                }
             }
         }
 

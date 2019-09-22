@@ -50,7 +50,13 @@ namespace Diabetto.Core.ViewModels.Calendars
             this.WhenAnyValue(v => v.Month)
                 .Where(v => v != null)
                 .Take(1)
-                .Subscribe(v => v.SelectFirstDay());
+                .Subscribe(
+                    v =>
+                    {
+                        var day = v.Days.First(c => c.Day == _timeProvider.UtcNow.Day);
+
+                        v.DaySelectedCommand.Execute(day);
+                    });
 
             this.WhenAnyValue(v => v.Month)
                 .Where(v => v != null)

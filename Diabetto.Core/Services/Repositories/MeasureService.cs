@@ -10,6 +10,8 @@ namespace Diabetto.Core.Services.Repositories
 {
     public interface IMeasureService
     {
+        Task<Measure> GetAsync(int id);
+
         Task<List<Measure>> GetAsync(DateTime date);
 
         Task<List<Measure>> GetAsync(DateTime from, DateTime until);
@@ -69,49 +71,58 @@ namespace Diabetto.Core.Services.Repositories
         }
 
         /// <inheritdoc />
+        public Task<Measure> GetAsync(int id)
+        {
+            lock (_lockObject)
+            {
+                var value = this.GetWithChildren<Measure>(id, recursive: true);
+
+                FixDateTime(value);
+
+                return Task.FromResult(value);
+            }
+        }
+
+        /// <inheritdoc />
         public Task<List<Measure>> GetAsync(DateTime date)
         {
-            return Task.Run(
-                () =>
-                {
-                    lock (_lockObject)
-                    {
-                        var beginDate = new DateTime(
-                            date.Year,
-                            date.Month,
-                            date.Day,
-                            0,
-                            0,
-                            0,
-                            DateTimeKind.Utc);
+            lock (_lockObject)
+            {
+                var beginDate = new DateTime(
+                    date.Year,
+                    date.Month,
+                    date.Day,
+                    0,
+                    0,
+                    0,
+                    DateTimeKind.Utc);
 
-                        var endDate = beginDate.AddDays(1);
+                var endDate = beginDate.AddDays(1);
 
-                        return this
-                            .GetAllWithChildren<Measure>(v => v.Date >= beginDate && v.Date <= endDate, recursive: true)
-                            .Select(v => FixDateTime(v))
-                            .ToList();
-                    }
-                });
+                var values = this
+                    .GetAllWithChildren<Measure>(v => v.Date >= beginDate && v.Date <= endDate, recursive: false)
+                    .Select(v => FixDateTime(v))
+                    .ToList();
+
+                return Task.FromResult(values);
+            }
         }
 
         /// <inheritdoc />
         public Task<List<Measure>> GetAsync(DateTime from, DateTime until)
         {
-            return Task.Run(
-                () =>
-                {
-                    lock (_lockObject)
-                    {
-                        return this
-                            .GetAllWithChildren<Measure>(v => v.Date >= from && v.Date <= until, recursive: false)
-                            .Select(v => FixDateTime(v))
-                            .ToList();
-                    }
-                });
+            lock (_lockObject)
+            {
+                var values = this
+                    .GetAllWithChildren<Measure>(v => v.Date >= from && v.Date <= until, recursive: false)
+                    .Select(v => FixDateTime(v))
+                    .ToList();
+
+                return Task.FromResult(values);
+            }
         }
 
-        private Measure FixDateTime(Measure measure)
+        private static Measure FixDateTime(Measure measure)
         {
             if (measure == null)
             {

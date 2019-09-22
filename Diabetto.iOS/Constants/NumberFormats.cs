@@ -2,6 +2,6 @@
 {
     public static class NumberFormats
     {
-        public const string BreadUnits = "0.0###";
+        public const string BreadUnits = "0.0";
     }
 }

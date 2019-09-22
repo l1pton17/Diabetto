@@ -6,7 +6,6 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Diabetto.Core.Models;
-using Diabetto.Core.Services;
 using Diabetto.Core.Services.Repositories;
 using Diabetto.Core.ViewModels.Core;
 using Diabetto.Core.ViewModels.Measures;
@@ -25,19 +24,9 @@ namespace Diabetto.Core.ViewModels.Calendars
         }
     }
 
-    public interface IMonthViewModel
-    {
-        List<CalendarCellViewModel> Days { get; }
-
-        DateTime Month { get; }
-
-        void SelectFirstDay();
-    }
-
-    public sealed class MonthViewModel : MvxReactiveViewModel, IMonthViewModel
+    public sealed class MonthViewModel : MvxReactiveViewModel
     {
         private readonly IMvxNavigationService _navigationService;
-        private readonly IMeasureService _measureService;
 
         public List<CalendarCellViewModel> Days { get; }
         public DateTime Month { get; }
@@ -49,26 +38,13 @@ namespace Diabetto.Core.ViewModels.Calendars
             IMvxNavigationService navigationService,
             DateTime month)
         {
-            _measureService = measureService ?? throw new ArgumentNullException(nameof(measureService));
             _navigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
 
             Month = month;
             DaySelectedCommand = ReactiveCommand.CreateFromTask<CalendarCellViewModel>(DaySelected);
             Days = GenerateCells(month);
         }
-
-        public void SelectFirstDay()
-        {
-            DaySelectedCommand.Execute(Days[0]);
-        }
-
-        public override async Task Initialize()
-        {
-            var measures = await _measureService.GetAsync(
-                Month,
-                Month.AddMonths(1).AddDays(-1));
-        }
-
+        
         private async Task DaySelected(CalendarCellViewModel day)
         {
             await _navigationService.Navigate<MeasuresViewModel, MeasuresNavigationRequest, Measure>(new MeasuresNavigationRequest(day.Date));

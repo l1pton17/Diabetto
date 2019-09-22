@@ -43,13 +43,16 @@ namespace Diabetto.iOS.Views.Cells.Measures
 
                     set.Bind(LevelLabel)
                         .To(v => v.Level)
+                        .For(v => v.Text)
                         .WithConversion(_levelLabelConverter);
 
                     set.Bind(BreadUnitsLabel)
+                        .For(v => v.Text)
                         .To(v => v.BreadUnits)
                         .WithConversion(BreadUnitsMvxValueConverter.Instance);
 
                     set.Bind(InsulinLabel)
+                        .For(v => v.Text)
                         .ByCombining(
                             InsulinMvxValueCombiner.Instance,
                             v => v.ShortInsulin,

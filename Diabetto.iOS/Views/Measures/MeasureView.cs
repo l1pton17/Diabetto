@@ -1,6 +1,7 @@
 ﻿
 using System;
 using Diabetto.Core.ViewModels.Measures;
+using Diabetto.iOS.Combiners;
 using Diabetto.iOS.Converters;
 using Diabetto.iOS.Extensions;
 using Diabetto.iOS.Sources.ProductMeasures;
@@ -87,6 +88,13 @@ namespace Diabetto.iOS.Views.Measures
                 .For(v => v.Text)
                 .To(v => v.Tag)
                 .WithConversion(_tagNameValueConverter);
+
+            set.Bind(ProductFooterLabel)
+                .For(v => v.Text)
+                .ByCombining(
+                    new StringFormatCombiner("Total {0} products for {1} BU"),
+                    v => v.ProductCount,
+                    v => v.TotalBreadUnits);
 
             set.Bind(_productsSource)
                 .For(v => v.ItemsSource)

@@ -55,6 +55,13 @@ namespace Diabetto.Core.ViewModels.ProductMeasureUnits
             set => SetProperty(ref _proteins, value);
         }
 
+        private bool _isGrams;
+        public bool IsGrams
+        {
+            get => _isGrams;
+            set => SetProperty(ref _isGrams, value);
+        }
+
         private float? _calories;
         public float? Calories
         {
@@ -73,6 +80,7 @@ namespace Diabetto.Core.ViewModels.ProductMeasureUnits
             Fats = parameter.Fats;
             Proteins = parameter.Proteins;
             Calories = parameter.Calories;
+            IsGrams = parameter.IsGrams;
         }
 
         public ProductMeasureUnit Extract()
@@ -86,7 +94,8 @@ namespace Diabetto.Core.ViewModels.ProductMeasureUnits
                 Name = Name,
                 ShortName = ShortName,
                 ProductId = ProductId,
-                Proteins = Proteins
+                Proteins = Proteins,
+                IsGrams = IsGrams
             };
         }
     }

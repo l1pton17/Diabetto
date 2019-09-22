@@ -16,9 +16,6 @@ namespace Diabetto.Core.Models
         [Column("product_id")]
         public int ProductId { get; set; }
 
-        [ManyToOne(CascadeOperations = CascadeOperation.CascadeRead)]
-        public Product Product { get; set; }
-
         [Column("name")]
         public string Name { get; set; }
 
@@ -39,23 +36,6 @@ namespace Diabetto.Core.Models
 
         [Column("calories")]
         public float? Calories { get; set; }
-
-        public ProductMeasureUnit()
-        {
-        }
-
-        public ProductMeasureUnit(ProductMeasureUnit source)
-        {
-            Id = source.Id;
-            ProductId = source.ProductId;
-            Product = source.Product;
-            Name = source.Name;
-            ShortName = source.ShortName;
-            Carbohydrates = source.Carbohydrates;
-            Fats = source.Fats;
-            Proteins = source.Proteins;
-            Calories = source.Calories;
-        }
 
         public override string ToString()
         {

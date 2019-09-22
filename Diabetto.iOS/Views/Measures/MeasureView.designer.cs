@@ -55,6 +55,10 @@ namespace Diabetto.iOS.Views.Measures
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UILabel ProductFooterLabel { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UITableView ProductsTableView { get; set; }
 
         [Outlet]
@@ -123,6 +127,11 @@ namespace Diabetto.iOS.Views.Measures
             if (LongInsulinValueLabel != null) {
                 LongInsulinValueLabel.Dispose ();
                 LongInsulinValueLabel = null;
+            }
+
+            if (ProductFooterLabel != null) {
+                ProductFooterLabel.Dispose ();
+                ProductFooterLabel = null;
             }
 
             if (ProductsTableView != null) {
