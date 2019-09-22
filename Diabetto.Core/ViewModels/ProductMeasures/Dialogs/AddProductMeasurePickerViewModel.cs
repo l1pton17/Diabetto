@@ -14,15 +14,16 @@ namespace Diabetto.Core.ViewModels.ProductMeasures.Dialogs
                 .AddRange(
                     Enumerable
                         .Range(1, 1000)
-                        .Select(v => v * 10));
+                        .Select(v => DialogPickerOption.Create(v * 10)));
 
-            Item2Values.Add(ProductMeasureUnitConstants.DefaultUnitName);
+            Item2Values
+                .Add(DialogPickerOption.Create(ProductMeasureUnitConstants.DefaultUnitName));
 
             Item3Values
                 .AddRange(
                     Enumerable
                         .Range(1, 1000)
-                        .Select(v => v / 10.0f));
+                        .Select(v => DialogPickerOption.Create(v / 10.0f)));
         }
     }
 }

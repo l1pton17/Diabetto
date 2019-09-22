@@ -5,6 +5,8 @@ namespace Diabetto.Core.Services
 {
     public interface IDialogService
     {
-        Task<bool> Show(IDialogPickerViewModel source);
+        void ShowAlert(string title, string message);
+
+        Task<bool> ShowPicker(IDialogPickerViewModel source);
     }
 }

@@ -71,7 +71,7 @@ namespace Diabetto.iOS.Views.Measures
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        Diabetto.iOS.UINoCursorTextField TagTextField { get; set; }
+        UIKit.UILabel TagLabel { get; set; }
 
         void ReleaseDesignerOutlets ()
         {
@@ -145,9 +145,9 @@ namespace Diabetto.iOS.Views.Measures
                 ShortInsulinValueLabel = null;
             }
 
-            if (TagTextField != null) {
-                TagTextField.Dispose ();
-                TagTextField = null;
+            if (TagLabel != null) {
+                TagLabel.Dispose ();
+                TagLabel = null;
             }
         }
     }

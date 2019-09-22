@@ -1,19 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using Diabetto.Core.Models;
 using Diabetto.Core.MvxInteraction.ProductMeasures;
+using Diabetto.Core.Services;
 using Diabetto.Core.Services.Repositories;
 using Diabetto.Core.ViewModelResults;
 using Diabetto.Core.ViewModels.Core;
 using Diabetto.Core.ViewModels.ProductMeasures;
 using Diabetto.Core.ViewModels.ProductMeasureUnits;
+using Diabetto.Core.ViewModels.Tags.Dialogs;
 using MvvmCross.Navigation;
-using MvvmCross.ViewModels;
 using ReactiveUI;
 using ReactiveUI.Legacy;
 #pragma warning disable 618
@@ -25,6 +24,8 @@ namespace Diabetto.Core.ViewModels.Measures
         private readonly IProductMeasureViewModelFactory _productMeasureViewModelFactory;
         private readonly IProductMeasureUnitService _productMeasureUnitService;
         private readonly IMvxNavigationService _navigationService;
+        private readonly IDialogService _dialogService;
+        private readonly ITagService _tagService;
 
         private int _id;
         public int Id
@@ -45,13 +46,6 @@ namespace Diabetto.Core.ViewModels.Measures
         {
             get => _tag;
             set => SetProperty(ref _tag, value);
-        }
-
-        private List<Tag> _tags;
-        public List<Tag> Tags
-        {
-            get => _tags;
-            set => SetProperty(ref _tags, value);
         }
 
         private int _level;
@@ -100,22 +94,23 @@ namespace Diabetto.Core.ViewModels.Measures
 
         public ReactiveCommand<ProductMeasureViewModel, Unit> ProductMeasureSelectedCommand { get; }
 
-        public ICommand SaveCommand { get; }
+        public ReactiveCommand<Unit, Unit> EditTagCommand { get; }
 
-        private readonly MvxInteraction<EditProductMeasureInteraction> _editProductMeasureInteraction;
-
-        public IMvxInteraction<EditProductMeasureInteraction> EditProductMeasureInteraction => _editProductMeasureInteraction;
+        public ReactiveCommand<Unit, bool> SaveCommand { get; }
 
         public MeasureViewModel(
             IMvxNavigationService navigationService,
             IProductMeasureUnitService productMeasureUnitService,
-            IProductMeasureViewModelFactory productMeasureViewModelFactory
+            IProductMeasureViewModelFactory productMeasureViewModelFactory,
+            IDialogService dialogService,
+            ITagService tagService
         )
         {
             _navigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
             _productMeasureUnitService = productMeasureUnitService ?? throw new ArgumentNullException(nameof(productMeasureUnitService));
             _productMeasureViewModelFactory = productMeasureViewModelFactory ?? throw new ArgumentNullException(nameof(productMeasureViewModelFactory));
-            _editProductMeasureInteraction = new MvxInteraction<EditProductMeasureInteraction>();
+            _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
+            _tagService = tagService ?? throw new ArgumentNullException(nameof(tagService));
 
             this.WhenAnyValue(v => v.Level)
                 .Where(v => v > 0)
@@ -124,8 +119,6 @@ namespace Diabetto.Core.ViewModels.Measures
             this.WhenAnyValue(v => v.Level, v => v.HasLevel)
                 .Select(v => v.Item2 ? v.Item1 : (int?) null)
                 .ToProperty(this, v => v.NullableLevel, out _nullableLevel);
-
-            Tags = new List<Tag>();
 
             ProductMeasures = new ReactiveList<ProductMeasureViewModel>();
 
@@ -139,6 +132,8 @@ namespace Diabetto.Core.ViewModels.Measures
                                 Id = Id,
                                 Date = Date,
                                 Level = HasLevel ? (int?) Level : null,
+                                Tag = Tag,
+                                TagId = Tag?.Id,
                                 LongInsulin = LongInsulin,
                                 ShortInsulin = ShortInsulin,
                                 BreadUnits = BreadUnits,
@@ -149,6 +144,8 @@ namespace Diabetto.Core.ViewModels.Measures
 
             AddProductMeasureCommand = ReactiveCommand.CreateFromTask(AddProductMeasure);
 
+            EditTagCommand = ReactiveCommand.CreateFromTask(EditTag);
+
             DeleteProductMeasureCommand = ReactiveCommand
                 .Create<ProductMeasureViewModel>(v => ProductMeasures.Remove(v));
 
@@ -156,10 +153,26 @@ namespace Diabetto.Core.ViewModels.Measures
                 .CreateFromTask<ProductMeasureViewModel>(ProductMeasureSelected);
         }
 
+        private async Task EditTag()
+        {
+            var tags = await _tagService.GetAll();
+            var source = new SelectTagPickerViewModel(tags);
+
+            source.SelectedItem1 = source.Item1Values.First(v => Tag == null ? v.IsEmpty : v.Item?.Id == Tag.Id);
+
+            var isOk = await _dialogService.ShowPicker(source);
+
+            if (!isOk)
+            {
+                return;
+            }
+
+            Tag = source.SelectedItem1.IsEmpty ? null : source.SelectedItem1.Item;
+        }
+
         private async Task AddProductMeasure()
         {
-            var result = await _navigationService.Navigate<AddProductMeasureViewModel, AddProductMeasureParameter, ProductMeasure>(
-                new AddProductMeasureParameter(Id));
+            var result = await _navigationService.Navigate<AddProductMeasureViewModel, AddProductMeasureParameter, ProductMeasure>(new AddProductMeasureParameter(Id));
 
             if (result == null)
             {
@@ -207,8 +220,6 @@ namespace Diabetto.Core.ViewModels.Measures
                     productMeasure.Unit.Prepare(r.Unit.Extract());
                 }
             };
-
-            _editProductMeasureInteraction.Raise(interaction);
         }
 
         /// <inheritdoc />
@@ -221,6 +232,7 @@ namespace Diabetto.Core.ViewModels.Measures
             BreadUnits = parameter.BreadUnits;
             LongInsulin = parameter.LongInsulin;
             ShortInsulin = parameter.ShortInsulin;
+            Tag = parameter.Tag;
 
             ProductMeasures.Clear();
 

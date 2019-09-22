@@ -20,22 +20,19 @@ namespace Diabetto.iOS.Views.ProductMeasures
 
             TableView.Source = _searchResultsSource;
 
-            var searchController = new UISearchController(searchResultsController: null);
+            var searchBar = new UISearchBar();
+            searchBar.SizeToFit();
+            searchBar.SearchBarStyle = UISearchBarStyle.Prominent;
+            searchBar.Placeholder = "Enter a product name";
 
-            searchController.SearchBar.SizeToFit();
-            searchController.SearchBar.SearchBarStyle = UISearchBarStyle.Prominent;
-            searchController.SearchBar.Placeholder = "Enter a product name";
-            searchController.HidesNavigationBarDuringPresentation = false;
-            searchController.DimsBackgroundDuringPresentation = false;
-
-            TableView.TableHeaderView = searchController.SearchBar;
+            TableView.TableHeaderView = searchBar;
 
             DefinesPresentationContext = true;
 
             var bindingSet = this.CreateBindingSet<AddProductMeasureView, AddProductMeasureViewModel>();
 
             bindingSet
-                .Bind(searchController.SearchBar)
+                .Bind(searchBar)
                 .For(v => v.Text)
                 .To(v => v.SearchQuery);
 

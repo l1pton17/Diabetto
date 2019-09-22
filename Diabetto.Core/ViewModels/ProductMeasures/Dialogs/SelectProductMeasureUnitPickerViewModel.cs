@@ -10,14 +10,14 @@ namespace Diabetto.Core.ViewModels.ProductMeasures.Dialogs
 {
     public sealed class SelectProductMeasureUnitPickerViewModel : DialogPickerViewModel<int, ProductMeasureUnit>
     {
-        public static readonly int[] GramAmounts = Enumerable
+        public static readonly DialogPickerOption<int>[] GramAmounts = Enumerable
             .Range(1, 500)
-            .Select(v => v * 10)
+            .Select(v => DialogPickerOption.Create(v * 10))
             .ToArray();
 
-        public static readonly int[] Amounts = Enumerable
+        public static readonly DialogPickerOption<int>[] Amounts = Enumerable
             .Range(1, 100)
-            .Select(v => v)
+            .Select(v => DialogPickerOption.Create(v))
             .ToArray();
 
         /// <inheritdoc />
@@ -25,7 +25,8 @@ namespace Diabetto.Core.ViewModels.ProductMeasures.Dialogs
             : base("Add")
         {
             this.WhenAnyValue(v => v.SelectedItem2)
-                .Where(v => v != null)
+                .Where(v => v.Item != null)
+                .Select(v => v.Item)
                 .Subscribe(
                     v =>
                     {
@@ -42,12 +43,12 @@ namespace Diabetto.Core.ViewModels.ProductMeasures.Dialogs
                     });
 
             Item2Values
-                .AddRange(units);
+                .AddRange(units.Select(v => DialogPickerOption.Create(v)));
         }
 
-        protected override string FormatItem2(ProductMeasureUnit item)
+        protected override string FormatItem2(DialogPickerOption<ProductMeasureUnit> item)
         {
-            return item.Name;
+            return item.Item.Name;
         }
     }
 }

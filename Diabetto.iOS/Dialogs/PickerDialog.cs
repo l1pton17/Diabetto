@@ -132,6 +132,11 @@ namespace Diabetto.iOS.Dialogs
             _isDialogShown = false; // rest the flag
         }
 
+        public void Select(int row, int component, bool animated)
+        {
+            _pickerView?.Select(row, component, animated);
+        }
+
         /* Helper function: count and return the screen's size */
         private CGSize CountScreenSize()
         {

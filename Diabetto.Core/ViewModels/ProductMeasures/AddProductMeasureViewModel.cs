@@ -130,7 +130,7 @@ namespace Diabetto.Core.ViewModels.ProductMeasures
             {
                 var source = new AddProductMeasurePickerViewModel();
 
-                var isOk = await _dialogService.Show(source);
+                var isOk = await _dialogService.ShowPicker(source);
 
                 if (!isOk)
                 {
@@ -145,9 +145,9 @@ namespace Diabetto.Core.ViewModels.ProductMeasures
                         new ProductMeasureUnit
                         {
                             IsGrams = true,
-                            Name = source.SelectedItem2,
-                            ShortName = source.SelectedItem2[0].ToString(),
-                            Carbohydrates = source.SelectedItem3
+                            Name = source.SelectedItem2.Item,
+                            ShortName = source.SelectedItem2.Item[0].ToString(),
+                            Carbohydrates = source.SelectedItem3.Item
                         }
                     }
                 };
@@ -158,7 +158,7 @@ namespace Diabetto.Core.ViewModels.ProductMeasures
 
                 var productMeasure = new ProductMeasure
                 {
-                    Amount = source.SelectedItem1,
+                    Amount = source.SelectedItem1.Item,
                     ProductMeasureUnitId = unit.Id,
                     ProductMeasureUnit = unit,
                     MeasureId = MeasureId
@@ -172,7 +172,7 @@ namespace Diabetto.Core.ViewModels.ProductMeasures
 
                 var source = new SelectProductMeasureUnitPickerViewModel(units);
 
-                var isOk = await _dialogService.Show(source);
+                var isOk = await _dialogService.ShowPicker(source);
 
                 if (!isOk)
                 {
@@ -181,9 +181,9 @@ namespace Diabetto.Core.ViewModels.ProductMeasures
 
                 var productMeasure = new ProductMeasure
                 {
-                    Amount = source.SelectedItem1,
-                    ProductMeasureUnitId = source.SelectedItem2.Id,
-                    ProductMeasureUnit = source.SelectedItem2,
+                    Amount = source.SelectedItem1.Item,
+                    ProductMeasureUnitId = source.SelectedItem2.Item.Id,
+                    ProductMeasureUnit = source.SelectedItem2.Item,
                     MeasureId = MeasureId
                 };
 

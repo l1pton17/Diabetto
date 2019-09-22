@@ -88,13 +88,12 @@
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="6344" translatesAutoresizingMaskIntoConstraints="NO" textAlignment="right" customClass="UINoCursorTextField" placeholder="Select a tag">
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="23473" translatesAutoresizingMaskIntoConstraints="NO">
                                                             <rect key="frame" x="187" y="0.0" width="187" height="44"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                             <nil key="textColor"/>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                            <textInputTraits key="textInputTraits"/>
-                                                            <color key="tintColor" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace" white="0" alpha="0"/>
-                                                        </textField>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
                                                     </subviews>
                                                 </stackView>
                                             </subviews>
@@ -367,9 +366,9 @@
                         <outlet property="HasLevelSwitch" destination="537" id="name-outlet-537"/>
                         <outlet property="LevelStepper" destination="548" id="name-outlet-548"/>
                         <outlet property="LevelRow" destination="2303" id="name-outlet-2303"/>
-                        <outlet property="TagTextField" destination="6344" id="name-outlet-6344"/>
                         <outlet property="ProductsTableView" destination="8296" id="name-outlet-8296"/>
                         <outlet property="AddProductMeasureButton" destination="8301" id="name-outlet-8301"/>
+                        <outlet property="TagLabel" destination="23473" id="name-outlet-23473"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="251" userLabel="First Responder" sceneMemberID="firstResponder"/>

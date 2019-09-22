@@ -6,6 +6,7 @@ using MvvmCross.Binding.BindingContext;
 using MvvmCross.Navigation;
 using MvvmCross.Platforms.Ios.Views;
 using MvvmCross.ViewModels;
+using MvvmCross.WeakSubscription;
 using UIKit;
 
 namespace Diabetto.iOS
@@ -38,6 +39,14 @@ namespace Diabetto.iOS
         {
             textField.Text = textField.Text + "";
             textField.EditingChanged += (sender, args) => { textField.Text = ""; };
+        }
+
+        public void Include(UISearchBar sb)
+        {
+            sb.Text = sb.Text + "";
+            sb.Placeholder = sb.Placeholder + "";
+            sb.TextChanged += (sender, e) => { };
+            sb.WeakSubscribe<UISearchBar, UISearchBarTextChangedEventArgs>(nameof(sb.TextChanged), null);
         }
 
         public void Include(UITextView textView)

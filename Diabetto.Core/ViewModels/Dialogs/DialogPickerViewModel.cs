@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Linq;
 using ReactiveUI;
 using ReactiveUI.Legacy;
@@ -6,11 +8,56 @@ using ReactiveUI.Legacy;
 
 namespace Diabetto.Core.ViewModels.Dialogs
 {
+    public readonly struct DialogPickerOption<T>
+    {
+        public bool IsEmpty { get; }
+
+        public T Item { get; }
+
+        public DialogPickerOption(T item, bool isEmpty)
+        {
+            IsEmpty = isEmpty;
+            Item = item;
+        }
+    }
+
+    public static class DialogPickerOption
+    {
+        public static DialogPickerOption<T> Create<T>(T item)
+        {
+            return new DialogPickerOption<T>(item, isEmpty: false);
+        }
+        
+        public static DialogPickerOption<T> Empty<T>()
+        {
+            return new DialogPickerOption<T>(default, isEmpty: true);
+        }
+    }
+
+    public sealed class DialogPickerItemSelectedEventArgs : EventArgs
+    {
+        public int Component { get; }
+
+        public int Row { get; }
+
+        public bool Animated { get; }
+
+        /// <inheritdoc />
+        public DialogPickerItemSelectedEventArgs(int component, int row, bool animated = false)
+        {
+            Component = component;
+            Row = row;
+            Animated = animated;
+        }
+    }
+
     public interface IDialogPickerViewModel
     {
         string Title { get; }
 
         int ComponentCount { get; }
+
+        IEnumerable<(int Component, int Row)> SelectedItems { get; }
 
         event EventHandler ItemsChanged;
 
@@ -21,10 +68,10 @@ namespace Diabetto.Core.ViewModels.Dialogs
 
     public abstract class DialogPickerViewModel<TItem> : ReactiveObject, IDialogPickerViewModel
     {
-        public ReactiveList<TItem> Item1Values { get; }
+        public ReactiveList<DialogPickerOption<TItem>> Item1Values { get; }
 
-        private TItem _selectedItem1;
-        public TItem SelectedItem1
+        private DialogPickerOption<TItem> _selectedItem1;
+        public DialogPickerOption<TItem> SelectedItem1
         {
             get => _selectedItem1;
             set => this.RaiseAndSetIfChanged(ref _selectedItem1, value);
@@ -36,13 +83,16 @@ namespace Diabetto.Core.ViewModels.Dialogs
         public int ComponentCount { get; protected set; }
 
         /// <inheritdoc />
+        public IEnumerable<(int Component, int Row)> SelectedItems => GetSelectedItems();
+
+        /// <inheritdoc />
         public event EventHandler ItemsChanged;
 
         protected DialogPickerViewModel(string title)
         {
             ComponentCount = 1;
             Title = title ?? throw new ArgumentNullException(nameof(title));
-            Item1Values = new ReactiveList<TItem>();
+            Item1Values = new ReactiveList<DialogPickerOption<TItem>>();
 
             Item1Values
                 .ItemsAdded
@@ -92,9 +142,29 @@ namespace Diabetto.Core.ViewModels.Dialogs
             }
         }
 
-        protected virtual string FormatItem1(TItem item)
+        protected virtual IEnumerable<(int Component, int Row)> GetSelectedItems()
         {
-            return item.ToString();
+            var idx = Item1Values.IndexOf(SelectedItem1);
+
+            if (idx >= 0)
+            {
+                yield return (0, idx);
+            }
+        }
+
+        protected virtual string FormatItem1(DialogPickerOption<TItem> item)
+        {
+            return FormatItem(item);
+        }
+
+        protected string FormatItem<T>(DialogPickerOption<T> value)
+        {
+            if (value.IsEmpty)
+            {
+                return "Not selected";
+            }
+
+            return value.Item.ToString();
         }
 
         protected void RaiseItemsChanged()
@@ -105,13 +175,13 @@ namespace Diabetto.Core.ViewModels.Dialogs
 
     public abstract class DialogPickerViewModel<TItem1, TItem2> : DialogPickerViewModel<TItem1>
     {
-        public ReactiveList<TItem2> Item2Values { get; }
+        public ReactiveList<DialogPickerOption<TItem2>> Item2Values { get; }
 
-        private TItem2 _selectedItem2;
-        public TItem2 SelectedItem2
+        private DialogPickerOption<TItem2> _selectedItem2;
+        public DialogPickerOption<TItem2> SelectedItem2
         {
             get => _selectedItem2;
-            set => this.RaiseAndSetIfChanged(ref _selectedItem2, value);
+            protected set => this.RaiseAndSetIfChanged(ref _selectedItem2, value);
         }
 
         /// <inheritdoc />
@@ -119,7 +189,7 @@ namespace Diabetto.Core.ViewModels.Dialogs
             : base(title)
         {
             ComponentCount = 2;
-            Item2Values = new ReactiveList<TItem2>();
+            Item2Values = new ReactiveList<DialogPickerOption<TItem2>>();
 
             Item2Values
                 .ItemsAdded
@@ -180,28 +250,42 @@ namespace Diabetto.Core.ViewModels.Dialogs
             }
         }
 
-        protected virtual string FormatItem2(TItem2 item)
+        protected override IEnumerable<(int Component, int Row)> GetSelectedItems()
         {
-            return item.ToString();
+            var idx = Item2Values.IndexOf(SelectedItem2);
+
+            if (idx >= 0)
+            {
+                return base
+                    .GetSelectedItems()
+                    .Append((1, idx));
+            }
+
+            return base.GetSelectedItems();
+        }
+
+        protected virtual string FormatItem2(DialogPickerOption<TItem2> item)
+        {
+            return FormatItem(item);
         }
     }
 
     public abstract class DialogPickerViewModel<TItem1, TItem2, TItem3> : DialogPickerViewModel<TItem1, TItem2>
     {
-        public ReactiveList<TItem3> Item3Values { get; }
+        public ReactiveList<DialogPickerOption<TItem3>> Item3Values { get; }
 
-        private TItem3 _selectedItem3;
-        public TItem3 SelectedItem3
+        private DialogPickerOption<TItem3> _selectedItem3;
+        public DialogPickerOption<TItem3> SelectedItem3
         {
             get => _selectedItem3;
-            set => this.RaiseAndSetIfChanged(ref _selectedItem3, value);
+            protected set => this.RaiseAndSetIfChanged(ref _selectedItem3, value);
         }
 
         protected DialogPickerViewModel(string title)
             : base(title)
         {
             ComponentCount = 3;
-            Item3Values = new ReactiveList<TItem3>();
+            Item3Values = new ReactiveList<DialogPickerOption<TItem3>>();
 
             Item3Values
                 .ItemsAdded
@@ -273,9 +357,23 @@ namespace Diabetto.Core.ViewModels.Dialogs
             }
         }
 
-        protected virtual string FormatItem3(TItem3 item)
+        protected override IEnumerable<(int Component, int Row)> GetSelectedItems()
         {
-            return item.ToString();
+            var idx = Item3Values.IndexOf(SelectedItem3);
+
+            if (idx >= 0)
+            {
+                return base
+                    .GetSelectedItems()
+                    .Append((2, idx));
+            }
+
+            return base.GetSelectedItems();
+        }
+
+        protected virtual string FormatItem3(DialogPickerOption<TItem3> item)
+        {
+            return FormatItem(item);
         }
     }
 }

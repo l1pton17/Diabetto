@@ -78,6 +78,7 @@
     <Compile Include="AppDelegate.cs" />
     <Compile Include="Combiners\InsulinMvxValueCombiner.cs" />
     <Compile Include="Combiners\StringJoinCombiner.cs" />
+    <Compile Include="Converters\TagNameMvxValueConverter.cs" />
     <Compile Include="Constants\NumberFormats.cs" />
     <Compile Include="Controls\Calendar\DTCalendarCell.cs" />
     <Compile Include="Controls\Calendar\DTCalendarMonthCollectionView.cs" />
@@ -106,9 +107,8 @@
     <Compile Include="UINoCursorTextField.designer.cs">
       <DependentUpon>UINoCursorTextField.cs</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\Dialogs\AddProductMeasureUIPickerViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\PickerDialogViewModel.cs" />
-    <Compile Include="ViewModels\MvxDeleteTableViewSource.cs" />
+    <Compile Include="Sources\MvxDeleteTableViewSource.cs" />
     <Compile Include="Views\Calendars\CalendarView.cs" />
     <Compile Include="Views\Calendars\MonthHeaderView.cs" />
     <Compile Include="Views\Calendars\MonthView.cs" />

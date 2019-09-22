@@ -6,7 +6,6 @@ using Diabetto.iOS.Extensions;
 using Diabetto.iOS.Sources.ProductMeasures;
 using Foundation;
 using MvvmCross.Binding.BindingContext;
-using MvvmCross.Platforms.Ios.Binding.Views;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using MvvmCross.Platforms.Ios.Views;
 using UIKit;
@@ -23,6 +22,8 @@ namespace Diabetto.iOS.Views.Measures
             Prefix = "mmol/l"
         };
 
+        private static readonly TagNameValueConverter _tagNameValueConverter = new TagNameValueConverter();
+
         private bool _datePickerVisible;
         private bool _levelRowVisible;
         private ProductMeasureTableViewSource _productsSource;
@@ -36,15 +37,6 @@ namespace Diabetto.iOS.Views.Measures
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
-
-            var tagPicker = new UIPickerView();
-            var tagPickerViewModel = new MvxPickerViewModel(tagPicker);
-            tagPicker.Model = tagPickerViewModel;
-            tagPicker.ShowSelectionIndicator = true;
-
-            TagTextField.TintColor = UIColor.Clear;
-            TagTextField.InputView = tagPicker;
-            TagTextField.ShouldChangeCharacters += delegate { return false; };
 
             this.HideKeyboardWhenTappedAround();
 
@@ -91,17 +83,10 @@ namespace Diabetto.iOS.Views.Measures
                 .For(v => v.Value)
                 .To(v => v.Level);
 
-            set.Bind(TagTextField)
-                .OneWay()
-                .To(v => v.Tag);
-
-            set.Bind(tagPickerViewModel)
-                .For(v => v.ItemsSource)
-                .To(v => v.Tags);
-
-            set.Bind(tagPickerViewModel)
-                .For(v => v.SelectedItem)
-                .To(v => v.Tag);
+            set.Bind(TagLabel)
+                .For(v => v.Text)
+                .To(v => v.Tag)
+                .WithConversion(_tagNameValueConverter);
 
             set.Bind(_productsSource)
                 .For(v => v.ItemsSource)
@@ -149,6 +134,11 @@ namespace Diabetto.iOS.Views.Measures
                     {
                         ShowDatePickerRow();
                     }
+                }
+
+                if (indexPath.Row == 2)
+                {
+                    ViewModel.EditTagCommand.Execute();
                 }
 
                 if (indexPath.Row == 3)

@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Reactive;
-using System.Reactive.Linq;
 using Foundation;
 using MvvmCross.Binding.Extensions;
 using MvvmCross.Platforms.Ios.Binding.Views;
 using ReactiveUI;
 using UIKit;
 
-namespace Diabetto.iOS.ViewModels
+namespace Diabetto.iOS.Sources
 {
     public abstract class MvxDeleteTableViewSource<TItem> : MvxTableViewSource
     {
