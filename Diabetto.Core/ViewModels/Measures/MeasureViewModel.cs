@@ -10,6 +10,7 @@ using Diabetto.Core.Services.Repositories;
 using Diabetto.Core.ViewModelResults;
 using Diabetto.Core.ViewModels.Core;
 using Diabetto.Core.ViewModels.ProductMeasures;
+using Diabetto.Core.ViewModels.ProductMeasures.Dialogs;
 using Diabetto.Core.ViewModels.ProductMeasureUnits;
 using Diabetto.Core.ViewModels.Tags.Dialogs;
 using MvvmCross.Navigation;
@@ -189,37 +190,20 @@ namespace Diabetto.Core.ViewModels.Measures
         private async Task ProductMeasureSelected(ProductMeasureViewModel productMeasure)
         {
             var units = await _productMeasureUnitService.GetByProductId(productMeasure.Unit.ProductId);
+            var source = new SelectProductMeasureUnitPickerViewModel(units);
 
-            var unitViewModels = units
-                .Select(
-                    u =>
-                    {
-                        var viewModel = new ProductMeasureUnitViewModel();
-                        viewModel.Prepare(u);
+            source.SelectedItem2 = source.Item2Values.First(v => v.Item.Id == productMeasure.Unit.Id);
+            source.SelectedItem1 = source.Item1Values.First(v => v.Item == productMeasure.Amount);
 
-                        return viewModel;
-                    })
-                .ToList();
+            var isOk = await _dialogService.ShowPicker(source);
 
-            var selectedUnit = unitViewModels.First(u => u.Id == productMeasure.Id);
-            var selectedAmount = productMeasure.Amount;
-
-            var interaction = new EditProductMeasureInteraction
+            if (!isOk)
             {
-                Units = unitViewModels,
-                SelectedUnit = selectedUnit,
-                SelectedAmount = selectedAmount,
-                Callback = r =>
-                {
-                    if (r == null)
-                    {
-                        return;
-                    }
+                return;
+            }
 
-                    productMeasure.Amount = r.Amount;
-                    productMeasure.Unit.Prepare(r.Unit.Extract());
-                }
-            };
+            productMeasure.Unit.Prepare(source.SelectedItem2.Item);
+            productMeasure.Amount = source.SelectedItem1.Item;
         }
 
         /// <inheritdoc />

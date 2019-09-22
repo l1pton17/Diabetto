@@ -117,6 +117,11 @@ namespace Diabetto.iOS.Views.Measures
                 height = _levelRowVisible ? height : 0;
             }
 
+            if (indexPath.Section == 1 && indexPath.Row == 1)
+            {
+                return height * (ViewModel.ProductMeasures.Count + 1);
+            }
+
             return height;
         }
 
