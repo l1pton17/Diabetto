@@ -28,6 +28,11 @@ namespace Diabetto.iOS.Views.Cells.Products
                         .For(v => v.Text)
                         .To(v => v.Name);
 
+                    bindingSet
+                        .Bind(CategoryNameLabel)
+                        .For(v => v.Text)
+                        .To(v => v.CategoryName);
+
                     bindingSet.Apply();
                 });
         }

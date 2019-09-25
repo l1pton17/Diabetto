@@ -136,6 +136,7 @@
     <Compile Include="Views\ProductMeasures\AddProductMeasureView.designer.cs">
       <DependentUpon>AddProductMeasureView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\Products\ProductsView.cs" />
     <None Include="Info.plist" />
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

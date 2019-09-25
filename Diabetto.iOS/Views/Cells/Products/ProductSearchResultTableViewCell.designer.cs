@@ -15,10 +15,19 @@ namespace Diabetto.iOS.Views.Cells.Products
     {
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UILabel CategoryNameLabel { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UILabel NameLabel { get; set; }
 
         void ReleaseDesignerOutlets ()
         {
+            if (CategoryNameLabel != null) {
+                CategoryNameLabel.Dispose ();
+                CategoryNameLabel = null;
+            }
+
             if (NameLabel != null) {
                 NameLabel.Dispose ();
                 NameLabel = null;

@@ -43,6 +43,13 @@ namespace Diabetto.Core.ViewModels.ProductMeasures
             set => SetProperty(ref _name, value);
         }
 
+        private string _categoryName;
+        public string CategoryName
+        {
+            get => _categoryName;
+            set => SetProperty(ref _categoryName, value);
+        }
+
         private int _id;
         public int Id
         {
@@ -207,6 +214,7 @@ namespace Diabetto.Core.ViewModels.ProductMeasures
                     {
                         Id = v.Id,
                         Name = v.Name,
+                        CategoryName = v.ProductCategory?.Name ?? String.Empty,
                         IsNew = false
                     });
 
