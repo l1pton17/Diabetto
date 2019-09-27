@@ -28,6 +28,7 @@ namespace Diabetto.Core
                 .AsInterfaces()
                 .RegisterAsLazySingleton();
 
+            Mvx.IoCProvider.LazyConstructAndRegisterSingleton<ISettingViewModelsStorage, SettingViewModelsStorage>();
             Mvx.IoCProvider.LazyConstructAndRegisterSingleton<IMonthViewModelFactory, MonthViewModelFactory>();
             Mvx.IoCProvider.LazyConstructAndRegisterSingleton<IProductMeasureViewModelFactory, ProductMeasureViewModelFactory>();
             Mvx.IoCProvider.LazyConstructAndRegisterSingleton<IMeasureCellViewModelFactory, MeasureCellViewModelFactory>();

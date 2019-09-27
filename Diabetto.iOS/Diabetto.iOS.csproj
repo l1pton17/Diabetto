@@ -110,6 +110,7 @@
     </Compile>
     <Compile Include="ViewModels\Dialogs\PickerDialogViewModel.cs" />
     <Compile Include="Sources\MvxDeleteTableViewSource.cs" />
+    <Compile Include="ViewModels\Settings\HealthKitSettingsViewModel.cs" />
     <Compile Include="Views\Calendars\CalendarView.cs" />
     <Compile Include="Views\Calendars\MonthHeaderView.cs" />
     <Compile Include="Views\Calendars\MonthView.cs" />
@@ -137,6 +138,8 @@
       <DependentUpon>AddProductMeasureView.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\Products\ProductsView.cs" />
+    <Compile Include="Views\Settings\HealthKitSettingsView.cs" />
+    <Compile Include="Views\Settings\SettingsHolderView.cs" />
     <None Include="Info.plist" />
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
