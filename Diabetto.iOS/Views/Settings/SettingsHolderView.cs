@@ -25,6 +25,8 @@ namespace Diabetto.iOS.Views.Settings
                 new NSString("SettingsOptionItem"),
                 "TitleText Name");
 
+            TableView.Source = _source;
+
             var bindingSet = this.CreateBindingSet<SettingsHolderView, SettingsHolderViewModel>();
 
             bindingSet

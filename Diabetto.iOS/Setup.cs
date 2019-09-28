@@ -20,11 +20,6 @@ namespace Diabetto.iOS
             base.InitializeFirstChance();
             Mvx.IoCProvider.RegisterType<IMvxJsonConverter, MvxJsonConverter>();
             Mvx.IoCProvider.RegisterType<IDialogService, DialogService>();
-
-            var settingViewModelStorage = Mvx.IoCProvider.Resolve<ISettingViewModelsStorage>();
-            var healthKitSettingsViewModel = Mvx.IoCProvider.IoCConstruct<HealthKitSettingsViewModel>();
-
-            settingViewModelStorage.Options.Add(healthKitSettingsViewModel);
         }
 
         protected override void InitializeLastChance()
@@ -36,6 +31,11 @@ namespace Diabetto.iOS
                 new MvxCustomBindingFactory<UIViewController>(
                     "NetworkIndicator",
                     viewController => new NetworkIndicatorTargetBinding(viewController)));
+
+            var settingViewModelStorage = Mvx.IoCProvider.Resolve<ISettingViewModelsStorage>();
+            var healthKitSettingsViewModel = Mvx.IoCProvider.IoCConstruct<HealthKitSettingsViewModel>();
+
+            settingViewModelStorage.Options.Add(healthKitSettingsViewModel);
         }
 
         protected override IMvxIocOptions CreateIocOptions()
