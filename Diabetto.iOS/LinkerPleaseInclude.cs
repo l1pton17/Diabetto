@@ -4,6 +4,7 @@ using System.Windows.Input;
 using Foundation;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Navigation;
+using MvvmCross.Platforms.Ios.Binding.Target;
 using MvvmCross.Platforms.Ios.Views;
 using MvvmCross.ViewModels;
 using MvvmCross.WeakSubscription;
@@ -16,6 +17,11 @@ namespace Diabetto.iOS
     [Preserve(AllMembers = true)]
     public class LinkerPleaseInclude
     {
+        public void Include(MvxUISwitchOnTargetBinding binding)
+        {
+            binding = new MvxUISwitchOnTargetBinding(null);
+        }
+
         public void Include(MvxTaskBasedBindingContext c)
         {
             c.Dispose();

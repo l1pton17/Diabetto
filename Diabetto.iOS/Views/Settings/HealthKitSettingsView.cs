@@ -1,6 +1,7 @@
 ﻿
 using System;
 using Diabetto.iOS.ViewModels.Settings;
+using MvvmCross.Binding;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using MvvmCross.Platforms.Ios.Views;
@@ -17,11 +18,12 @@ namespace Diabetto.iOS.Views.Settings
 
         public override void ViewDidLoad()
         {
+            base.ViewDidLoad();
+
             var bindingSet = this.CreateBindingSet<HealthKitSettingsView, HealthKitSettingsViewModel>();
 
             bindingSet
                 .Bind(EnabledSwitch)
-                .For(v => v.Selected)
                 .To(v => v.IsEnabled);
 
             bindingSet

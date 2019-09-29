@@ -97,6 +97,7 @@
     <Compile Include="Converters\LevelMvxValueConverter.cs" />
     <Compile Include="Converters\TimeMvxValueConverter.cs" />
     <Compile Include="Dialogs\PickerDialog.cs" />
+    <Compile Include="Extensions\HKHealthStoreExtensions.cs" />
     <Compile Include="Extensions\UIViewControllerExtensions.cs" />
     <Compile Include="LinkerPleaseInclude.cs" />
     <Compile Include="MvxBindings\NetworkIndicatorTargetBinding.cs" />

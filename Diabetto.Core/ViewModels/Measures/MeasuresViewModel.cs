@@ -85,9 +85,10 @@ namespace Diabetto.Core.ViewModels.Measures
             return Task.CompletedTask;
         }
 
-        private async Task Delete(MeasureCellViewModel measure)
+        private async Task Delete(MeasureCellViewModel measureCell)
         {
-            await _measureService.DeleteAsync(measure.Id);
+            await _measureService.DeleteAsync(measureCell.Extract());
+
             LoadTask = MvxNotifyTask.Create(LoadMeasures);
         }
 

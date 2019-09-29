@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Diabetto.Core.Events.Measures;
 using Diabetto.Core.Models;
+using ReactiveUI;
 using SQLite;
 using SQLiteNetExtensions.Extensions;
 
@@ -22,7 +24,7 @@ namespace Diabetto.Core.Services.Repositories
 
         Task EditAsync(Measure value);
 
-        Task DeleteAsync(int id);
+        Task DeleteAsync(Measure value);
     }
 
     internal sealed class MeasureService : SQLiteConnection, IMeasureService
@@ -59,6 +61,8 @@ namespace Diabetto.Core.Services.Repositories
                 this.InsertOrReplaceWithChildren(value, recursive: true);
             }
 
+            MessageBus.Current.SendMessage(new MeasureAddedEvent(value));
+
             return Task.CompletedTask;
         }
 
@@ -72,20 +76,24 @@ namespace Diabetto.Core.Services.Repositories
                 this.InsertOrReplaceWithChildren(value, recursive: true);
             }
 
+            MessageBus.Current.SendMessage(new MeasureChangedEvent(value));
+
             return Task.CompletedTask;
         }
 
         /// <inheritdoc />
-        public Task DeleteAsync(int id)
+        public Task DeleteAsync(Measure value)
         {
             lock (_lockObject)
             {
                 Delete(
                     new Measure
                     {
-                        Id = id
+                        Id = value.Id
                     });
             }
+
+            MessageBus.Current.SendMessage(new MeasureDeletedEvent(value));
 
             return Task.CompletedTask;
         }

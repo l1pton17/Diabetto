@@ -32,7 +32,7 @@ namespace Diabetto.iOS.ViewModels.Settings
             IDialogService dialogService,
             IHealthKitService healthKitService)
         {
-            IsEnabled = healthKitService.GetStatus();
+            _isEnabled = healthKitService.GetStatus();
 
             DisableCommand = ReactiveCommand.Create(() => healthKitService.Disable());
 
@@ -42,13 +42,22 @@ namespace Diabetto.iOS.ViewModels.Settings
                 .Where(v => !v)
                 .Subscribe(isEnabled => IsEnabled = isEnabled);
 
+            EnableCommand.ThrownExceptions
+                .Subscribe(e => dialogService.ShowAlert("Error", e.Message));
+
+            DisableCommand.ThrownExceptions
+                .Subscribe(e => dialogService.ShowAlert("Error", e.Message));
+
             var canExport = this
                 .WhenAnyValue(v => v.IsEnabled);
 
             ExportCommand = ReactiveCommand
                 .CreateFromTask(
-                    () => healthKitService.Export(),
+                    healthKitService.Export,
                     canExecute: canExport);
+
+            ExportCommand
+                .Subscribe(_ => dialogService.ShowAlert("Success", "Measures have been synchronized"));
 
             ExportCommand.ThrownExceptions
                 .Subscribe(e => dialogService.ShowAlert("Error", e.Message));

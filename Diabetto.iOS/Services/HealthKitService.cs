@@ -1,11 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
+using Diabetto.Core.Events.Measures;
 using Diabetto.Core.Models;
 using Diabetto.Core.Services.Repositories;
+using Diabetto.iOS.Extensions;
 using Foundation;
 using HealthKit;
+using MvvmCross.Logging;
+using ReactiveUI;
 
 namespace Diabetto.iOS.Services
 {
@@ -24,10 +30,21 @@ namespace Diabetto.iOS.Services
         private static class MetadataKey
         {
             public const string DiabettoOrigin = "diabetto.origin";
+            public const string IsTest = "diabetto.is.test";
 
-            public static string GetIdentifier(int id)
+            public static string GetExternalUUID(int id)
             {
                 return "diabetto." + id;
+            }
+
+            public static string GetBloodGlucoseIdentifier(int id)
+            {
+                return "diabetto." + id + ".glucose";
+            }
+
+            public static string GetInsulinIdentifier(int id, InsulinType type)
+            {
+                return "diabetto." + id + ".insulin." + type.ToString().ToLowerInvariant();
             }
         }
 
@@ -47,11 +64,53 @@ namespace Diabetto.iOS.Services
 
         private readonly HKHealthStore _healthStore;
         private readonly IMeasureService _measureService;
+        private readonly IMvxLog _log;
 
-        public HealthKitService(IMeasureService measureService)
+        public ReactiveCommand<Measure, Unit> AddCommand { get; }
+
+        public ReactiveCommand<Measure, Unit> DeleteCommand { get; }
+
+        public HealthKitService(
+            IMeasureService measureService,
+            IMvxLogProvider logProvider)
         {
+            _log = logProvider.GetLogFor<HealthKitService>();
             _measureService = measureService ?? throw new ArgumentNullException(nameof(measureService));
             _healthStore = new HKHealthStore();
+
+            AddCommand = ReactiveCommand.CreateFromTask<Measure>(
+                v => AddSamples(GetQuantitySamples(v)));
+
+            AddCommand.ThrownExceptions
+                .Subscribe(e => _log.ErrorException("While sync measure", e));
+
+            DeleteCommand = ReactiveCommand.CreateFromTask<Measure>(
+                v => DeleteSamples(v));
+
+            DeleteCommand.ThrownExceptions
+                .Subscribe(e => _log.ErrorException("While deleting measure", e));
+
+            var addedMeasures = MessageBus.Current
+                .ListenIncludeLatest<MeasureAddedEvent>()
+                .Select(v => v?.Value);
+
+            var changedMeasures = MessageBus.Current
+                .ListenIncludeLatest<MeasureChangedEvent>()
+                .Select(v => v?.Value);
+
+            addedMeasures
+                .Merge(changedMeasures)
+                .Where(v => v != null)
+                .Where(_ => GetStatus())
+                .InvokeCommand(this, v => v.AddCommand);
+
+            MessageBus.Current
+                .ListenIncludeLatest<MeasureDeletedEvent>()
+                .Select(v => v?.Value)
+                .Where(v => v != null)
+                .Where(_ => GetStatus())
+                .InvokeCommand(this, v => v.DeleteCommand);
+
         }
 
         public async Task Export()
@@ -60,16 +119,9 @@ namespace Diabetto.iOS.Services
 
             var measureSamples = measures
                 .Where(v => v.ShortInsulin > 0 || v.LongInsulin > 0)
-                .SelectMany(v => GetInsulinSamples(v))
-                .OfType<HKObject>()
-                .ToArray();
+                .SelectMany(v => GetQuantitySamples(v));
 
-            var saveMeasureSamplesResult = await _healthStore.SaveObjectsAsync(measureSamples);
-
-            if (!saveMeasureSamplesResult.Item1)
-            {
-                throw new InvalidOperationException(saveMeasureSamplesResult.Item2.LocalizedDescription);
-            }
+            await AddSamples(measureSamples);
         }
 
         public bool GetStatus()
@@ -88,6 +140,13 @@ namespace Diabetto.iOS.Services
         /// <inheritdoc />
         public async Task<bool> Enable()
         {
+            var currentStatus = GetStatus();
+
+            if (currentStatus)
+            {
+                return true;
+            }
+
             var accessGranted = await _healthStore.RequestAuthorizationToShareAsync(_dataTypesToWrite, _dataTypesToRead);
 
             if (accessGranted.Item1)
@@ -96,6 +155,10 @@ namespace Diabetto.iOS.Services
                 pList.SetBool(true, _userDefaultsKey);
                 pList.Synchronize();
             }
+            else
+            {
+                _log.Warn("Can't obtain authorization to health kit");
+            }
 
             return accessGranted.Item1;
         }
@@ -103,6 +166,13 @@ namespace Diabetto.iOS.Services
         /// <inheritdoc />
         public void Disable()
         {
+            var currentStatus = GetStatus();
+
+            if (!currentStatus)
+            {
+                return;
+            }
+
             var pList = NSUserDefaults.StandardUserDefaults;
             pList.SetBool(false, _userDefaultsKey);
             pList.Synchronize();
@@ -114,7 +184,49 @@ namespace Diabetto.iOS.Services
             _healthStore?.Dispose();
         }
 
-        private static IEnumerable<HKQuantitySample> GetInsulinSamples(Measure measure)
+        private async Task DeleteSamples(Measure measure)
+        {
+            var predicate = HKQuery.GetPredicateForMetadataKey(
+                HKMetadataKey.ExternalUuid,
+                new[] {NSObject.FromObject(MetadataKey.GetExternalUUID(measure.Id))});
+
+            var result = await _healthStore.DeleteObjectsAsync(
+                HKQuantityType.Create(HKQuantityTypeIdentifier.BloodGlucose),
+                predicate);
+
+            if (!result.Item1)
+            {
+                _log.Warn($"Can't delete blood glucose data by reason: {result.Item2.LocalizedDescription}");
+            }
+
+            result = await _healthStore.DeleteObjectsAsync(
+                HKQuantityType.Create(HKQuantityTypeIdentifier.InsulinDelivery),
+                predicate);
+
+            if (!result.Item1)
+            {
+                _log.Warn($"Can't delete insulin data by reason: {result.Item2.LocalizedDescription}");
+            }
+        }
+
+        private async Task AddSamples(IEnumerable<HKObject> objects)
+        {
+            var samples = objects.ToArray();
+
+            if (samples.Length == 0)
+            {
+                return;
+            }
+
+            var result = await _healthStore.SaveObjectsAsync(samples);
+
+            if (!result.Item1)
+            {
+                throw new InvalidOperationException($"Can't sync health kit: {result.Item2.LocalizedDescription}");
+            }
+        }
+
+        private static IEnumerable<HKObject> GetQuantitySamples(Measure measure)
         {
             if (measure.Level.HasValue)
             {
@@ -131,7 +243,7 @@ namespace Diabetto.iOS.Services
                     measure.Id,
                     measure.Date,
                     measure.Version,
-                    isLong: false,
+                    type: InsulinType.Bolus,
                     measure.ShortInsulin);
             }
 
@@ -141,7 +253,7 @@ namespace Diabetto.iOS.Services
                     measure.Id,
                     measure.Date,
                     measure.Version,
-                    isLong: true,
+                    type: InsulinType.Basal,
                     measure.LongInsulin);
             }
         }
@@ -153,12 +265,21 @@ namespace Diabetto.iOS.Services
             int level
             )
         {
-            var metadata = new NSDictionary
-            {
-                [MetadataKey.DiabettoOrigin] = (NSString) "true",
-                [HKMetadataKey.SyncVersion] = (NSString) version.ToString(),
-                [HKMetadataKey.SyncIdentifier] = (NSString) MetadataKey.GetIdentifier(measureId)
-            };
+            var metadata = new NSDictionary(
+                MetadataKey.DiabettoOrigin,
+                NSObject.FromObject(true),
+                HKMetadataKey.TimeZone,
+                NSObject.FromObject("UTC"),
+                MetadataKey.IsTest,
+                NSObject.FromObject(true),
+                HKMetadataKey.SyncVersion,
+                NSObject.FromObject(version),
+                HKMetadataKey.WasUserEntered,
+                NSObject.FromObject(true),
+                HKMetadataKey.ExternalUuid,
+                NSObject.FromObject(MetadataKey.GetExternalUUID(measureId)),
+                HKMetadataKey.SyncIdentifier,
+                NSObject.FromObject(MetadataKey.GetBloodGlucoseIdentifier(measureId)));
 
             return HKQuantitySample.FromType(
                 HKQuantityType.Create(HKQuantityTypeIdentifier.BloodGlucose),
@@ -176,19 +297,29 @@ namespace Diabetto.iOS.Services
             int measureId,
             DateTime date,
             int version,
-            bool isLong,
+            InsulinType type,
             int value
         )
         {
-            var metadata = new NSDictionary
-            {
-                [HKMetadataKey.InsulinDeliveryReason] = isLong
-                    ? (NSString) HKInsulinDeliveryReason.Basal.ToString()
-                    : (NSString) HKInsulinDeliveryReason.Bolus.ToString(),
-                [MetadataKey.DiabettoOrigin] = (NSString) "true",
-                [HKMetadataKey.SyncVersion] = (NSString) version.ToString(),
-                [HKMetadataKey.SyncIdentifier] = (NSString) MetadataKey.GetIdentifier(measureId)
-            };
+            var metadata = new NSDictionary(
+                MetadataKey.DiabettoOrigin,
+                NSObject.FromObject(true),
+                HKMetadataKey.InsulinDeliveryReason,
+                NSObject.FromObject(type == InsulinType.Basal
+                    ? HKInsulinDeliveryReason.Basal
+                    : HKInsulinDeliveryReason.Bolus),
+                HKMetadataKey.TimeZone,
+                NSObject.FromObject("UTC"),
+                MetadataKey.IsTest,
+                NSObject.FromObject(true),
+                HKMetadataKey.ExternalUuid,
+                NSObject.FromObject(MetadataKey.GetExternalUUID(measureId)),
+                HKMetadataKey.WasUserEntered,
+                NSObject.FromObject(true),
+                HKMetadataKey.SyncVersion,
+                NSObject.FromObject(version),
+                HKMetadataKey.SyncIdentifier,
+                NSObject.FromObject(MetadataKey.GetInsulinIdentifier(measureId, type)));
 
             return HKQuantitySample.FromType(
                 HKQuantityType.Create(HKQuantityTypeIdentifier.InsulinDelivery),

@@ -33,5 +33,10 @@ namespace Diabetto.Core.ViewModels.Measures
                 .DefaultIfEmpty(0)
                 .Sum();
         }
+
+        public Measure Extract()
+        {
+            return _measure;
+        }
     }
 }

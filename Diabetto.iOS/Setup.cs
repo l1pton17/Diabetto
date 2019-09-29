@@ -7,6 +7,7 @@ using MvvmCross;
 using MvvmCross.Base;
 using MvvmCross.Binding.Bindings.Target.Construction;
 using MvvmCross.IoC;
+using MvvmCross.Platforms.Ios.Binding.Target;
 using MvvmCross.Platforms.Ios.Core;
 using MvvmCross.Plugin.Json;
 using UIKit;
@@ -37,6 +38,16 @@ namespace Diabetto.iOS
             var healthKitSettingsViewModel = Mvx.IoCProvider.IoCConstruct<HealthKitSettingsViewModel>();
 
             settingViewModelStorage.Options.Add(healthKitSettingsViewModel);
+        }
+
+        protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)
+        {
+            base.FillTargetFactories(registry);
+
+            registry.RegisterCustomBindingFactory<UISwitch>(
+                "On",
+                uiSwitch => new MvxUISwitchOnTargetBinding(uiSwitch)
+            );
         }
 
         protected override IMvxIocOptions CreateIocOptions()
