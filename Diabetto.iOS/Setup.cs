@@ -20,6 +20,7 @@ namespace Diabetto.iOS
             base.InitializeFirstChance();
             Mvx.IoCProvider.RegisterType<IMvxJsonConverter, MvxJsonConverter>();
             Mvx.IoCProvider.RegisterType<IDialogService, DialogService>();
+            Mvx.IoCProvider.LazyConstructAndRegisterSingleton<IHealthKitService, HealthKitService>();
         }
 
         protected override void InitializeLastChance()

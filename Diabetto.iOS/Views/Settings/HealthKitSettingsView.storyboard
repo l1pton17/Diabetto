@@ -55,12 +55,28 @@
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="697" id="698">
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="2213" translatesAutoresizingMaskIntoConstraints="NO">
+                                                    <rect key="frame" x="20" y="7" width="374" height="30"/>
+                                                    <state key="normal" title="Export measures"/>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint id="2214" firstAttribute="trailing" secondItem="2213" secondAttribute="trailing" constant="20"/>
+                                                <constraint id="2215" firstItem="2213" firstAttribute="leading" secondItem="698" secondAttribute="leading" constant="20"/>
+                                                <constraint id="2217" firstItem="2213" firstAttribute="top" secondItem="698" secondAttribute="top" constant="7"/>
+                                                <constraint id="2218" firstAttribute="bottom" secondItem="2213" secondAttribute="bottom" constant="7"/>
+                                            </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
                         </sections>
                     </tableView>
+                    <connections>
+                        <outlet property="ExportButton" destination="2213" id="name-outlet-2213"/>
+                        <outlet property="EnabledSwitch" destination="1907" id="name-outlet-1907"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="301" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

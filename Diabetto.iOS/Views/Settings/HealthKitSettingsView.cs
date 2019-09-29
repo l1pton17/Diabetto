@@ -1,13 +1,13 @@
 ﻿
 using System;
 using Diabetto.iOS.ViewModels.Settings;
+using MvvmCross.Binding.BindingContext;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using MvvmCross.Platforms.Ios.Views;
-using UIKit;
 
 namespace Diabetto.iOS.Views.Settings
 {
-    [MvxFromStoryboard]
+    [MvxFromStoryboard(StoryboardName = "HealthKitSettingsView")]
     [MvxChildPresentation(Animated = true)]
     public partial class HealthKitSettingsView : MvxTableViewController<HealthKitSettingsViewModel>
     {
@@ -15,43 +15,20 @@ namespace Diabetto.iOS.Views.Settings
         {
         }
 
-        public override void DidReceiveMemoryWarning()
-        {
-            // Releases the view if it doesn't have a superview.
-            base.DidReceiveMemoryWarning();
-
-            // Release any cached data, images, etc that aren't in use.
-        }
-
-        #region View lifecycle
-
         public override void ViewDidLoad()
         {
-            base.ViewDidLoad();
+            var bindingSet = this.CreateBindingSet<HealthKitSettingsView, HealthKitSettingsViewModel>();
 
-            // Perform any additional setup after loading the view, typically from a nib.
+            bindingSet
+                .Bind(EnabledSwitch)
+                .For(v => v.Selected)
+                .To(v => v.IsEnabled);
+
+            bindingSet
+                .Bind(ExportButton)
+                .To(v => v.ExportCommand);
+
+            bindingSet.Apply();
         }
-
-        public override void ViewWillAppear(bool animated)
-        {
-            base.ViewWillAppear(animated);
-        }
-
-        public override void ViewDidAppear(bool animated)
-        {
-            base.ViewDidAppear(animated);
-        }
-
-        public override void ViewWillDisappear(bool animated)
-        {
-            base.ViewWillDisappear(animated);
-        }
-
-        public override void ViewDidDisappear(bool animated)
-        {
-            base.ViewDidDisappear(animated);
-        }
-
-        #endregion
     }
 }

@@ -26,7 +26,8 @@
     <MtouchLink>None</MtouchLink>
     <MtouchDebug>true</MtouchDebug>
     <CodesignKey>iPhone Developer</CodesignKey>
-    <CodesignProvision />
+    <CodesignProvision>Diabetto Provisioning Profile</CodesignProvision>
+    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>
@@ -100,6 +101,7 @@
     <Compile Include="LinkerPleaseInclude.cs" />
     <Compile Include="MvxBindings\NetworkIndicatorTargetBinding.cs" />
     <Compile Include="Services\DialogService.cs" />
+    <Compile Include="Services\HealthKitService.cs" />
     <Compile Include="Setup.cs" />
     <Compile Include="Sources\Measures\MeasureTableViewSource.cs" />
     <Compile Include="Sources\Products\ProductSearchResultsTableViewSource.cs" />
@@ -139,6 +141,9 @@
     </Compile>
     <Compile Include="Views\Products\ProductsView.cs" />
     <Compile Include="Views\Settings\HealthKitSettingsView.cs" />
+    <Compile Include="Views\Settings\HealthKitSettingsView.designer.cs">
+      <DependentUpon>HealthKitSettingsView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\Settings\SettingsHolderView.cs" />
     <None Include="Info.plist" />
     <Compile Include="Main.cs" />
@@ -148,6 +153,7 @@
     <InterfaceDefinition Include="Views\Cells\Measures\MeasureTableViewCell.xib" />
     <InterfaceDefinition Include="Views\Measures\MeasureView.storyboard" />
     <InterfaceDefinition Include="Views\Cells\Products\ProductSearchResultTableViewCell.xib" />
+    <InterfaceDefinition Include="Views\Settings\HealthKitSettingsView.storyboard" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

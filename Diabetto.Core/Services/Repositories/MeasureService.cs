@@ -16,6 +16,8 @@ namespace Diabetto.Core.Services.Repositories
 
         Task<List<Measure>> GetAsync(DateTime from, DateTime until);
 
+        Task<List<Measure>> GetAllAsync();
+
         Task AddAsync(Measure value);
 
         Task EditAsync(Measure value);
@@ -35,10 +37,25 @@ namespace Diabetto.Core.Services.Repositories
         }
 
         /// <inheritdoc />
+        public Task<List<Measure>> GetAllAsync()
+        {
+            lock (_lockObject)
+            {
+                var values = Table<Measure>()
+                    .Select(v => FixDateTime(v))
+                    .ToList();
+
+                return Task.FromResult(values);
+            }
+        }
+
+        /// <inheritdoc />
         public Task AddAsync(Measure value)
         {
             lock (_lockObject)
             {
+                value.Version = 0;
+
                 this.InsertOrReplaceWithChildren(value, recursive: true);
             }
 
@@ -50,6 +67,8 @@ namespace Diabetto.Core.Services.Repositories
         {
             lock (_lockObject)
             {
+                value.Version++;
+
                 this.InsertOrReplaceWithChildren(value, recursive: true);
             }
 
