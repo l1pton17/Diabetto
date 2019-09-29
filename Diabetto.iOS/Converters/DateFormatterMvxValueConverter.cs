@@ -20,7 +20,7 @@ namespace Diabetto.iOS.Converters
 
         protected override string Convert(DateTime value, Type targetType, object parameter, CultureInfo culture)
         {
-            return _dateFormatter?.ToString((NSDate) value) ?? value.ToString();
+            return _dateFormatter?.ToString((NSDate) value) ?? value.ToString(CultureInfo.CurrentUICulture);
         }
     }
 }

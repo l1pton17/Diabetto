@@ -57,7 +57,16 @@ namespace Diabetto.iOS.Views.Measures
                 .To(v => v.Date);
 
             set.Bind(DateValueLabel)
-                .To(v => v.Date);
+                .For(v => v.Text)
+                .To(v => v.Date)
+                .WithConversion(
+                    new DateFormatterMvxValueConverter(
+                        new NSDateFormatter
+                        {
+                            Locale = NSLocale.CurrentLocale,
+                            DateStyle = NSDateFormatterStyle.Short,
+                            TimeStyle = NSDateFormatterStyle.Short
+                        }));
 
             set.Bind(LongInsulinStepper)
                 .For(v => v.Value)

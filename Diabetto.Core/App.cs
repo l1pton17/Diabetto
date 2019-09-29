@@ -38,9 +38,6 @@ namespace Diabetto.Core
             Mvx.IoCProvider.ConstructAndRegisterSingleton<IProductService, ProductService>();
             Mvx.IoCProvider.ConstructAndRegisterSingleton<ITagService, TagService>();
 
-            //Mvx.IoCProvider.RegisterSingleton(() => UserDialogs.Instance);
-
-            // register the appstart object
             RegisterCustomAppStart<AppStart>();
 
             ServicePointManager.ServerCertificateValidationCallback += delegate { return true; };

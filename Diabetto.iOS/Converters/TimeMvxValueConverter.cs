@@ -9,6 +9,7 @@ namespace Diabetto.iOS.Converters
     {
         private static readonly NSDateFormatter _dateFormatter = new NSDateFormatter
         {
+            Locale = NSLocale.CurrentLocale,
             DateStyle = NSDateFormatterStyle.None,
             TimeStyle = NSDateFormatterStyle.Short
         };
