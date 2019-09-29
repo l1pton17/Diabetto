@@ -118,7 +118,6 @@ namespace Diabetto.iOS.Services
             var measures = await _measureService.GetAllAsync();
 
             var measureSamples = measures
-                .Where(v => v.ShortInsulin > 0 || v.LongInsulin > 0)
                 .SelectMany(v => GetQuantitySamples(v));
 
             await AddSamples(measureSamples);
