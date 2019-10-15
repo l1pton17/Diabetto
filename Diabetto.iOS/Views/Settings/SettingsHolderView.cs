@@ -19,6 +19,8 @@ namespace Diabetto.iOS.Views.Settings
 
             Title = "Settings";
 
+            TableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
+
             _source = new MvxStandardTableViewSource(
                 TableView,
                 UITableViewCellStyle.Default,
