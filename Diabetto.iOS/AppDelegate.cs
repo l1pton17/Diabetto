@@ -2,7 +2,9 @@
 using System.IO;
 using System.Threading.Tasks;
 using Diabetto.Core;
+using Diabetto.iOS.MeasureKit;
 using Foundation;
+using Intents;
 using MvvmCross.Platforms.Ios.Core;
 using UIKit;
 
@@ -29,6 +31,33 @@ namespace Diabetto.iOS
             return result;
         }
 
+        public override bool ContinueUserActivity(UIApplication application, NSUserActivity userActivity, UIApplicationRestorationHandler completionHandler)
+        {
+            if (userActivity.GetInteraction()?.Intent is AddMeasureIntent intent)
+            {
+                HandleIntent(intent);
+
+                return true;
+            }
+
+            return false;
+        }
+
+        private static void HandleIntent(AddMeasureIntent intent)
+        {
+            var handler = new AddMeasureIntentHandler();
+
+            handler.HandleAddMeasure(
+                intent,
+                response =>
+                {
+                    if (response.Code != AddMeasureIntentResponseCode.Success)
+                    {
+                        Console.WriteLine(response.Code);
+                    }
+                });
+        }
+
         private static void TaskSchedulerOnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs unobservedTaskExceptionEventArgs)
         {
             var newExc = new Exception("TaskSchedulerOnUnobservedTaskException", unobservedTaskExceptionEventArgs.Exception);
@@ -41,7 +70,7 @@ namespace Diabetto.iOS
             LogUnhandledException(newExc);
         }
 
-        internal static void LogUnhandledException(Exception exception)
+        private static void LogUnhandledException(Exception exception)
         {
             try
             {

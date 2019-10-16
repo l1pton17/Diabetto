@@ -107,10 +107,6 @@
     <Compile Include="Sources\Measures\MeasureTableViewSource.cs" />
     <Compile Include="Sources\Products\ProductSearchResultsTableViewSource.cs" />
     <Compile Include="Sources\ProductMeasures\ProductMeasureTableViewSource.cs" />
-    <Compile Include="UINoCursorTextField.cs" />
-    <Compile Include="UINoCursorTextField.designer.cs">
-      <DependentUpon>UINoCursorTextField.cs</DependentUpon>
-    </Compile>
     <Compile Include="ViewModels\Dialogs\PickerDialogViewModel.cs" />
     <Compile Include="Sources\MvxDeleteTableViewSource.cs" />
     <Compile Include="ViewModels\Settings\HealthKitSettingsViewModel.cs" />
@@ -157,6 +153,9 @@
     <InterfaceDefinition Include="Views\Settings\HealthKitSettingsView.storyboard" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="NativeLibrary">
+      <HintPath>..\Diabetto.iOS.AddMeasureIntentBinding\NativeLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
@@ -224,6 +223,24 @@
     <ProjectReference Include="..\Diabetto.Core\Diabetto.Core.csproj">
       <Project>{3969cb50-1ec2-442c-bb86-752e0aae4c63}</Project>
       <Name>Diabetto.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Diabetto.iOS.Intents\Diabetto.iOS.IntentsUI\Diabetto.iOS.IntentsUI.csproj">
+      <Project>{aeb8f693-6aac-4f54-8b10-e295cecc2108}</Project>
+      <Name>Diabetto.iOS.IntentsUI</Name>
+      <IsAppExtension>true</IsAppExtension>
+      <IsWatchApp>false</IsWatchApp>
+    </ProjectReference>
+    <ProjectReference Include="..\Diabetto.iOS.Intents\Diabetto.iOS.Intents\Diabetto.iOS.Intents.csproj">
+      <Project>{afcdf530-7264-47aa-837e-55fc9b943509}</Project>
+      <Name>Diabetto.iOS.Intents</Name>
+      <IsAppExtension>true</IsAppExtension>
+      <IsWatchApp>false</IsWatchApp>
+    </ProjectReference>
+    <ProjectReference Include="..\Diabetto.iOS.MeasureKit\Diabetto.iOS.MeasureKit.csproj">
+      <Project>{c7ff198e-5d84-4f02-bd5d-2a2e01f38a2d}</Project>
+      <Name>Diabetto.iOS.MeasureKit</Name>
+      <IsAppExtension>false</IsAppExtension>
+      <IsWatchApp>false</IsWatchApp>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />

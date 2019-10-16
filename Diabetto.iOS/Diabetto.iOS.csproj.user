@@ -3,8 +3,10 @@
   <PropertyGroup>
     <SelectedDevice>iPhone 11 iOS 13.1</SelectedDevice>
     <DefaultDevice>iPhone 11 iOS 13.1</DefaultDevice>
-    <DeveloperId />
-    <DevelopmentTeamId />
+    <DeveloperId>
+    </DeveloperId>
+    <DevelopmentTeamId>
+    </DevelopmentTeamId>
     <ProjectView>ProjectFiles</ProjectView>
   </PropertyGroup>
 </Project>

@@ -40,10 +40,12 @@ namespace Diabetto.iOS.IntentsUI
             // Do configuration here, including preparing views and calculating a desired size for presentation.
 
             if (completion != null)
+            {
                 completion(DesiredSize());
+            }
         }
 
-        CGSize DesiredSize()
+        private CGSize DesiredSize()
         {
             return ExtensionContext.GetHostedViewMaximumAllowedSize();
         }

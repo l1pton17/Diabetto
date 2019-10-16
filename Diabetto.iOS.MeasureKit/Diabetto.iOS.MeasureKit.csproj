@@ -31,6 +31,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NativeLibrary, Version=1.0.7228.43085, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Diabetto.iOS.AddMeasureIntentBinding\NativeLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
@@ -40,6 +44,7 @@
     <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddMeasureIntentDonationManager.cs" />
     <Compile Include="AddMeasureIntentHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -47,9 +52,9 @@
     <Content Include="Base.lproj\Intents.intentdefinition" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AddMeasureIntentBinding\AddMeasureIntentBinding.csproj">
-      <Project>{88451ab3-9705-46ac-9a55-a9b64253392d}</Project>
-      <Name>AddMeasureIntentBinding</Name>
+    <ProjectReference Include="..\Diabetto.Core\Diabetto.Core.csproj">
+      <Project>{3969cb50-1ec2-442c-bb86-752e0aae4c63}</Project>
+      <Name>Diabetto.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />

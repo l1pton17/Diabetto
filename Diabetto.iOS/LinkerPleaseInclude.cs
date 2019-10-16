@@ -120,7 +120,13 @@ namespace Diabetto.iOS
 
         public void Include(ICommand command)
         {
-            command.CanExecuteChanged += (s, e) => { if (command.CanExecute(null)) command.Execute(null); };
+            command.CanExecuteChanged += (s, e) =>
+            {
+                if (command.CanExecute(null))
+                {
+                    command.Execute(null);
+                }
+            };
         }
 
         public void Include(MvvmCross.IoC.MvxPropertyInjector injector)

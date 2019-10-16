@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Diabetto.Core", "Diabetto.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Diabetto.iOS", "Diabetto.iOS\Diabetto.iOS.csproj", "{C281EBF4-6478-4AB3-9AA0-309587786C3F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AddMeasureIntentBinding", "AddMeasureIntentBinding\AddMeasureIntentBinding.csproj", "{88451AB3-9705-46AC-9A55-A9B64253392D}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Diabetto.iOS.MeasureKit", "Diabetto.iOS.MeasureKit\Diabetto.iOS.MeasureKit.csproj", "{C7FF198E-5D84-4F02-BD5D-2A2E01F38A2D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Diabetto.iOS.Intents", "Diabetto.iOS.Intents\Diabetto.iOS.Intents\Diabetto.iOS.Intents.csproj", "{AFCDF530-7264-47AA-837E-55FC9B943509}"
@@ -47,18 +45,6 @@ Global
 		{C281EBF4-6478-4AB3-9AA0-309587786C3F}.Release|iPhone.Build.0 = Release|iPhone
 		{C281EBF4-6478-4AB3-9AA0-309587786C3F}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
 		{C281EBF4-6478-4AB3-9AA0-309587786C3F}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
-		{88451AB3-9705-46AC-9A55-A9B64253392D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{88451AB3-9705-46AC-9A55-A9B64253392D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{88451AB3-9705-46AC-9A55-A9B64253392D}.Debug|iPhone.ActiveCfg = Debug|Any CPU
-		{88451AB3-9705-46AC-9A55-A9B64253392D}.Debug|iPhone.Build.0 = Debug|Any CPU
-		{88451AB3-9705-46AC-9A55-A9B64253392D}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
-		{88451AB3-9705-46AC-9A55-A9B64253392D}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
-		{88451AB3-9705-46AC-9A55-A9B64253392D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{88451AB3-9705-46AC-9A55-A9B64253392D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{88451AB3-9705-46AC-9A55-A9B64253392D}.Release|iPhone.ActiveCfg = Release|Any CPU
-		{88451AB3-9705-46AC-9A55-A9B64253392D}.Release|iPhone.Build.0 = Release|Any CPU
-		{88451AB3-9705-46AC-9A55-A9B64253392D}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
-		{88451AB3-9705-46AC-9A55-A9B64253392D}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 		{C7FF198E-5D84-4F02-BD5D-2A2E01F38A2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C7FF198E-5D84-4F02-BD5D-2A2E01F38A2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C7FF198E-5D84-4F02-BD5D-2A2E01F38A2D}.Debug|iPhone.ActiveCfg = Debug|Any CPU

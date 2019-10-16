@@ -1,5 +1,6 @@
 ﻿using Diabetto.Core;
 using Diabetto.Core.Services;
+using Diabetto.iOS.MeasureKit;
 using Diabetto.iOS.MvxBindings;
 using Diabetto.iOS.Services;
 using Diabetto.iOS.ViewModels.Settings;
@@ -38,6 +39,8 @@ namespace Diabetto.iOS
             var healthKitSettingsViewModel = Mvx.IoCProvider.IoCConstruct<HealthKitSettingsViewModel>();
 
             settingViewModelStorage.Options.Add(healthKitSettingsViewModel);
+
+            Mvx.IoCProvider.ConstructAndRegisterSingleton<IAddMeasureIntentDonationManager, AddMeasureIntentDonationManager>();
         }
 
         protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)
