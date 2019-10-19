@@ -71,10 +71,10 @@
     <OutputPath>bin\iPhone\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodesignKey>iPhone Distribution</CodesignKey>
+    <CodesignKey>Apple Distribution: ARTUR  SITDIKOV (M4Y3PFSKXS)</CodesignKey>
     <MtouchUseSGen>true</MtouchUseSGen>
     <MtouchUseRefCounting>true</MtouchUseRefCounting>
-    <MtouchFloat32>true</MtouchFloat32>
+    <MtouchFloat32>false</MtouchFloat32>
     <CodesignEntitlements>
     </CodesignEntitlements>
     <MtouchLink>SdkOnly</MtouchLink>
@@ -84,6 +84,9 @@
     <CodesignProvision>Diabetto Intents UI Distribution Profile</CodesignProvision>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AddMeasureIntentBinding">
+      <HintPath>..\..\Diabetto.iOS.AddMeasureIntentBinding\AddMeasureIntentBinding.dll</HintPath>
+    </Reference>
     <Reference Include="NativeLibrary, Version=1.0.7228.43085, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Diabetto.iOS.AddMeasureIntentBinding\NativeLibrary.dll</HintPath>
@@ -105,14 +108,6 @@
     <Compile Include="IntentViewController.designer.cs">
       <DependentUpon>IntentViewController.cs</DependentUpon>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Diabetto.iOS.MeasureKit\Diabetto.iOS.MeasureKit.csproj">
-      <Project>{c7ff198e-5d84-4f02-bd5d-2a2e01f38a2d}</Project>
-      <Name>Diabetto.iOS.MeasureKit</Name>
-      <IsAppExtension>false</IsAppExtension>
-      <IsWatchApp>false</IsWatchApp>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.AppExtension.CSharp.targets" />
 </Project>

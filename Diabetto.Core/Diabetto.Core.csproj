@@ -5,15 +5,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DynamicData" Version="6.13.5" />
-    <PackageReference Include="MvvmCross" Version="6.4.0" />
-    <PackageReference Include="MvvmCross.Plugin.Json" Version="6.4.0" />
-    <PackageReference Include="MvvmCross.Plugin.Messenger" Version="6.4.0" />
-    <PackageReference Include="MvvmCross.Plugin.Visibility" Version="6.4.0" />
+    <PackageReference Include="DynamicData" Version="6.13.18" />
+    <PackageReference Include="MvvmCross" Version="6.4.1" />
+    <PackageReference Include="MvvmCross.Plugin.Json" Version="6.4.1" />
+    <PackageReference Include="MvvmCross.Plugin.Messenger" Version="6.4.1" />
+    <PackageReference Include="MvvmCross.Plugin.Visibility" Version="6.4.1" />
     <PackageReference Include="ReactiveUI" Version="9.22.1" />
     <PackageReference Include="sqlite-net-pcl" Version="1.6.292" />
     <PackageReference Include="SQLiteNetExtensions" Version="2.1.0" />
-    <PackageReference Include="System.Collections.Immutable" Version="1.5.0" />
+    <PackageReference Include="System.Collections.Immutable" Version="1.6.0" />
   </ItemGroup>
 
   <ItemGroup>
