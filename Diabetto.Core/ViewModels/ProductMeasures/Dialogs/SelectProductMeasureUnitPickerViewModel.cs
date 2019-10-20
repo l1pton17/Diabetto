@@ -30,20 +30,19 @@ namespace Diabetto.Core.ViewModels.ProductMeasures.Dialogs
                 .Subscribe(
                     v =>
                     {
-                        Item1Values.Clear();
+                        ClearItem1Values();
 
                         if (v.IsGrams)
                         {
-                            Item1Values.AddRange(GramAmounts);
+                            AddItem1Values(GramAmounts);
                         }
                         else
                         {
-                            Item1Values.AddRange(Amounts);
+                            AddItem1Values(Amounts);
                         }
                     });
 
-            Item2Values
-                .AddRange(units.Select(v => DialogPickerOption.Create(v)));
+            AddItem2Values(units.Select(v => DialogPickerOption.Create(v)));
         }
 
         protected override string FormatItem2(DialogPickerOption<ProductMeasureUnit> item)

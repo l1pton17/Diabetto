@@ -6,8 +6,6 @@ using Diabetto.Core.Resources;
 using Diabetto.Core.Services;
 using MvvmCross.ViewModels;
 using ReactiveUI;
-using PropertyChangingEventArgs = ReactiveUI.PropertyChangingEventArgs;
-using PropertyChangingEventHandler = ReactiveUI.PropertyChangingEventHandler;
 
 namespace Diabetto.Core.ViewModels.Core
 {

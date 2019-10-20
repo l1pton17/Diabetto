@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
@@ -7,10 +9,10 @@ using Diabetto.Core.Services;
 using Diabetto.Core.Services.Repositories;
 using Diabetto.Core.ViewModelResults;
 using Diabetto.Core.ViewModels.Core;
+using DynamicData;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using ReactiveUI;
-using ReactiveUI.Legacy;
 #pragma warning disable 618
 
 namespace Diabetto.Core.ViewModels.Measures
@@ -39,7 +41,8 @@ namespace Diabetto.Core.ViewModels.Measures
             set => SetProperty(ref _date, value);
         }
 
-        public ReactiveList<MeasureCellViewModel> Measures { get; }
+        private readonly ObservableCollection<MeasureCellViewModel> _measures;
+        public IEnumerable<MeasureCellViewModel> Measures => _measures;
 
         public ReactiveCommand<Unit, Unit> AddCommand { get; }
 
@@ -65,7 +68,7 @@ namespace Diabetto.Core.ViewModels.Measures
             _measureService = measureService ?? throw new ArgumentNullException(nameof(measureService));
             _timeProvider = timeProvider ?? throw new ArgumentNullException(nameof(timeProvider));
             _cellViewModelFactory = cellViewModelFactory ?? throw new ArgumentNullException(nameof(cellViewModelFactory));
-            Measures = new ReactiveList<MeasureCellViewModel>();
+            _measures = new ObservableCollection<MeasureCellViewModel>();
 
             SelectedCommand = ReactiveCommand.CreateFromTask<MeasureCellViewModel>(MeasureSelected);
             AddCommand = ReactiveCommand.CreateFromTask(Add);
@@ -124,9 +127,11 @@ namespace Diabetto.Core.ViewModels.Measures
         {
             var result = await _measureService.GetAsync(Date);
 
-            Measures.Clear();
 
-            Measures
+
+            _measures.Clear();
+
+            _measures
                 .AddRange(
                     result
                         .OrderBy(v => v.Date)

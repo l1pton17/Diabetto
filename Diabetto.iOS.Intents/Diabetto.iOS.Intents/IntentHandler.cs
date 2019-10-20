@@ -1,5 +1,5 @@
 ﻿using System;
-using Diabetto.iOS.MeasureKit;
+using Diabetto.iOS.Intents.Shared;
 using Foundation;
 using Intents;
 

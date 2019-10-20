@@ -2,7 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 using Diabetto.Core;
-using Diabetto.iOS.MeasureKit;
+using Diabetto.iOS.Intents.Shared;
 using Foundation;
 using Intents;
 using MvvmCross.Platforms.Ios.Core;

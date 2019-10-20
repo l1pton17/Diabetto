@@ -13,25 +13,32 @@ namespace Diabetto.iOS.MeasureKit
         /// <inheritdoc />
         public override void HandleAddMeasure(AddMeasureIntent intent, Action<AddMeasureIntentResponse> completion)
         {
-            var level = intent.Level;
-            var shortInsulin = intent.Shortinsulin;
-            var breadUnits = intent.Breadunits;
-
-            var hasLevel = level.DoubleValue > 0;
-            var hasShortInsulin = shortInsulin.Int32Value > 0;
-            var hasBreadUnits = breadUnits.DoubleValue > 0;
-
-            var hasSomeValues = hasLevel || hasBreadUnits || hasShortInsulin;
-
-            if (!hasSomeValues)
-            {
-                completion(new AddMeasureIntentResponse(AddMeasureIntentResponseCode.Failure, null));
-
-                return;
-            }
-
             try
             {
+                if (intent == null)
+                {
+                    completion(new AddMeasureIntentResponse(AddMeasureIntentResponseCode.Failure, null));
+
+                    return;
+                }
+
+                var level = intent.Level;
+                var shortInsulin = intent.Shortinsulin;
+                var breadUnits = intent.Breadunits;
+
+                var hasLevel = level.DoubleValue > 0;
+                var hasShortInsulin = shortInsulin.Int32Value > 0;
+                var hasBreadUnits = breadUnits.DoubleValue > 0;
+
+                var hasSomeValues = hasLevel || hasBreadUnits || hasShortInsulin;
+
+                if (!hasSomeValues)
+                {
+                    completion(new AddMeasureIntentResponse(AddMeasureIntentResponseCode.Failure, null));
+
+                    return;
+                }
+
                 var measureService = Mvx.IoCProvider.Resolve<IMeasureService>();
                 var timeProvider = Mvx.IoCProvider.Resolve<ITimeProvider>();
 

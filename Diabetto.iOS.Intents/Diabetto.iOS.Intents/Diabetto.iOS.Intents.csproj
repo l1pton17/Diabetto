@@ -19,18 +19,21 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodesignKey>Apple Development: ARTUR  SITDIKOV (U37ZUS2JRL)</CodesignKey>
-    <MtouchDebug>true</MtouchDebug>
-    <MtouchFastDev>true</MtouchFastDev>
+    <MtouchDebug>false</MtouchDebug>
+    <MtouchFastDev>false</MtouchFastDev>
     <MtouchUseSGen>true</MtouchUseSGen>
     <MtouchUseRefCounting>true</MtouchUseRefCounting>
-    <MtouchLink>None</MtouchLink>
+    <MtouchLink>SdkOnly</MtouchLink>
     <MtouchArch>x86_64</MtouchArch>
-    <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
+    <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
     <MtouchTlsProvider>Default</MtouchTlsProvider>
     <DeviceSpecificBuild>false</DeviceSpecificBuild>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
-    <CodesignProvision>Diabetto Intents Provisioning Profile</CodesignProvision>
+    <CodesignProvision>Diabetto Intents Development Profile</CodesignProvision>
     <MtouchExtraArgs>-v -v -v -v</MtouchExtraArgs>
+    <MtouchEnableSGenConc>true</MtouchEnableSGenConc>
+    <MtouchNoSymbolStrip>true</MtouchNoSymbolStrip>
+    <MtouchFloat32>false</MtouchFloat32>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>pdbonly</DebugType>
@@ -93,9 +96,15 @@
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'Default' ">
     <AppExtensionDebugBundleId />
   </PropertyGroup>
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="AddMeasureIntentBinding">
       <HintPath>..\..\Diabetto.iOS.AddMeasureIntentBinding\AddMeasureIntentBinding.dll</HintPath>
+    </Reference>
+    <Reference Include="MvvmCross, Version=6.4.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MvvmCross.6.4.1\lib\xamarinios10\MvvmCross.dll</HintPath>
     </Reference>
     <Reference Include="OpenTK-1.0" />
     <Reference Include="System" />
@@ -114,9 +123,13 @@
     <Compile Include="IntentHandler.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Diabetto.iOS.MeasureKit\Diabetto.iOS.MeasureKit.csproj">
-      <Project>{c7ff198e-5d84-4f02-bd5d-2a2e01f38a2d}</Project>
-      <Name>Diabetto.iOS.MeasureKit</Name>
+    <ProjectReference Include="..\..\Diabetto.Core\Diabetto.Core.csproj">
+      <Project>{3969cb50-1ec2-442c-bb86-752e0aae4c63}</Project>
+      <Name>Diabetto.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Diabetto.iOS.Intents.Shared\Diabetto.iOS.Intents.Shared.csproj">
+      <Project>{6e22c0b4-dc54-41ee-9b80-180ccd56687b}</Project>
+      <Name>Diabetto.iOS.Intents.Shared</Name>
       <IsAppExtension>false</IsAppExtension>
       <IsWatchApp>false</IsWatchApp>
     </ProjectReference>
