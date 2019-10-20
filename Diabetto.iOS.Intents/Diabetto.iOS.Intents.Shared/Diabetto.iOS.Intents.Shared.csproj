@@ -54,6 +54,9 @@
     <MtouchHttpClientHandler>
     </MtouchHttpClientHandler>
   </PropertyGroup>
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="AddMeasureIntentBinding">
       <HintPath>..\..\Diabetto.iOS.AddMeasureIntentBinding\AddMeasureIntentBinding.dll</HintPath>

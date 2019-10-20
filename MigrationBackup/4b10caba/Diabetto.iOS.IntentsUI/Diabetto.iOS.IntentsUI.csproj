@@ -108,6 +108,7 @@
   <ItemGroup>
     <None Include="Info.plist" />
     <None Include="Entitlements.plist" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="MainInterface.storyboard" />
@@ -129,14 +130,6 @@
       <IsAppExtension>false</IsAppExtension>
       <IsWatchApp>false</IsWatchApp>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="MvvmCross">
-      <Version>6.4.1</Version>
-    </PackageReference>
-    <PackageReference Include="System.Drawing.Common">
-      <Version>4.6.0</Version>
-    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.AppExtension.CSharp.targets" />
 </Project>

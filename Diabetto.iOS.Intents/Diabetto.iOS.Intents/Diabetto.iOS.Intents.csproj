@@ -23,7 +23,7 @@
     <MtouchFastDev>false</MtouchFastDev>
     <MtouchUseSGen>true</MtouchUseSGen>
     <MtouchUseRefCounting>true</MtouchUseRefCounting>
-    <MtouchLink>SdkOnly</MtouchLink>
+    <MtouchLink>None</MtouchLink>
     <MtouchArch>x86_64</MtouchArch>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
     <MtouchTlsProvider>Default</MtouchTlsProvider>
@@ -103,10 +103,10 @@
     <Reference Include="AddMeasureIntentBinding">
       <HintPath>..\..\Diabetto.iOS.AddMeasureIntentBinding\AddMeasureIntentBinding.dll</HintPath>
     </Reference>
-    <Reference Include="MvvmCross, Version=6.4.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\MvvmCross.6.4.1\lib\xamarinios10\MvvmCross.dll</HintPath>
-    </Reference>
     <Reference Include="OpenTK-1.0" />
+    <Reference Include="ReactiveUI">
+      <HintPath>..\..\..\..\Users\sitdi\.nuget\packages\reactiveui\10.5.7\lib\xamarinios10\ReactiveUI.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
@@ -133,6 +133,20 @@
       <IsAppExtension>false</IsAppExtension>
       <IsWatchApp>false</IsWatchApp>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="MvvmCross">
+      <Version>6.4.1</Version>
+    </PackageReference>
+    <PackageReference Include="Splat">
+      <Version>9.1.1</Version>
+    </PackageReference>
+    <PackageReference Include="System.Drawing.Common">
+      <Version>4.6.0</Version>
+    </PackageReference>
+    <PackageReference Include="System.Reactive">
+      <Version>4.2.0</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.AppExtension.CSharp.targets" />
 </Project>

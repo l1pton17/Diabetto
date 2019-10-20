@@ -23,15 +23,17 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <MtouchArch>x86_64</MtouchArch>
-    <MtouchLink>SdkOnly</MtouchLink>
+    <MtouchLink>None</MtouchLink>
     <MtouchDebug>true</MtouchDebug>
     <CodesignKey>Apple Development: ARTUR  SITDIKOV (U37ZUS2JRL)</CodesignKey>
     <CodesignProvision>Diabetto Development Profile</CodesignProvision>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <MtouchExtraArgs>-v -v -v -v</MtouchExtraArgs>
     <DeviceSpecificBuild>false</DeviceSpecificBuild>
-    <MtouchEnableSGenConc>false</MtouchEnableSGenConc>
-    <MtouchSdkVersion>13.1</MtouchSdkVersion>
+    <MtouchEnableSGenConc>true</MtouchEnableSGenConc>
+    <MtouchSdkVersion>
+    </MtouchSdkVersion>
+    <MtouchNoSymbolStrip>true</MtouchNoSymbolStrip>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>
