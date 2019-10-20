@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AddMeasureIntent.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
-
+AddMeasureIntent
 
 @end
 
