@@ -8,7 +8,7 @@ namespace Diabetto
     // @interface AddMeasureIntent : INIntent
     [Watch(5, 0), NoTV, NoMac, iOS(12, 0)]
     [BaseType(typeof(INIntent))]
-    public interface AddMeasureIntent
+    interface AddMeasureIntent
     {
         // @property (readwrite, copy, nonatomic) NSNumber * _Nullable level;
         [NullAllowed, Export("level", ArgumentSemantic.Copy)]
@@ -27,7 +27,7 @@ namespace Diabetto
     [Watch(5, 0), NoTV, NoMac, iOS(12, 0)]
     [Protocol, Model]
     [BaseType(typeof(NSObject))]
-    public interface AddMeasureIntentHandling
+    interface AddMeasureIntentHandling
     {
         // @required -(void)handleAddMeasure:(AddMeasureIntent * _Nonnull)intent completion:(void (^ _Nonnull)(AddMeasureIntentResponse * _Nonnull))completion;
         [Abstract]
@@ -61,7 +61,7 @@ namespace Diabetto
     [Watch(5, 0), NoTV, NoMac, iOS(12, 0)]
     [BaseType(typeof(INIntentResponse))]
     [DisableDefaultCtor]
-    public interface AddMeasureIntentResponse
+    interface AddMeasureIntentResponse
     {
         // -(instancetype _Nonnull)initWithCode:(AddMeasureIntentResponseCode)code userActivity:(NSUserActivity * _Nullable)userActivity __attribute__((objc_designated_initializer));
         [Export("initWithCode:userActivity:")]
@@ -76,7 +76,7 @@ namespace Diabetto
     // @interface AddMeasureLevelResolutionResult : INDoubleResolutionResult
     [Watch(6, 0), iOS(13, 0)]
     [BaseType(typeof(INDoubleResolutionResult))]
-    public interface AddMeasureLevelResolutionResult
+    interface AddMeasureLevelResolutionResult
     {
         // +(instancetype _Nonnull)unsupportedForReason:(AddMeasureLevelUnsupportedReason)reason;
         [Static]
@@ -87,7 +87,7 @@ namespace Diabetto
     // @interface AddMeasureBreadunitsResolutionResult : INDoubleResolutionResult
     [Watch(6, 0), iOS(13, 0)]
     [BaseType(typeof(INDoubleResolutionResult))]
-    public interface AddMeasureBreadunitsResolutionResult
+    interface AddMeasureBreadunitsResolutionResult
     {
         // +(instancetype _Nonnull)unsupportedForReason:(AddMeasureBreadunitsUnsupportedReason)reason;
         [Static]
@@ -98,7 +98,7 @@ namespace Diabetto
     // @interface AddMeasureShortinsulinResolutionResult : INIntegerResolutionResult
     [Watch(6, 0), iOS(13, 0)]
     [BaseType(typeof(INIntegerResolutionResult))]
-    public interface AddMeasureShortinsulinResolutionResult
+    interface AddMeasureShortinsulinResolutionResult
     {
         // +(instancetype _Nonnull)unsupportedForReason:(AddMeasureShortinsulinUnsupportedReason)reason;
         [Static]
