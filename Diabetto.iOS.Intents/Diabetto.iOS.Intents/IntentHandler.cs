@@ -8,19 +8,16 @@ namespace Diabetto.iOS.Intents
     [Register("IntentHandler")]
     public class IntentHandler : INExtension
     {
-        protected IntentHandler(IntPtr handle)
+        public IntentHandler(IntPtr handle)
             : base(handle)
         {
         }
 
         public override NSObject GetHandler(INIntent intent)
         {
-            if (intent is AddMeasureIntent)
-            {
-                return new AddMeasureIntentHandler();
-            }
+            Console.WriteLine("get the intent handler");
 
-            throw new Exception($"Unhandled intent type: {intent}");
+            return new AddMeasureIntentHandler();
         }
     }
 }

@@ -38,19 +38,19 @@ namespace Diabetto
         [Watch(6, 0), iOS(13, 0)]
         [Abstract]
         [Export("resolveLevelForAddMeasure:withCompletion:")]
-        void ResolveLevelForAddMeasure(AddMeasureIntent intent, Action<AddMeasureLevelResolutionResult> completion);
+        void ResolveLevelForAddMeasure(AddMeasureIntent intent, Action<INDoubleResolutionResult> completion);
 
         // @required -(void)resolveBreadunitsForAddMeasure:(AddMeasureIntent * _Nonnull)intent withCompletion:(void (^ _Nonnull)(AddMeasureBreadunitsResolutionResult * _Nonnull))completion __attribute__((availability(watchos, introduced=6.0))) __attribute__((availability(ios, introduced=13.0)));
         [Watch(6, 0), iOS(13, 0)]
         [Abstract]
         [Export("resolveBreadunitsForAddMeasure:withCompletion:")]
-        void ResolveBreadunitsForAddMeasure(AddMeasureIntent intent, Action<AddMeasureBreadunitsResolutionResult> completion);
+        void ResolveBreadunitsForAddMeasure(AddMeasureIntent intent, Action<INDoubleResolutionResult> completion);
 
         // @required -(void)resolveShortinsulinForAddMeasure:(AddMeasureIntent * _Nonnull)intent withCompletion:(void (^ _Nonnull)(AddMeasureShortinsulinResolutionResult * _Nonnull))completion __attribute__((availability(watchos, introduced=6.0))) __attribute__((availability(ios, introduced=13.0)));
         [Watch(6, 0), iOS(13, 0)]
         [Abstract]
         [Export("resolveShortinsulinForAddMeasure:withCompletion:")]
-        void ResolveShortinsulinForAddMeasure(AddMeasureIntent intent, Action<AddMeasureShortinsulinResolutionResult> completion);
+        void ResolveShortinsulinForAddMeasure(AddMeasureIntent intent, Action<INIntegerResolutionResult> completion);
 
         // @optional -(void)confirmAddMeasure:(AddMeasureIntent * _Nonnull)intent completion:(void (^ _Nonnull)(AddMeasureIntentResponse * _Nonnull))completion;
         [Export("confirmAddMeasure:completion:")]

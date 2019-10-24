@@ -41,10 +41,10 @@
     <OutputPath>bin\iPhoneSimulator\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <MtouchLink>None</MtouchLink>
+    <MtouchLink>SdkOnly</MtouchLink>
     <MtouchArch>x86_64</MtouchArch>
-    <CodesignKey>iPhone Developer: l1pton17@me.com (U37ZUS2JRL)</CodesignKey>
-    <CodesignProvision>VS: WildCard Development</CodesignProvision>
+    <CodesignKey>Apple Distribution: ARTUR  SITDIKOV (M4Y3PFSKXS)</CodesignKey>
+    <CodesignProvision>Diabetto Distribution Profile</CodesignProvision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
     <DebugSymbols>true</DebugSymbols>
@@ -74,7 +74,8 @@
     <MtouchLink>SdkOnly</MtouchLink>
     <OptimizePNGs>true</OptimizePNGs>
     <BuildIpa>true</BuildIpa>
-    <MtouchNoSymbolStrip>true</MtouchNoSymbolStrip>
+    <MtouchNoSymbolStrip>false</MtouchNoSymbolStrip>
+    <MtouchEnableSGenConc>false</MtouchEnableSGenConc>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'Default' ">
     <AppExtensionDebugBundleId />
@@ -113,6 +114,7 @@
     <Compile Include="MvxBindings\NetworkIndicatorTargetBinding.cs" />
     <Compile Include="Services\DialogService.cs" />
     <Compile Include="Services\HealthKitService.cs" />
+    <Compile Include="Services\MeasuresMigrator.cs" />
     <Compile Include="Setup.cs" />
     <Compile Include="Sources\Measures\MeasureTableViewSource.cs" />
     <Compile Include="Sources\Products\ProductSearchResultsTableViewSource.cs" />

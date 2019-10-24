@@ -8,6 +8,7 @@ using MvvmCross.Logging;
 
 namespace Diabetto.iOS.Intents.Shared
 {
+
     public sealed class AddMeasureIntentHandler : AddMeasureIntentHandling
     {
         /// <inheritdoc />
@@ -39,12 +40,11 @@ namespace Diabetto.iOS.Intents.Shared
                     return;
                 }
 
-                var measureService = Mvx.IoCProvider.Resolve<IMeasureService>();
-                var timeProvider = Mvx.IoCProvider.Resolve<ITimeProvider>();
+                var measureService = new MeasureService(new SharedDatabaseConnectionStringHolder());
 
                 var measure = new Measure
                 {
-                    Date = timeProvider.UtcNow,
+                    Date = DateTime.UtcNow,
                     Level = hasLevel ? (int?) level * 10 : null,
                     LongInsulin = 0,
                     ShortInsulin = shortInsulin.Int32Value
@@ -65,21 +65,21 @@ namespace Diabetto.iOS.Intents.Shared
         }
 
         /// <inheritdoc />
-        public override void ResolveLevelForAddMeasure(AddMeasureIntent intent, Action<AddMeasureLevelResolutionResult> completion)
+        public override void ResolveLevelForAddMeasure(AddMeasureIntent intent, Action<INDoubleResolutionResult> completion)
         {
-            completion((AddMeasureLevelResolutionResult) INDoubleResolutionResult.GetSuccess(intent.Level.DoubleValue));
+            completion(INDoubleResolutionResult.GetSuccess(intent.Level.DoubleValue));
         }
 
         /// <inheritdoc />
-        public override void ResolveShortinsulinForAddMeasure(AddMeasureIntent intent, Action<AddMeasureShortinsulinResolutionResult> completion)
+        public override void ResolveShortinsulinForAddMeasure(AddMeasureIntent intent, Action<INIntegerResolutionResult> completion)
         {
-            completion((AddMeasureShortinsulinResolutionResult) INIntegerResolutionResult.GetSuccess(intent.Shortinsulin.Int32Value));
+            completion(INIntegerResolutionResult.GetSuccess(intent.Shortinsulin.Int32Value));
         }
 
         /// <inheritdoc />
-        public override void ResolveBreadunitsForAddMeasure(AddMeasureIntent intent, Action<AddMeasureBreadunitsResolutionResult> completion)
+        public override void ResolveBreadunitsForAddMeasure(AddMeasureIntent intent, Action<INDoubleResolutionResult> completion)
         {
-            completion((AddMeasureBreadunitsResolutionResult) INDoubleResolutionResult.GetSuccess(intent.Level.DoubleValue));
+            completion(INDoubleResolutionResult.GetSuccess(intent.Breadunits.DoubleValue));
         }
     }
 }

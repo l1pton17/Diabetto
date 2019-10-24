@@ -27,7 +27,7 @@ namespace Diabetto.Core.Services.Repositories
         Task DeleteAsync(Measure value);
     }
 
-    internal sealed class MeasureService : SQLiteConnection, IMeasureService
+    public sealed class MeasureService : SQLiteConnection, IMeasureService
     {
         private static readonly object _lockObject = new object();
 

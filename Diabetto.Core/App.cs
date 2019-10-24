@@ -16,7 +16,6 @@ namespace Diabetto.Core
         {
             Mvx.IoCProvider.LazyConstructAndRegisterSingleton<IBreadUnitsCalculator, BreadUnitsCalculator>();
             Mvx.IoCProvider.LazyConstructAndRegisterSingleton<ITimeProvider, TimeProvider>();
-            Mvx.IoCProvider.LazyConstructAndRegisterSingleton<IDatabaseConnectionStringHolder, DatabaseConnectionStringHolder>();
 
             CreatableTypes()
                 .EndingWith("Service")
@@ -33,10 +32,10 @@ namespace Diabetto.Core
             Mvx.IoCProvider.LazyConstructAndRegisterSingleton<IProductMeasureViewModelFactory, ProductMeasureViewModelFactory>();
             Mvx.IoCProvider.LazyConstructAndRegisterSingleton<IMeasureCellViewModelFactory, MeasureCellViewModelFactory>();
 
-            Mvx.IoCProvider.ConstructAndRegisterSingleton<IMeasureService, MeasureService>();
-            Mvx.IoCProvider.ConstructAndRegisterSingleton<IProductCategoryService, ProductCategoryService>();
-            Mvx.IoCProvider.ConstructAndRegisterSingleton<IProductService, ProductService>();
-            Mvx.IoCProvider.ConstructAndRegisterSingleton<ITagService, TagService>();
+            Mvx.IoCProvider.LazyConstructAndRegisterSingleton<IMeasureService, MeasureService>();
+            Mvx.IoCProvider.LazyConstructAndRegisterSingleton<IProductCategoryService, ProductCategoryService>();
+            Mvx.IoCProvider.LazyConstructAndRegisterSingleton<IProductService, ProductService>();
+            Mvx.IoCProvider.LazyConstructAndRegisterSingleton<ITagService, TagService>();
 
             RegisterCustomAppStart<AppStart>();
 
