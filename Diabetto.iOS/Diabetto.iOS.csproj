@@ -114,7 +114,6 @@
     <Compile Include="MvxBindings\NetworkIndicatorTargetBinding.cs" />
     <Compile Include="Services\DialogService.cs" />
     <Compile Include="Services\HealthKitService.cs" />
-    <Compile Include="Services\MeasuresMigrator.cs" />
     <Compile Include="Setup.cs" />
     <Compile Include="Sources\Measures\MeasureTableViewSource.cs" />
     <Compile Include="Sources\Products\ProductSearchResultsTableViewSource.cs" />

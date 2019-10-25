@@ -39,10 +39,6 @@ namespace Diabetto.iOS
             settingViewModelStorage.AddOption(healthKitSettingsViewModel);
 
             Mvx.IoCProvider.ConstructAndRegisterSingleton<IAddMeasureIntentDonationManager, AddMeasureIntentDonationManager>();
-
-            var migrator = Mvx.IoCProvider.IoCConstruct<MeasuresMigrator>();
-
-            migrator.Init().GetAwaiter().GetResult();
         }
 
         protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)

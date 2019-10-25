@@ -11,7 +11,7 @@ namespace Diabetto.Core.Services.Repositories
         Task<List<Tag>> GetAll();
     }
 
-    internal sealed class TagService : SQLiteConnection, ITagService
+    public sealed class TagService : SQLiteConnection, ITagService
     {
         private static readonly object _lockObject = new object();
 

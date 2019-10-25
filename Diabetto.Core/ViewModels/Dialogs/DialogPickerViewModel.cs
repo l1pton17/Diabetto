@@ -100,7 +100,6 @@ namespace Diabetto.Core.ViewModels.Dialogs
 
             _item1ValuesSource
                 .Connect()
-                .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out _item1Values)
                 .DisposeMany()
                 .Subscribe();
@@ -222,7 +221,6 @@ namespace Diabetto.Core.ViewModels.Dialogs
 
             _item2ValuesSource
                 .Connect()
-                .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out _item2Values)
                 .DisposeMany()
                 .Subscribe();
@@ -345,7 +343,6 @@ namespace Diabetto.Core.ViewModels.Dialogs
 
             _item3ValuesSource
                 .Connect()
-                .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out _item3Values)
                 .DisposeMany()
                 .Subscribe();
