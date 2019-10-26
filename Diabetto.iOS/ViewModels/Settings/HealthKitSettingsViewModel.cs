@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Globalization;
 using System.Reactive;
 using System.Reactive.Linq;
-using Diabetto.Core.Models;
 using Diabetto.Core.Services;
-using Diabetto.Core.Services.Repositories;
 using Diabetto.Core.ViewModels.Core;
 using Diabetto.Core.ViewModels.Settings;
 using Diabetto.iOS.Services;
 using ReactiveUI;
-using Xamarin.Essentials;
 
 namespace Diabetto.iOS.ViewModels.Settings
 {
@@ -34,8 +30,7 @@ namespace Diabetto.iOS.ViewModels.Settings
 
         public HealthKitSettingsViewModel(
             IDialogService dialogService,
-            IHealthKitService healthKitService,
-            IMeasureService measureService)
+            IHealthKitService healthKitService)
         {
             _isEnabled = healthKitService.GetStatus();
 

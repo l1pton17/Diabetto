@@ -120,7 +120,13 @@ namespace Diabetto.iOS
 
         public void Include(ICommand command)
         {
-            command.CanExecuteChanged += (s, e) => { if (command.CanExecute(null)) command.Execute(null); };
+            command.CanExecuteChanged += (s, e) =>
+            {
+                if (command.CanExecute(null))
+                {
+                    command.Execute(null);
+                }
+            };
         }
 
         public void Include(MvvmCross.IoC.MvxPropertyInjector injector)
@@ -149,11 +155,6 @@ namespace Diabetto.iOS
             Console.ForegroundColor = ConsoleColor.White;
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.ForegroundColor = ConsoleColor.DarkGray;
-        }
-
-        public void Include(MvvmCross.Plugin.Json.Plugin plugin)
-        {
-            plugin.Load();
         }
     }
 }

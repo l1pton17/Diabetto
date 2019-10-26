@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Linq;
+using DynamicData;
 using ReactiveUI;
-using ReactiveUI.Legacy;
 #pragma warning disable 618
 
 namespace Diabetto.Core.ViewModels.Dialogs
@@ -68,7 +69,10 @@ namespace Diabetto.Core.ViewModels.Dialogs
 
     public abstract class DialogPickerViewModel<TItem> : ReactiveObject, IDialogPickerViewModel
     {
-        public ReactiveList<DialogPickerOption<TItem>> Item1Values { get; }
+        private readonly SourceList<DialogPickerOption<TItem>> _item1ValuesSource;
+        private readonly ReadOnlyObservableCollection<DialogPickerOption<TItem>> _item1Values;
+
+        public ReadOnlyObservableCollection<DialogPickerOption<TItem>> Item1Values => _item1Values;
 
         private DialogPickerOption<TItem> _selectedItem1;
         public DialogPickerOption<TItem> SelectedItem1
@@ -92,15 +96,22 @@ namespace Diabetto.Core.ViewModels.Dialogs
         {
             ComponentCount = 1;
             Title = title ?? throw new ArgumentNullException(nameof(title));
-            Item1Values = new ReactiveList<DialogPickerOption<TItem>>();
+            _item1ValuesSource = new SourceList<DialogPickerOption<TItem>>();
 
-            Item1Values
-                .ItemsAdded
+            _item1ValuesSource
+                .Connect()
+                .Bind(out _item1Values)
+                .DisposeMany()
+                .Subscribe();
+
+            _item1ValuesSource
+                .Connect()
+                .Where(v => v.Adds > 0)
                 .Take(1)
-                .Subscribe(v => SelectedItem1 = v);
+                .Subscribe(v => SelectedItem1 = v.First().Item.Current);
 
-            Item1Values
-                .Changed
+            _item1ValuesSource
+                .Connect()
                 .Subscribe(_ => RaiseItemsChanged());
         }
 
@@ -142,6 +153,21 @@ namespace Diabetto.Core.ViewModels.Dialogs
             }
         }
 
+        protected void ClearItem1Values()
+        {
+            _item1ValuesSource.Clear();
+        }
+
+        protected void AddItem1Values(DialogPickerOption<TItem>[] items)
+        {
+            _item1ValuesSource.AddRange(items);
+        }
+
+        protected void AddItem1Values(IEnumerable<DialogPickerOption<TItem>> items)
+        {
+            _item1ValuesSource.AddRange(items);
+        }
+
         protected virtual IEnumerable<(int Component, int Row)> GetSelectedItems()
         {
             var idx = Item1Values.IndexOf(SelectedItem1);
@@ -175,7 +201,9 @@ namespace Diabetto.Core.ViewModels.Dialogs
 
     public abstract class DialogPickerViewModel<TItem1, TItem2> : DialogPickerViewModel<TItem1>
     {
-        public ReactiveList<DialogPickerOption<TItem2>> Item2Values { get; }
+        private readonly SourceList<DialogPickerOption<TItem2>> _item2ValuesSource;
+        private readonly ReadOnlyObservableCollection<DialogPickerOption<TItem2>> _item2Values;
+        public ReadOnlyObservableCollection<DialogPickerOption<TItem2>> Item2Values => _item2Values;
 
         private DialogPickerOption<TItem2> _selectedItem2;
         public DialogPickerOption<TItem2> SelectedItem2
@@ -189,15 +217,22 @@ namespace Diabetto.Core.ViewModels.Dialogs
             : base(title)
         {
             ComponentCount = 2;
-            Item2Values = new ReactiveList<DialogPickerOption<TItem2>>();
+            _item2ValuesSource = new SourceList<DialogPickerOption<TItem2>>();
 
-            Item2Values
-                .ItemsAdded
+            _item2ValuesSource
+                .Connect()
+                .Bind(out _item2Values)
+                .DisposeMany()
+                .Subscribe();
+
+            _item2ValuesSource
+                .Connect()
+                .Where(v => v.Adds > 0)
                 .Take(1)
-                .Subscribe(v => SelectedItem2 = v);
+                .Subscribe(v => SelectedItem2 = v.First().Item.Current);
 
-            Item2Values
-                .Changed
+            _item2ValuesSource
+                .Connect()
                 .Subscribe(_ => RaiseItemsChanged());
         }
 
@@ -250,6 +285,22 @@ namespace Diabetto.Core.ViewModels.Dialogs
             }
         }
 
+        protected void ClearItem2Values()
+        {
+            _item2ValuesSource.Clear();
+        }
+
+        protected void AddItem2Values(params DialogPickerOption<TItem2>[] items)
+        {
+            _item2ValuesSource.AddRange(items);
+        }
+
+
+        protected void AddItem2Values(IEnumerable<DialogPickerOption<TItem2>> items)
+        {
+            _item2ValuesSource.AddRange(items);
+        }
+
         protected override IEnumerable<(int Component, int Row)> GetSelectedItems()
         {
             var idx = Item2Values.IndexOf(SelectedItem2);
@@ -272,7 +323,10 @@ namespace Diabetto.Core.ViewModels.Dialogs
 
     public abstract class DialogPickerViewModel<TItem1, TItem2, TItem3> : DialogPickerViewModel<TItem1, TItem2>
     {
-        public ReactiveList<DialogPickerOption<TItem3>> Item3Values { get; }
+        private readonly SourceList<DialogPickerOption<TItem3>> _item3ValuesSource;
+        private readonly ReadOnlyObservableCollection<DialogPickerOption<TItem3>> _item3Values;
+
+        public ReadOnlyObservableCollection<DialogPickerOption<TItem3>> Item3Values => _item3Values;
 
         private DialogPickerOption<TItem3> _selectedItem3;
         public DialogPickerOption<TItem3> SelectedItem3
@@ -285,15 +339,22 @@ namespace Diabetto.Core.ViewModels.Dialogs
             : base(title)
         {
             ComponentCount = 3;
-            Item3Values = new ReactiveList<DialogPickerOption<TItem3>>();
+            _item3ValuesSource = new SourceList<DialogPickerOption<TItem3>>();
 
-            Item3Values
-                .ItemsAdded
+            _item3ValuesSource
+                .Connect()
+                .Bind(out _item3Values)
+                .DisposeMany()
+                .Subscribe();
+
+            _item3ValuesSource
+                .Connect()
+                .Where(v => v.Adds > 0)
                 .Take(1)
-                .Subscribe(v => SelectedItem3 = v);
+                .Subscribe(v => SelectedItem3 = v.First().Item.Current);
 
-            Item3Values
-                .Changed
+            _item3ValuesSource
+                .Connect()
                 .Subscribe(_ => RaiseItemsChanged());
         }
 
@@ -355,6 +416,21 @@ namespace Diabetto.Core.ViewModels.Dialogs
 
                     break;
             }
+        }
+
+        protected void ClearItem3Values()
+        {
+            _item3ValuesSource.Clear();
+        }
+
+        protected void AddItem3Values(DialogPickerOption<TItem3>[] items)
+        {
+            _item3ValuesSource.AddRange(items);
+        }
+
+        protected void AddItem3Values(IEnumerable<DialogPickerOption<TItem3>> items)
+        {
+            _item3ValuesSource.AddRange(items);
         }
 
         protected override IEnumerable<(int Component, int Row)> GetSelectedItems()

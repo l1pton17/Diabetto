@@ -1,22 +1,33 @@
-﻿using Diabetto.Core.ViewModels.Settings;
-using ReactiveUI.Legacy;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using Diabetto.Core.ViewModels.Settings;
 #pragma warning disable 618
 
 namespace Diabetto.Core.Services
 {
     public interface ISettingViewModelsStorage
     {
-        ReactiveList<ISettingsViewModel> Options { get; }
+        IEnumerable<ISettingsViewModel> Options { get; }
+
+        void AddOption(ISettingsViewModel viewModel);
     }
 
     internal sealed class SettingViewModelsStorage : ISettingViewModelsStorage
     {
+        private readonly ObservableCollection<ISettingsViewModel> _options;
+
         /// <inheritdoc />
-        public ReactiveList<ISettingsViewModel> Options { get; }
+        public IEnumerable<ISettingsViewModel> Options => _options;
+
+        /// <inheritdoc />
+        public void AddOption(ISettingsViewModel viewModel)
+        {
+            _options.Add(viewModel);
+        }
 
         public SettingViewModelsStorage()
         {
-            Options = new ReactiveList<ISettingsViewModel>();
+            _options = new ObservableCollection<ISettingsViewModel>();
         }
     }
 }

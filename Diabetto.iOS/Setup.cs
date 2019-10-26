@@ -1,15 +1,14 @@
 ﻿using Diabetto.Core;
 using Diabetto.Core.Services;
+using Diabetto.iOS.Intents.Shared;
 using Diabetto.iOS.MvxBindings;
 using Diabetto.iOS.Services;
 using Diabetto.iOS.ViewModels.Settings;
 using MvvmCross;
-using MvvmCross.Base;
 using MvvmCross.Binding.Bindings.Target.Construction;
 using MvvmCross.IoC;
 using MvvmCross.Platforms.Ios.Binding.Target;
 using MvvmCross.Platforms.Ios.Core;
-using MvvmCross.Plugin.Json;
 using UIKit;
 
 namespace Diabetto.iOS
@@ -19,8 +18,8 @@ namespace Diabetto.iOS
         protected override void InitializeFirstChance()
         {
             base.InitializeFirstChance();
-            Mvx.IoCProvider.RegisterType<IMvxJsonConverter, MvxJsonConverter>();
             Mvx.IoCProvider.RegisterType<IDialogService, DialogService>();
+            Mvx.IoCProvider.LazyConstructAndRegisterSingleton<IDatabaseConnectionStringHolder, SharedDatabaseConnectionStringHolder>();
             Mvx.IoCProvider.LazyConstructAndRegisterSingleton<IHealthKitService, HealthKitService>();
         }
 
@@ -37,7 +36,9 @@ namespace Diabetto.iOS
             var settingViewModelStorage = Mvx.IoCProvider.Resolve<ISettingViewModelsStorage>();
             var healthKitSettingsViewModel = Mvx.IoCProvider.IoCConstruct<HealthKitSettingsViewModel>();
 
-            settingViewModelStorage.Options.Add(healthKitSettingsViewModel);
+            settingViewModelStorage.AddOption(healthKitSettingsViewModel);
+
+            Mvx.IoCProvider.ConstructAndRegisterSingleton<IAddMeasureIntentDonationManager, AddMeasureIntentDonationManager>();
         }
 
         protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)

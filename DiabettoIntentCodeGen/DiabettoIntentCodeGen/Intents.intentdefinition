@@ -9,11 +9,11 @@
 	<key>INIntentDefinitionNamespace</key>
 	<string>TNyahM</string>
 	<key>INIntentDefinitionSystemVersion</key>
-	<string>18G84</string>
+	<string>19A602</string>
 	<key>INIntentDefinitionToolsBuildVersion</key>
-	<string>11A420a</string>
+	<string>11A1027</string>
 	<key>INIntentDefinitionToolsVersion</key>
-	<string>11.0</string>
+	<string>11.1</string>
 	<key>INIntents</key>
 	<array>
 		<dict>
@@ -25,36 +25,91 @@
 			<string>Add blood sugar measure</string>
 			<key>INIntentDescriptionID</key>
 			<string>zmzWdq</string>
-			<key>INIntentInput</key>
-			<string>level</string>
-			<key>INIntentKeyParameter</key>
-			<string>level</string>
 			<key>INIntentLastParameterTag</key>
-			<integer>9</integer>
+			<integer>11</integer>
 			<key>INIntentManagedParameterCombinations</key>
 			<dict>
 				<key>level,breadunits,shortinsulin</key>
 				<dict>
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
 					<true/>
+					<key>INIntentParameterCombinationTitle</key>
+					<string>Add blood sugar</string>
+					<key>INIntentParameterCombinationTitleID</key>
+					<string>AZmhv8</string>
 				</dict>
 			</dict>
 			<key>INIntentName</key>
 			<string>AddMeasure</string>
 			<key>INIntentParameterCombinations</key>
 			<dict>
-				<key>level,breadunits,shortinsulin</key>
+				<key></key>
 				<dict>
-					<key>INIntentParameterCombinationSubtitle</key>
-					<string>Keep inform</string>
-					<key>INIntentParameterCombinationSubtitleID</key>
-					<string>7bNHpN</string>
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
 					<true/>
 					<key>INIntentParameterCombinationTitle</key>
 					<string>Add blood sugar</string>
 					<key>INIntentParameterCombinationTitleID</key>
-					<string>AJ4gFH</string>
+					<string>rIgn8d</string>
+				</dict>
+				<key>breadunits</key>
+				<dict>
+					<key>INIntentParameterCombinationSubtitle</key>
+					<string>Add bread units</string>
+					<key>INIntentParameterCombinationSubtitleID</key>
+					<string>Vju14s</string>
+					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
+					<true/>
+					<key>INIntentParameterCombinationTitle</key>
+					<string>Add BU ${breadunits}</string>
+					<key>INIntentParameterCombinationTitleID</key>
+					<string>EmTlNi</string>
+				</dict>
+				<key>breadunits,level,shortinsulin</key>
+				<dict>
+					<key>INIntentParameterCombinationIsPrimary</key>
+					<true/>
+					<key>INIntentParameterCombinationSubtitle</key>
+					<string>BU ${breadunits}  insulin ${shortinsulin}</string>
+					<key>INIntentParameterCombinationSubtitleID</key>
+					<string>dkRHLL</string>
+					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
+					<true/>
+					<key>INIntentParameterCombinationTitle</key>
+					<string>Add blood sugar</string>
+					<key>INIntentParameterCombinationTitleID</key>
+					<string>fMjCI4</string>
+				</dict>
+				<key>level</key>
+				<dict>
+					<key>INIntentParameterCombinationSubtitle</key>
+					<string>Level ${level}</string>
+					<key>INIntentParameterCombinationSubtitleID</key>
+					<string>USnNbk</string>
+					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
+					<true/>
+					<key>INIntentParameterCombinationTitle</key>
+					<string>Add blood sugar ${level}</string>
+					<key>INIntentParameterCombinationTitleID</key>
+					<string>rNt8cy</string>
+				</dict>
+				<key>shortinsulin</key>
+				<dict>
+					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
+					<true/>
+					<key>INIntentParameterCombinationTitle</key>
+					<string>Add insulin ${shortinsulin}</string>
+					<key>INIntentParameterCombinationTitleID</key>
+					<string>Wk8qHb</string>
+				</dict>
+				<key>shortinsulin,breadunits</key>
+				<dict>
+					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
+					<true/>
+					<key>INIntentParameterCombinationTitle</key>
+					<string>Add BU ${breadunits}insulin ${shortinsulin}</string>
+					<key>INIntentParameterCombinationTitleID</key>
+					<string>YQetWY</string>
 				</dict>
 			</dict>
 			<key>INIntentParameters</key>
@@ -74,10 +129,8 @@
 						<real>5.5</real>
 						<key>INIntentParameterMetadataMaximumValue</key>
 						<real>50</real>
-						<key>INIntentParameterMetadataMinimumValue</key>
-						<real>1</real>
 						<key>INIntentParameterMetadataType</key>
-						<string>Stepper</string>
+						<string>Field</string>
 					</dict>
 					<key>INIntentParameterName</key>
 					<string>level</string>
@@ -107,7 +160,7 @@
 					<key>INIntentParameterSupportsResolution</key>
 					<true/>
 					<key>INIntentParameterTag</key>
-					<integer>3</integer>
+					<integer>11</integer>
 					<key>INIntentParameterType</key>
 					<string>Decimal</string>
 					<key>INIntentParameterUnsupportedReasons</key>
@@ -148,7 +201,7 @@
 					<key>INIntentParameterCustomDisambiguation</key>
 					<true/>
 					<key>INIntentParameterDisplayName</key>
-					<string>Bread Units</string>
+					<string>Bread units</string>
 					<key>INIntentParameterDisplayNameID</key>
 					<string>Ceel4X</string>
 					<key>INIntentParameterDisplayPriority</key>
@@ -158,7 +211,7 @@
 						<key>INIntentParameterMetadataMaximumValue</key>
 						<real>100</real>
 						<key>INIntentParameterMetadataType</key>
-						<string>Slider</string>
+						<string>Stepper</string>
 					</dict>
 					<key>INIntentParameterName</key>
 					<string>breadunits</string>
@@ -323,10 +376,12 @@
 					</dict>
 				</array>
 				<key>INIntentResponseLastParameterTag</key>
-				<integer>1</integer>
+				<integer>2</integer>
 			</dict>
+			<key>INIntentRestrictions</key>
+			<integer>1</integer>
 			<key>INIntentTitle</key>
-			<string>Add neasure</string>
+			<string>Add measure</string>
 			<key>INIntentTitleID</key>
 			<string>adJaa0</string>
 			<key>INIntentType</key>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
@@ -11,9 +12,10 @@ using Diabetto.Core.ViewModels.Core;
 using Diabetto.Core.ViewModels.ProductMeasures;
 using Diabetto.Core.ViewModels.ProductMeasures.Dialogs;
 using Diabetto.Core.ViewModels.Tags.Dialogs;
+using DynamicData;
+using DynamicData.Aggregation;
 using MvvmCross.Navigation;
 using ReactiveUI;
-using ReactiveUI.Legacy;
 #pragma warning disable 618
 
 namespace Diabetto.Core.ViewModels.Measures
@@ -84,7 +86,10 @@ namespace Diabetto.Core.ViewModels.Measures
         private readonly ObservableAsPropertyHelper<float> _totalBreadUnits;
         public float TotalBreadUnits => _totalBreadUnits.Value;
 
-        public ReactiveList<ProductMeasureViewModel> ProductMeasures { get; }
+        private readonly SourceList<ProductMeasureViewModel> _productMeasuresSource;
+        private readonly ReadOnlyObservableCollection<ProductMeasureViewModel> _productMeasures;
+
+        public ReadOnlyObservableCollection<ProductMeasureViewModel> ProductMeasures => _productMeasures;
 
         public ReactiveCommand<Unit, Unit> AddProductMeasureCommand { get; }
 
@@ -118,23 +123,29 @@ namespace Diabetto.Core.ViewModels.Measures
                 .Select(v => v.Item2 ? v.Item1 : (int?) null)
                 .ToProperty(this, v => v.NullableLevel, out _nullableLevel);
 
-            ProductMeasures = new ReactiveList<ProductMeasureViewModel>
-            {
-                ChangeTrackingEnabled = true
-            };
+            _productMeasuresSource = new SourceList<ProductMeasureViewModel>();
 
-            ProductMeasures
-                .CountChanged
+            _productMeasuresSource
+                .Connect()
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Bind(out _productMeasures)
+                .DisposeMany()
+                .Subscribe();
+
+            _productMeasuresSource
+                .Connect()
+                .Count()
                 .ToProperty(
                     this,
                     v => v.ProductCount,
                     out _productCount,
                     initialValue: 0);
 
-            ProductMeasures
-                .ItemChanged
+            _productMeasuresSource
+                .Connect()
+                .WhenAnyPropertyChanged()
                 .Select(_ => Unit.Default)
-                .Merge(ProductMeasures.Changed.Select(_ => Unit.Default))
+                .Merge(_productMeasuresSource.Connect().Select(_ => Unit.Default))
                 .Select(
                     _ => ProductMeasures
                         .Select(v => v.BreadUnits)
@@ -170,7 +181,7 @@ namespace Diabetto.Core.ViewModels.Measures
             EditTagCommand = ReactiveCommand.CreateFromTask(EditTag);
 
             DeleteProductMeasureCommand = ReactiveCommand
-                .Create<ProductMeasureViewModel>(v => ProductMeasures.Remove(v));
+                .Create<ProductMeasureViewModel>(v => _productMeasuresSource.Remove(v));
 
             ProductMeasureSelectedCommand = ReactiveCommand
                 .CreateFromTask<ProductMeasureViewModel>(ProductMeasureSelected);
@@ -206,7 +217,7 @@ namespace Diabetto.Core.ViewModels.Measures
 
             itemViewModel.Prepare(result);
 
-            ProductMeasures.Add(itemViewModel);
+            _productMeasuresSource.Add(itemViewModel);
         }
 
         private async Task ProductMeasureSelected(ProductMeasureViewModel productMeasure)
@@ -239,9 +250,9 @@ namespace Diabetto.Core.ViewModels.Measures
             ShortInsulin = parameter.ShortInsulin;
             Tag = parameter.Tag;
 
-            ProductMeasures.Clear();
+            _productMeasuresSource.Clear();
 
-            ProductMeasures
+            _productMeasuresSource
                 .AddRange(
                     parameter.Products
                         .Select(

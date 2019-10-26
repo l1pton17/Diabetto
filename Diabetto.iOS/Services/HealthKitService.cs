@@ -5,6 +5,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Diabetto.Core.Events.Measures;
+using Diabetto.Core.Helpers;
 using Diabetto.Core.Models;
 using Diabetto.Core.Services.Repositories;
 using Diabetto.iOS.Extensions;
@@ -21,6 +22,7 @@ namespace Diabetto.iOS.Services
         Task Export();
         Task<bool> Enable();
         void Disable();
+        IDisposable Suppress();
     }
 
     public sealed class HealthKitService : IHealthKitService, IDisposable
@@ -66,13 +68,16 @@ namespace Diabetto.iOS.Services
         private readonly IMeasureService _measureService;
         private readonly IMvxLog _log;
 
+        private bool _suppressed;
+
         public ReactiveCommand<Measure, Unit> AddCommand { get; }
 
         public ReactiveCommand<Measure, Unit> DeleteCommand { get; }
 
         public HealthKitService(
             IMeasureService measureService,
-            IMvxLogProvider logProvider)
+            IMvxLogProvider logProvider
+        )
         {
             _log = logProvider.GetLogFor<HealthKitService>();
             _measureService = measureService ?? throw new ArgumentNullException(nameof(measureService));
@@ -110,7 +115,6 @@ namespace Diabetto.iOS.Services
                 .Where(v => v != null)
                 .Where(_ => GetStatus())
                 .InvokeCommand(this, v => v.DeleteCommand);
-
         }
 
         public async Task Export()
@@ -131,7 +135,7 @@ namespace Diabetto.iOS.Services
             var isInsulinStatus = _healthStore.GetAuthorizationStatus(HKQuantityType.Create(HKQuantityTypeIdentifier.InsulinDelivery));
 
             var hasAccessToHealthKit = isBloodGlucoseStatus == HKAuthorizationStatus.SharingAuthorized
-                || isInsulinStatus == HKAuthorizationStatus.SharingAuthorized;
+             || isInsulinStatus == HKAuthorizationStatus.SharingAuthorized;
 
             return isEnabled && hasAccessToHealthKit;
         }
@@ -178,6 +182,14 @@ namespace Diabetto.iOS.Services
         }
 
         /// <inheritdoc />
+        public IDisposable Suppress()
+        {
+            _suppressed = true;
+
+            return new ActionDisposable(() => _suppressed = false);
+        }
+
+        /// <inheritdoc />
         public void Dispose()
         {
             _healthStore?.Dispose();
@@ -185,6 +197,11 @@ namespace Diabetto.iOS.Services
 
         private async Task DeleteSamples(Measure measure)
         {
+            if (_suppressed)
+            {
+                return;
+            }
+
             var predicate = HKQuery.GetPredicateForMetadataKey(
                 HKMetadataKey.ExternalUuid,
                 new[] {NSObject.FromObject(MetadataKey.GetExternalUUID(measure.Id))});
@@ -210,6 +227,11 @@ namespace Diabetto.iOS.Services
 
         private async Task AddSamples(IEnumerable<HKObject> objects)
         {
+            if (_suppressed)
+            {
+                return;
+            }
+
             var samples = objects.ToArray();
 
             if (samples.Length == 0)
@@ -262,7 +284,7 @@ namespace Diabetto.iOS.Services
             DateTime date,
             int version,
             int level
-            )
+        )
         {
             var metadata = new NSDictionary(
                 MetadataKey.DiabettoOrigin,
@@ -304,9 +326,10 @@ namespace Diabetto.iOS.Services
                 MetadataKey.DiabettoOrigin,
                 NSObject.FromObject(true),
                 HKMetadataKey.InsulinDeliveryReason,
-                NSObject.FromObject(type == InsulinType.Basal
-                    ? HKInsulinDeliveryReason.Basal
-                    : HKInsulinDeliveryReason.Bolus),
+                NSObject.FromObject(
+                    type == InsulinType.Basal
+                        ? HKInsulinDeliveryReason.Basal
+                        : HKInsulinDeliveryReason.Bolus),
                 HKMetadataKey.TimeZone,
                 NSObject.FromObject("UTC"),
                 MetadataKey.IsTest,

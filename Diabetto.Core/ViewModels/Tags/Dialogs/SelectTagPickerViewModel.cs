@@ -11,8 +11,7 @@ namespace Diabetto.Core.ViewModels.Tags.Dialogs
         public SelectTagPickerViewModel(IEnumerable<Tag> tags)
             : base("Tags")
         {
-            Item1Values
-                .AddRange(
+            AddItem1Values(
                     tags
                         .Select(v => DialogPickerOption.Create(v))
                         .Prepend(DialogPickerOption.Empty<Tag>()));

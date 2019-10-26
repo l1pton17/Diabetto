@@ -1,16 +1,16 @@
-﻿using System.Reactive;
+﻿using System.Collections.Generic;
+using System.Reactive;
 using Diabetto.Core.Services;
 using Diabetto.Core.ViewModels.Core;
 using MvvmCross.Navigation;
 using ReactiveUI;
-using ReactiveUI.Legacy;
 #pragma warning disable 618
 
 namespace Diabetto.Core.ViewModels.Settings
 {
     public sealed class SettingsHolderViewModel : MvxReactiveViewModel
     {
-        public ReactiveList<ISettingsViewModel> Options { get; }
+        public IEnumerable<ISettingsViewModel> Options { get; }
 
         public ReactiveCommand<ISettingsViewModel, Unit> OptionSelectedCommand { get; }
 
