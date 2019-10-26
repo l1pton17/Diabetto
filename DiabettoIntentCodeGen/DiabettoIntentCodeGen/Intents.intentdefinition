@@ -9,7 +9,7 @@
 	<key>INIntentDefinitionNamespace</key>
 	<string>TNyahM</string>
 	<key>INIntentDefinitionSystemVersion</key>
-	<string>18G95</string>
+	<string>19A602</string>
 	<key>INIntentDefinitionToolsBuildVersion</key>
 	<string>11A1027</string>
 	<key>INIntentDefinitionToolsVersion</key>
@@ -25,8 +25,6 @@
 			<string>Add blood sugar measure</string>
 			<key>INIntentDescriptionID</key>
 			<string>zmzWdq</string>
-			<key>INIntentInput</key>
-			<string>level</string>
 			<key>INIntentLastParameterTag</key>
 			<integer>11</integer>
 			<key>INIntentManagedParameterCombinations</key>
@@ -36,7 +34,7 @@
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
 					<true/>
 					<key>INIntentParameterCombinationTitle</key>
-					<string>Add blood sugar ${level}with ${breadunits}BU and insulin ${shortinsulin}</string>
+					<string>Add blood sugar</string>
 					<key>INIntentParameterCombinationTitleID</key>
 					<string>AZmhv8</string>
 				</dict>
@@ -45,6 +43,15 @@
 			<string>AddMeasure</string>
 			<key>INIntentParameterCombinations</key>
 			<dict>
+				<key></key>
+				<dict>
+					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
+					<true/>
+					<key>INIntentParameterCombinationTitle</key>
+					<string>Add blood sugar</string>
+					<key>INIntentParameterCombinationTitleID</key>
+					<string>rIgn8d</string>
+				</dict>
 				<key>breadunits</key>
 				<dict>
 					<key>INIntentParameterCombinationSubtitle</key>
@@ -69,7 +76,7 @@
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
 					<true/>
 					<key>INIntentParameterCombinationTitle</key>
-					<string>Add blood sugar ${level}with ${breadunits}BU and insulin ${shortinsulin}</string>
+					<string>Add blood sugar</string>
 					<key>INIntentParameterCombinationTitleID</key>
 					<string>fMjCI4</string>
 				</dict>
@@ -123,7 +130,7 @@
 						<key>INIntentParameterMetadataMaximumValue</key>
 						<real>50</real>
 						<key>INIntentParameterMetadataType</key>
-						<string>Stepper</string>
+						<string>Field</string>
 					</dict>
 					<key>INIntentParameterName</key>
 					<string>level</string>
