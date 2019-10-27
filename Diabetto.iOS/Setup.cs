@@ -28,6 +28,12 @@ namespace Diabetto.iOS
             base.InitializeLastChance();
 
             var registry = Mvx.IoCProvider.Resolve<IMvxTargetBindingFactoryRegistry>();
+
+            registry.RegisterPropertyInfoBindingFactory(
+                typeof(UtcUIDatePickerDateTargetBinding),
+                typeof(UIDatePicker),
+                "Date");
+
             registry.RegisterFactory(
                 new MvxCustomBindingFactory<UIViewController>(
                     "NetworkIndicator",
