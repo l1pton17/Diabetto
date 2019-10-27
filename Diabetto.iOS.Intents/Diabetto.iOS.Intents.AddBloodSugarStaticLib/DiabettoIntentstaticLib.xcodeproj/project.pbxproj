@@ -13,13 +13,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		45E7B4D7233C0B06007CCF86 /* CopyFiles */ = {
+		45E7B4D7233C0B06007CCF86 /* Copy Files */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
 			);
+			name = "Copy Files";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -89,7 +90,7 @@
 			buildPhases = (
 				45E7B4D5233C0B06007CCF86 /* Sources */,
 				45E7B4D6233C0B06007CCF86 /* Frameworks */,
-				45E7B4D7233C0B06007CCF86 /* CopyFiles */,
+				45E7B4D7233C0B06007CCF86 /* Copy Files */,
 			);
 			buildRules = (
 			);
@@ -114,7 +115,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 45E7B4D4233C0B06007CCF86 /* Build configuration list for PBXProject "DiabettoIntentStaticLib" */;
+			buildConfigurationList = 45E7B4D4233C0B06007CCF86 /* Build configuration list for PBXProject "DiabettoIntentstaticLib" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -281,7 +282,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		45E7B4D4233C0B06007CCF86 /* Build configuration list for PBXProject "DiabettoIntentStaticLib" */ = {
+		45E7B4D4233C0B06007CCF86 /* Build configuration list for PBXProject "DiabettoIntentstaticLib" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				45E7B4E0233C0B06007CCF86 /* Debug */,

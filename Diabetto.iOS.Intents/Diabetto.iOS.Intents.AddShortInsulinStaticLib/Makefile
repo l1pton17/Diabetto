@@ -1,7 +1,7 @@
 XBUILD=xcodebuild
 PROJECT_ROOT=./
-PROJECT=$(PROJECT_ROOT)/DiabettoIntentStaticLib.xcodeproj
-TARGET=DiabettoIntentStaticLib
+PROJECT=$(PROJECT_ROOT)/DiabettAddShortInsulinIntentStaticLib.xcodeproj
+TARGET=DiabettAddShortInsulinIntentStaticLib
 
 all: bind
 
@@ -17,7 +17,7 @@ lib$(TARGET).a: lib$(TARGET)-i386.a lib$(TARGET)-arm64.a
 	xcrun -sdk iphoneos lipo -create -output $@ $^
 
 bind: lib$(TARGET).a
-	sharpie bind -scope DiabettoIntentStaticLib -output bo -namespace Diabetto -sdk iphoneos$(shell xcrun --show-sdk-platform-version --sdk iphoneos) DiabettoIntentStaticLib/AddShortInsulinIntent.h
+	sharpie bind -scope DiabettAddShortInsulinIntentStaticLib -output bo -namespace Diabetto -sdk iphoneos$(shell xcrun --show-sdk-platform-version --sdk iphoneos) DiabettAddShortInsulinIntentStaticLib/AddShortInsulinIntent.h
 
 clean:
 	-rm -rf bo build *.a *.dll

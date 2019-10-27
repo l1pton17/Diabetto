@@ -20,29 +20,37 @@ namespace Diabetto
 	}
 
 	// @protocol AddShortInsulinIntentHandling <NSObject>
-	[Watch (5,0), NoTV, NoMac, iOS (12,0)]
-	[Protocol, Model]
+	/*
+  Check whether adding [Model] to this declaration is appropriate.
+  [Model] is used to generate a C# class that implements this protocol,
+  and might be useful for protocols that consumers are supposed to implement,
+  since consumers can subclass the generated class instead of implementing
+  the generated interface. If consumers are not supposed to implement this
+  protocol, then [Model] is redundant and will generate code that will never
+  be used.
+*/[Watch (5,0), NoTV, NoMac, iOS (12,0)]
+	[Protocol]
 	[BaseType (typeof(NSObject))]
 	interface AddShortInsulinIntentHandling
 	{
-		// @required -(void)handleAddShortInsulin:(AddShortInsulinIntent * _Nonnull)intent completion:(void (^ _Nonnull)(AddShortInsulinIntentResponse * _Nonnull))completion;
+		// @required -(void)handleAddShortInsulin:(AddShortInsulinIntent * _Nonnull)intent completion:(void (^ _Nonnull)(AddShortInsulinIntentResponse * _Nonnull))completion __attribute__((swift_name("handle(intent:completion:)")));
 		[Abstract]
 		[Export ("handleAddShortInsulin:completion:")]
 		void HandleAddShortInsulin (AddShortInsulinIntent intent, Action<AddShortInsulinIntentResponse> completion);
 
-		// @required -(void)resolveShortInsulinForAddShortInsulin:(AddShortInsulinIntent * _Nonnull)intent withCompletion:(void (^ _Nonnull)(AddShortInsulinShortInsulinResolutionResult * _Nonnull))completion __attribute__((availability(watchos, introduced=6.0))) __attribute__((availability(ios, introduced=13.0)));
+		// @required -(void)resolveShortInsulinForAddShortInsulin:(AddShortInsulinIntent * _Nonnull)intent withCompletion:(void (^ _Nonnull)(AddShortInsulinShortInsulinResolutionResult * _Nonnull))completion __attribute__((swift_name("resolveShortInsulin(for:with:)"))) __attribute__((availability(ios, introduced=13.0))) __attribute__((availability(watchos, introduced=6.0)));
 		[Watch (6,0), iOS (13,0)]
 		[Abstract]
 		[Export ("resolveShortInsulinForAddShortInsulin:withCompletion:")]
 		void ResolveShortInsulinForAddShortInsulin (AddShortInsulinIntent intent, Action<AddShortInsulinShortInsulinResolutionResult> completion);
 
-		// @required -(void)resolveBreadUnitsForAddShortInsulin:(AddShortInsulinIntent * _Nonnull)intent withCompletion:(void (^ _Nonnull)(AddShortInsulinBreadUnitsResolutionResult * _Nonnull))completion __attribute__((availability(watchos, introduced=6.0))) __attribute__((availability(ios, introduced=13.0)));
+		// @required -(void)resolveBreadUnitsForAddShortInsulin:(AddShortInsulinIntent * _Nonnull)intent withCompletion:(void (^ _Nonnull)(AddShortInsulinBreadUnitsResolutionResult * _Nonnull))completion __attribute__((swift_name("resolveBreadUnits(for:with:)"))) __attribute__((availability(ios, introduced=13.0))) __attribute__((availability(watchos, introduced=6.0)));
 		[Watch (6,0), iOS (13,0)]
 		[Abstract]
 		[Export ("resolveBreadUnitsForAddShortInsulin:withCompletion:")]
 		void ResolveBreadUnitsForAddShortInsulin (AddShortInsulinIntent intent, Action<AddShortInsulinBreadUnitsResolutionResult> completion);
 
-		// @optional -(void)confirmAddShortInsulin:(AddShortInsulinIntent * _Nonnull)intent completion:(void (^ _Nonnull)(AddShortInsulinIntentResponse * _Nonnull))completion;
+		// @optional -(void)confirmAddShortInsulin:(AddShortInsulinIntent * _Nonnull)intent completion:(void (^ _Nonnull)(AddShortInsulinIntentResponse * _Nonnull))completion __attribute__((swift_name("confirm(intent:completion:)")));
 		[Export ("confirmAddShortInsulin:completion:")]
 		void ConfirmAddShortInsulin (AddShortInsulinIntent intent, Action<AddShortInsulinIntentResponse> completion);
 	}
