@@ -111,6 +111,7 @@
     <Compile Include="Extensions\HKHealthStoreExtensions.cs" />
     <Compile Include="Extensions\UIViewControllerExtensions.cs" />
     <Compile Include="LinkerPleaseInclude.cs" />
+    <Compile Include="MvxBindings\UtcUIDatePickerDateTargetBinding.cs" />
     <Compile Include="MvxBindings\NetworkIndicatorTargetBinding.cs" />
     <Compile Include="Services\DialogService.cs" />
     <Compile Include="Services\HealthKitService.cs" />
