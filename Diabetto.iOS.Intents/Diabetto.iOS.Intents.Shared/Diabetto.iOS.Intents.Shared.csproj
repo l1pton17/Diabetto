@@ -58,8 +58,12 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AddMeasureIntentBinding">
-      <HintPath>..\..\Diabetto.iOS.AddMeasureIntentBinding\AddMeasureIntentBinding.dll</HintPath>
+    <Reference Include="AddMeasureIntentBinding, Version=1.0.7234.38415, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Diabetto.iOS.Intents.AddMeasureIntentBinding\AddMeasureIntentBinding.dll</HintPath>
+    </Reference>
+    <Reference Include="AddShortInsulinIntentBinding">
+      <HintPath>..\Diabetto.iOS.Intents.AddShortInsluinIntentBinding\AddShortInsulinIntentBinding.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
@@ -72,6 +76,7 @@
   <ItemGroup>
     <Compile Include="AddMeasureIntentDonationManager.cs" />
     <Compile Include="AddMeasureIntentHandler.cs" />
+    <Compile Include="AddShortInsulinIntentHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Setup.cs" />
     <Compile Include="SharedDatabaseConnectionStringHolder.cs" />

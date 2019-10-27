@@ -96,8 +96,12 @@
     <AppExtensionDebugBundleId />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AddMeasureIntentBinding">
-      <HintPath>..\..\Diabetto.iOS.AddMeasureIntentBinding\AddMeasureIntentBinding.dll</HintPath>
+    <Reference Include="AddMeasureIntentBinding, Version=1.0.7234.38415, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Diabetto.iOS.Intents.AddMeasureIntentBinding\AddMeasureIntentBinding.dll</HintPath>
+    </Reference>
+    <Reference Include="AddShortInsulinIntentBinding">
+      <HintPath>..\Diabetto.iOS.Intents.AddShortInsluinIntentBinding\AddShortInsulinIntentBinding.dll</HintPath>
     </Reference>
     <Reference Include="MvvmCross, Version=6.4.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\MvvmCross.6.4.1\lib\xamarinios10\MvvmCross.dll</HintPath>

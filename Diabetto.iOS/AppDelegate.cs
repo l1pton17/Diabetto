@@ -39,12 +39,19 @@ namespace Diabetto.iOS
 
         public override bool ContinueUserActivity(UIApplication application, NSUserActivity userActivity, UIApplicationRestorationHandler completionHandler)
         {
-            if (userActivity.GetInteraction()?.Intent is AddMeasureIntent intent)
+            if (userActivity.GetInteraction()?.Intent is AddMeasureIntent adMeasureIntent)
             {
-                HandleIntent(intent);
+                HandleIntent(adMeasureIntent);
 
                 return true;
-            } else if (userActivity.ActivityType == NSUserActivityHelper.AddMeasureActivityType)
+            }
+            else if (userActivity.GetInteraction()?.Intent is AddShortInsulinIntent addShortInsulinIntent)
+            {
+                HandleIntent(addShortInsulinIntent);
+
+                return true;
+            }
+            else if (userActivity.ActivityType == NSUserActivityHelper.AddMeasureActivityType)
             {
                 HandleAddMeasureUserActivity();
 
@@ -53,6 +60,7 @@ namespace Diabetto.iOS
 
             return false;
         }
+
         private void HandleAddMeasureUserActivity()
         {
             var navigationService = Mvx.IoCProvider.GetSingleton<IMvxNavigationService>();
@@ -68,6 +76,21 @@ namespace Diabetto.iOS
             //}
             //var segue = OrderHistoryTableViewController.SegueIdentifiers.SoupMenu;
             //orderHistoryViewController.PerformSegue(segue, null);
+        }
+
+        private static void HandleIntent(AddShortInsulinIntent intent)
+        {
+            var handler = new AddShortInsulinIntentHandler();
+
+            handler.HandleAddShortInsulin(
+                intent,
+                response =>
+                {
+                    if (response.Code != AddShortInsulinIntentResponseCode.Success)
+                    {
+                        Console.WriteLine(response.Code);
+                    }
+                });
         }
 
         private static void HandleIntent(AddMeasureIntent intent)

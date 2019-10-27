@@ -166,8 +166,12 @@
     <InterfaceDefinition Include="Views\Settings\HealthKitSettingsView.storyboard" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="AddMeasureIntentBinding">
-      <HintPath>..\Diabetto.iOS.AddMeasureIntentBinding\AddMeasureIntentBinding.dll</HintPath>
+    <Reference Include="AddMeasureIntentBinding, Version=1.0.7234.38415, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Diabetto.iOS.Intents\Diabetto.iOS.Intents.AddMeasureIntentBinding\AddMeasureIntentBinding.dll</HintPath>
+    </Reference>
+    <Reference Include="AddShortInsulinIntentBinding">
+      <HintPath>..\Diabetto.iOS.Intents\Diabetto.iOS.Intents.AddShortInsluinIntentBinding\AddShortInsulinIntentBinding.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />

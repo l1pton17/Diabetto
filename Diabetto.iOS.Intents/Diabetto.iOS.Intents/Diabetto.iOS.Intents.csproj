@@ -104,13 +104,14 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AddMeasureIntentBinding">
-      <HintPath>..\..\Diabetto.iOS.AddMeasureIntentBinding\AddMeasureIntentBinding.dll</HintPath>
+    <Reference Include="AddMeasureIntentBinding, Version=1.0.7234.38415, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Diabetto.iOS.Intents.AddMeasureIntentBinding\AddMeasureIntentBinding.dll</HintPath>
+    </Reference>
+    <Reference Include="AddShortInsulinIntentBinding">
+      <HintPath>..\Diabetto.iOS.Intents.AddShortInsluinIntentBinding\AddShortInsulinIntentBinding.dll</HintPath>
     </Reference>
     <Reference Include="OpenTK-1.0" />
-    <Reference Include="ReactiveUI">
-      <HintPath>..\..\..\..\Users\sitdi\.nuget\packages\reactiveui\10.5.7\lib\xamarinios10\ReactiveUI.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
@@ -144,6 +145,9 @@
     </PackageReference>
     <PackageReference Include="Splat">
       <Version>9.1.1</Version>
+    </PackageReference>
+    <PackageReference Include="ReactiveUI">
+      <Version>10.5.7</Version>
     </PackageReference>
     <PackageReference Include="System.Drawing.Common">
       <Version>4.6.0</Version>
