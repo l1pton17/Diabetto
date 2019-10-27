@@ -31,7 +31,6 @@ namespace Diabetto.Core.ViewModels.Measures
     {
         private readonly IMeasureService _measureService;
         private readonly IMvxNavigationService _navigationService;
-        private readonly ITimeProvider _timeProvider;
         private readonly IMeasureCellViewModelFactory _cellViewModelFactory;
 
         private DateTime _date;
@@ -60,13 +59,11 @@ namespace Diabetto.Core.ViewModels.Measures
         public MeasuresViewModel(
             IMvxNavigationService navigationService,
             IMeasureService measureService,
-            ITimeProvider timeProvider,
             IMeasureCellViewModelFactory cellViewModelFactory
         )
         {
             _navigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
             _measureService = measureService ?? throw new ArgumentNullException(nameof(measureService));
-            _timeProvider = timeProvider ?? throw new ArgumentNullException(nameof(timeProvider));
             _cellViewModelFactory = cellViewModelFactory ?? throw new ArgumentNullException(nameof(cellViewModelFactory));
             _measures = new ObservableCollection<MeasureCellViewModel>();
 
@@ -97,16 +94,10 @@ namespace Diabetto.Core.ViewModels.Measures
 
         private async Task Add()
         {
-            var result = await _navigationService.Navigate<MeasureViewModel, Measure, EditResult<Measure>>(
-                new Measure
-                {
-                    Date = _timeProvider.UtcNow,
-                    Level = 55
-                });
+            var result = await _navigationService.Navigate<MeasureViewModel, Measure, EditResult<Measure>>(null);
 
             if (result?.Save == true)
             {
-                await _measureService.AddAsync(result.Entity);
                 LoadTask = MvxNotifyTask.Create(LoadMeasures);
             }
         }
@@ -118,7 +109,6 @@ namespace Diabetto.Core.ViewModels.Measures
 
             if (result?.Save == true)
             {
-                await _measureService.EditAsync(result.Entity);
                 LoadTask = MvxNotifyTask.Create(LoadMeasures);
             }
         }

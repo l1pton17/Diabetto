@@ -2,9 +2,15 @@
 using System.IO;
 using System.Threading.Tasks;
 using Diabetto.Core;
+using Diabetto.Core.Models;
+using Diabetto.Core.ViewModelResults;
+using Diabetto.Core.ViewModels.Measures;
+using Diabetto.iOS.Helpers;
 using Diabetto.iOS.Intents.Shared;
 using Foundation;
 using Intents;
+using MvvmCross;
+using MvvmCross.Navigation;
 using MvvmCross.Platforms.Ios.Core;
 using UIKit;
 
@@ -38,9 +44,30 @@ namespace Diabetto.iOS
                 HandleIntent(intent);
 
                 return true;
+            } else if (userActivity.ActivityType == NSUserActivityHelper.AddMeasureActivityType)
+            {
+                HandleAddMeasureUserActivity();
+
+                return true;
             }
 
             return false;
+        }
+        private void HandleAddMeasureUserActivity()
+        {
+            var navigationService = Mvx.IoCProvider.GetSingleton<IMvxNavigationService>();
+
+            navigationService.Navigate<MeasureViewModel, Measure, EditResult<Measure>>(null);
+
+            //var rootViewController = Window?.RootViewController as UINavigationController;
+            //var orderHistoryViewController = rootViewController?.ViewControllers?.FirstOrDefault() as OrderHistoryTableViewController;
+            //if (orderHistoryViewController is null)
+            //{
+            //    Console.WriteLine("Failed to access OrderHistoryTableViewController.");
+            //    return;
+            //}
+            //var segue = OrderHistoryTableViewController.SegueIdentifiers.SoupMenu;
+            //orderHistoryViewController.PerformSegue(segue, null);
         }
 
         private static void HandleIntent(AddMeasureIntent intent)

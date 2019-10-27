@@ -27,6 +27,8 @@ namespace Diabetto.Core.ViewModels.Measures
         private readonly IMvxNavigationService _navigationService;
         private readonly IDialogService _dialogService;
         private readonly ITagService _tagService;
+        private readonly ITimeProvider _timeProvider;
+        private readonly IMeasureService _measureService;
 
         private int _id;
         public int Id
@@ -106,14 +108,17 @@ namespace Diabetto.Core.ViewModels.Measures
             IProductMeasureViewModelFactory productMeasureViewModelFactory,
             IDialogService dialogService,
             ITagService tagService,
-            IProductService productService
-        )
+            IProductService productService,
+            ITimeProvider timeProvider,
+            IMeasureService measureService)
         {
             _navigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
             _productMeasureViewModelFactory = productMeasureViewModelFactory ?? throw new ArgumentNullException(nameof(productMeasureViewModelFactory));
             _dialogService = dialogService ?? throw new ArgumentNullException(nameof(dialogService));
             _tagService = tagService ?? throw new ArgumentNullException(nameof(tagService));
             _productService = productService ?? throw new ArgumentNullException(nameof(productService));
+            _timeProvider = timeProvider ?? throw new ArgumentNullException(nameof(timeProvider));
+            _measureService = measureService ?? throw new ArgumentNullException(nameof(measureService));
 
             this.WhenAnyValue(v => v.Level)
                 .Where(v => v > 0)
@@ -157,24 +162,7 @@ namespace Diabetto.Core.ViewModels.Measures
                     out _totalBreadUnits,
                     initialValue: 0.0f);
 
-            SaveCommand = ReactiveCommand
-                .CreateFromTask(
-                    () => navigationService.Close(
-                        this,
-                        EditResult.Create(
-                            new Measure
-                            {
-                                Id = Id,
-                                Date = Date,
-                                Level = HasLevel ? (int?) Level : null,
-                                Tag = Tag,
-                                TagId = Tag?.Id,
-                                LongInsulin = LongInsulin,
-                                ShortInsulin = ShortInsulin,
-                                Products = ProductMeasures
-                                    .Select(v => v.Extract())
-                                    .ToList()
-                            })));
+            SaveCommand = ReactiveCommand.CreateFromTask(Save);
 
             AddProductMeasureCommand = ReactiveCommand.CreateFromTask(AddProductMeasure);
 
@@ -185,6 +173,41 @@ namespace Diabetto.Core.ViewModels.Measures
 
             ProductMeasureSelectedCommand = ReactiveCommand
                 .CreateFromTask<ProductMeasureViewModel>(ProductMeasureSelected);
+        }
+
+        private async Task<bool> Save()
+        {
+            var measure = Extract();
+
+            if (measure.Id != 0)
+            {
+                await _measureService.EditAsync(measure);
+            }
+            else
+            {
+                await _measureService.AddAsync(measure);
+            }
+
+            var result = await _navigationService.Close(this, EditResult.Create(measure));
+
+            return result;
+        }
+
+        private Measure Extract()
+        {
+            return new Measure
+            {
+                Id = Id,
+                Date = Date,
+                Level = HasLevel ? (int?)Level : null,
+                Tag = Tag,
+                TagId = Tag?.Id,
+                LongInsulin = LongInsulin,
+                ShortInsulin = ShortInsulin,
+                Products = ProductMeasures
+                    .Select(v => v.Extract())
+                    .ToList()
+            };
         }
 
         private async Task EditTag()
@@ -242,6 +265,12 @@ namespace Diabetto.Core.ViewModels.Measures
         /// <inheritdoc />
         public override void Prepare(Measure parameter)
         {
+            parameter ??= new Measure
+            {
+                Level = 55,
+                Date = _timeProvider.UtcNow
+            };
+
             Id = parameter.Id;
             Date = parameter.Date;
             Level = parameter.Level ?? 0;

@@ -110,6 +110,7 @@
     <Compile Include="Dialogs\PickerDialog.cs" />
     <Compile Include="Extensions\HKHealthStoreExtensions.cs" />
     <Compile Include="Extensions\UIViewControllerExtensions.cs" />
+    <Compile Include="Helpers\NSUserActivityHelper.cs" />
     <Compile Include="LinkerPleaseInclude.cs" />
     <Compile Include="MvxBindings\UtcUIDatePickerDateTargetBinding.cs" />
     <Compile Include="MvxBindings\NetworkIndicatorTargetBinding.cs" />

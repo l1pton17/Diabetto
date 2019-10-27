@@ -4,6 +4,7 @@ using Diabetto.Core.ViewModels.Measures;
 using Diabetto.iOS.Combiners;
 using Diabetto.iOS.Converters;
 using Diabetto.iOS.Extensions;
+using Diabetto.iOS.Helpers;
 using Diabetto.iOS.Sources.ProductMeasures;
 using Foundation;
 using MvvmCross.Binding.BindingContext;
@@ -38,6 +39,8 @@ namespace Diabetto.iOS.Views.Measures
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+
+            UserActivity = NSUserActivityHelper.AddMeasureActivity;
 
             this.HideKeyboardWhenTappedAround();
 

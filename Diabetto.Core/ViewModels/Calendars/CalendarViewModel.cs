@@ -17,8 +17,6 @@ namespace Diabetto.Core.ViewModels.Calendars
     public sealed class CalendarViewModel : MvxReactiveViewModel
     {
         private readonly IMvxNavigationService _navigationService;
-        private readonly ITimeProvider _timeProvider;
-        private readonly IMeasureService _measureService;
 
         private readonly ObservableAsPropertyHelper<MonthViewModel> _month;
         public MonthViewModel Month => _month.Value;
@@ -32,13 +30,10 @@ namespace Diabetto.Core.ViewModels.Calendars
 
         public CalendarViewModel(
             IMvxNavigationService navigationService,
-            ITimeProvider timeProvider,
-            IMeasureService measureService
+            ITimeProvider timeProvider
         )
         {
             _navigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
-            _timeProvider = timeProvider ?? throw new ArgumentNullException(nameof(timeProvider));
-            _measureService = measureService ?? throw new ArgumentNullException(nameof(measureService));
             AddCommand = ReactiveCommand.CreateFromTask(Add);
 
             MonthShowed = ReactiveCommand.Create<MonthViewModel, MonthViewModel>(v => v);
@@ -53,7 +48,7 @@ namespace Diabetto.Core.ViewModels.Calendars
                 .Subscribe(
                     v =>
                     {
-                        var day = v.Days.First(c => c.Day == _timeProvider.UtcNow.Day);
+                        var day = v.Days.First(c => c.Day == timeProvider.UtcNow.Day);
 
                         v.DaySelectedCommand.Execute(day);
                     });
@@ -61,21 +56,15 @@ namespace Diabetto.Core.ViewModels.Calendars
             this.WhenAnyValue(v => v.Month)
                 .Where(v => v != null)
                 .Select(v => v.Month.Date)
-                .ToProperty(this, v => v.MonthDate, out _monthDate, _timeProvider.UtcNow);
+                .ToProperty(this, v => v.MonthDate, out _monthDate, timeProvider.UtcNow);
         }
 
         private async Task Add()
         {
-            var result = await _navigationService.Navigate<MeasureViewModel, Measure, EditResult<Measure>>(
-                new Measure
-                {
-                    Date = _timeProvider.UtcNow,
-                    Level = 55
-                });
+            var result = await _navigationService.Navigate<MeasureViewModel, Measure, EditResult<Measure>>(null);
 
             if (result?.Save == true)
             {
-                await _measureService.AddAsync(result.Entity);
                 await _navigationService.Navigate<MeasuresViewModel, MeasuresNavigationRequest, Measure>(new MeasuresNavigationRequest(result.Entity.Date.Date));
             }
         }
