@@ -1,6 +1,5 @@
 ﻿using System;
 using Diabetto.Core.Models;
-using Diabetto.Core.Services;
 using Diabetto.Core.Services.Repositories;
 using Intents;
 using MvvmCross;
@@ -45,7 +44,7 @@ namespace Diabetto.iOS.Intents.Shared
                 var measure = new Measure
                 {
                     Date = DateTime.UtcNow,
-                    Level = hasLevel ? (int?) level * 10 : null,
+                    Level = hasLevel ? (int?) (level.DoubleValue * 10) : null,
                     LongInsulin = 0,
                     ShortInsulin = shortInsulin.Int32Value
                 };
@@ -67,19 +66,48 @@ namespace Diabetto.iOS.Intents.Shared
         /// <inheritdoc />
         public override void ResolveLevelForAddMeasure(AddMeasureIntent intent, Action<INDoubleResolutionResult> completion)
         {
-            completion(INDoubleResolutionResult.GetSuccess(intent.Level.DoubleValue));
+            try
+            {
+                Console.WriteLine(intent.Level.DoubleValue);
+
+                completion(intent.Level.DoubleValue <= Double.Epsilon
+                    ? INDoubleResolutionResult.NeedsValue
+                    : INDoubleResolutionResult.GetSuccess(intent.Level.DoubleValue));
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
         }
 
         /// <inheritdoc />
         public override void ResolveShortinsulinForAddMeasure(AddMeasureIntent intent, Action<INIntegerResolutionResult> completion)
         {
-            completion(INIntegerResolutionResult.GetSuccess(intent.Shortinsulin.Int32Value));
+            try
+            {
+                Console.WriteLine(intent.Shortinsulin.Int32Value);
+
+                completion(INIntegerResolutionResult.GetSuccess(intent.Shortinsulin.Int32Value));
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
         }
 
         /// <inheritdoc />
         public override void ResolveBreadunitsForAddMeasure(AddMeasureIntent intent, Action<INDoubleResolutionResult> completion)
         {
-            completion(INDoubleResolutionResult.GetSuccess(intent.Breadunits.DoubleValue));
+            try
+            {
+                Console.WriteLine(intent.Breadunits.DoubleValue);
+
+                completion(INDoubleResolutionResult.GetSuccess(intent.Breadunits.DoubleValue));
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
         }
     }
 }
