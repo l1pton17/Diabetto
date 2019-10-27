@@ -47,7 +47,7 @@
     <ObjcBindingCoreSource Include="Structs.cs" />
   </ItemGroup>
   <ItemGroup>
-    <NativeReference Include="Native References/libDiabettoIntentStaticLib.a">
+    <NativeReference Include="Native References/libDiabettAddShortInsulinIntentStaticLib.a">
       <Kind>Static</Kind>
     </NativeReference>
   </ItemGroup>
