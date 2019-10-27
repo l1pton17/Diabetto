@@ -34,7 +34,7 @@
 					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
 					<true/>
 					<key>INIntentParameterCombinationTitle</key>
-					<string>Add blood sugar</string>
+					<string>Add measure</string>
 					<key>INIntentParameterCombinationTitleID</key>
 					<string>AZmhv8</string>
 				</dict>
@@ -51,65 +51,6 @@
 					<string>Add blood sugar</string>
 					<key>INIntentParameterCombinationTitleID</key>
 					<string>rIgn8d</string>
-				</dict>
-				<key>breadunits</key>
-				<dict>
-					<key>INIntentParameterCombinationSubtitle</key>
-					<string>Add bread units</string>
-					<key>INIntentParameterCombinationSubtitleID</key>
-					<string>Vju14s</string>
-					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
-					<true/>
-					<key>INIntentParameterCombinationTitle</key>
-					<string>Add BU ${breadunits}</string>
-					<key>INIntentParameterCombinationTitleID</key>
-					<string>EmTlNi</string>
-				</dict>
-				<key>breadunits,level,shortinsulin</key>
-				<dict>
-					<key>INIntentParameterCombinationIsPrimary</key>
-					<true/>
-					<key>INIntentParameterCombinationSubtitle</key>
-					<string>BU ${breadunits}  insulin ${shortinsulin}</string>
-					<key>INIntentParameterCombinationSubtitleID</key>
-					<string>dkRHLL</string>
-					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
-					<true/>
-					<key>INIntentParameterCombinationTitle</key>
-					<string>Add blood sugar</string>
-					<key>INIntentParameterCombinationTitleID</key>
-					<string>fMjCI4</string>
-				</dict>
-				<key>level</key>
-				<dict>
-					<key>INIntentParameterCombinationSubtitle</key>
-					<string>Level ${level}</string>
-					<key>INIntentParameterCombinationSubtitleID</key>
-					<string>USnNbk</string>
-					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
-					<true/>
-					<key>INIntentParameterCombinationTitle</key>
-					<string>Add blood sugar ${level}</string>
-					<key>INIntentParameterCombinationTitleID</key>
-					<string>rNt8cy</string>
-				</dict>
-				<key>shortinsulin</key>
-				<dict>
-					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
-					<true/>
-					<key>INIntentParameterCombinationTitle</key>
-					<string>Add insulin ${shortinsulin}</string>
-					<key>INIntentParameterCombinationTitleID</key>
-					<string>Wk8qHb</string>
-				</dict>
-				<key>shortinsulin,breadunits</key>
-				<dict>
-					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
-					<true/>
-					<key>INIntentParameterCombinationTitle</key>
-					<string>Add BU ${breadunits}insulin ${shortinsulin}</string>
-					<key>INIntentParameterCombinationTitleID</key>
-					<string>YQetWY</string>
 				</dict>
 			</dict>
 			<key>INIntentParameters</key>
