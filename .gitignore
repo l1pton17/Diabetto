@@ -5,6 +5,9 @@
 # User-specific files
 .vscode
 
+.suo
+.dtbcache
+storage.ide
 *.suo
 *.user
 *.userosscache
