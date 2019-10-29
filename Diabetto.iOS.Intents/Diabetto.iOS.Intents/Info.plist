@@ -15,7 +15,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
-	<string>1.0.24</string>
+	<string>1.0.25</string>
 	<key>MinimumOSVersion</key>
 	<string>13.1</string>
 	<key>NSExtension</key>
@@ -27,6 +27,7 @@
 			<key>IntentsSupported</key>
 			<array>
 				<string>AddMeasureIntent</string>
+				<string>AddShortInsulinIntent</string>
 			</array>
 		</dict>
 		<key>NSExtensionPointIdentifier</key>

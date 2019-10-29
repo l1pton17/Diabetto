@@ -9,6 +9,11 @@ namespace Diabetto.iOS.Intents.Shared
 {
     public sealed class AddShortInsulinIntentHandler : AddShortInsulinIntentHandling
     {
+        public override void ConfirmAddShortInsulin(AddShortInsulinIntent intent, Action<AddShortInsulinIntentResponse> completion)
+        {
+            completion(new AddShortInsulinIntentResponse(AddShortInsulinIntentResponseCode.Success, null));
+        }
+
         public override void HandleAddShortInsulin(AddShortInsulinIntent intent, Action<AddShortInsulinIntentResponse> completion)
         {
             try
