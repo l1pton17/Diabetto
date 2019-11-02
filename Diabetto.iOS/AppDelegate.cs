@@ -34,6 +34,25 @@ namespace Diabetto.iOS
             //CustomizeAppearance();
             DisplayCrashReport();
 
+            INPreferences.RequestSiriAuthorization(
+                status =>
+                {
+                    switch (status)
+                    {
+                        case INSiriAuthorizationStatus.Authorized:
+                            break;
+
+                        case INSiriAuthorizationStatus.Denied:
+                            break;
+
+                        case INSiriAuthorizationStatus.NotDetermined:
+                            break;
+
+                        case INSiriAuthorizationStatus.Restricted:
+                            break;
+                    }
+                });
+
             return result;
         }
 

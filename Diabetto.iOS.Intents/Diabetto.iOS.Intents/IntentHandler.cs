@@ -17,7 +17,16 @@ namespace Diabetto.iOS.Intents
         {
             Console.WriteLine("get the intent handler");
 
-            return new AddMeasureIntentHandler();
+            switch (intent)
+            {
+                case AddMeasureIntent _:
+                    return new AddMeasureIntentHandler();
+
+                case AddShortInsulinIntent _:
+                    return new AddShortInsulinIntentHandler();
+            }
+
+            throw new InvalidOperationException($"Unhandled intent type: ${intent}");
         }
     }
 }

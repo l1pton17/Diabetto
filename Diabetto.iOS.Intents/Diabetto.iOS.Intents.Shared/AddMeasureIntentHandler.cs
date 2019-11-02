@@ -4,12 +4,18 @@ using Diabetto.Core.Services.Repositories;
 using Intents;
 using MvvmCross;
 using MvvmCross.Logging;
+using ObjCRuntime;
 
 namespace Diabetto.iOS.Intents.Shared
 {
 
     public sealed class AddMeasureIntentHandler : AddMeasureIntentHandling
     {
+        public override void ConfirmAddMeasure(AddMeasureIntent intent, Action<AddMeasureIntentResponse> completion)
+        {
+            completion(new AddMeasureIntentResponse(AddMeasureIntentResponseCode.Success, null));
+        }
+
         /// <inheritdoc />
         public override void HandleAddMeasure(AddMeasureIntent intent, Action<AddMeasureIntentResponse> completion)
         {

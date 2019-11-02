@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
 using Diabetto.Core.Models;
-using Diabetto.Core.Services;
 using Diabetto.Core.Services.Repositories;
 using Diabetto.Core.ViewModelResults;
 using Diabetto.Core.ViewModels.Core;
@@ -72,6 +71,11 @@ namespace Diabetto.Core.ViewModels.Measures
             DeleteCommand = ReactiveCommand.CreateFromTask<MeasureCellViewModel>(Delete);
         }
 
+        public override void ViewAppearing()
+        {
+            LoadTask = MvxNotifyTask.Create(LoadMeasures);
+        }
+
         /// <inheritdoc />
         public override void Prepare(MeasuresNavigationRequest parameter)
         {
@@ -80,8 +84,6 @@ namespace Diabetto.Core.ViewModels.Measures
 
         public override Task Initialize()
         {
-            LoadTask = MvxNotifyTask.Create(LoadMeasures);
-
             return Task.CompletedTask;
         }
 
