@@ -162,7 +162,16 @@ namespace Diabetto.Core.ViewModels.Measures
                     out _totalBreadUnits,
                     initialValue: 0.0f);
 
-            SaveCommand = ReactiveCommand.CreateFromTask(Save);
+            var canSave = this
+                .WhenAnyValue(
+                    v => v.HasLevel,
+                    v => v.TotalBreadUnits,
+                    v => v.ShortInsulin,
+                    v => v.LongInsulin,
+                    (hl, bu, si, li) => hl || bu > 0 || si > 0 || li > 0
+                );
+
+            SaveCommand = ReactiveCommand.CreateFromTask(Save, canSave);
 
             AddProductMeasureCommand = ReactiveCommand.CreateFromTask(AddProductMeasure);
 
@@ -273,8 +282,8 @@ namespace Diabetto.Core.ViewModels.Measures
 
             Id = parameter.Id;
             Date = parameter.Date;
-            Level = parameter.Level ?? 0;
-            HasLevel = true;
+            Level = parameter.Level ?? 55;
+            HasLevel = parameter.Level.HasValue;
             LongInsulin = parameter.LongInsulin;
             ShortInsulin = parameter.ShortInsulin;
             Tag = parameter.Tag;

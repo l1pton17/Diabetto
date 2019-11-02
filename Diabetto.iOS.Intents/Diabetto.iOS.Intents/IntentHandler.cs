@@ -15,7 +15,7 @@ namespace Diabetto.iOS.Intents
 
         public override NSObject GetHandler(INIntent intent)
         {
-            Console.WriteLine("get the intent handler");
+            Console.WriteLine("Get the intent handler");
 
             switch (intent)
             {

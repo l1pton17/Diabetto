@@ -58,13 +58,15 @@ namespace Diabetto.iOS
 
         public override bool ContinueUserActivity(UIApplication application, NSUserActivity userActivity, UIApplicationRestorationHandler completionHandler)
         {
-            if (userActivity.GetInteraction()?.Intent is AddMeasureIntent adMeasureIntent)
+            var intent = userActivity.GetInteraction()?.Intent;
+
+            if (intent is AddMeasureIntent adMeasureIntent)
             {
                 HandleIntent(adMeasureIntent);
 
                 return true;
             }
-            else if (userActivity.GetInteraction()?.Intent is AddShortInsulinIntent addShortInsulinIntent)
+            else if (intent is AddShortInsulinIntent addShortInsulinIntent)
             {
                 HandleIntent(addShortInsulinIntent);
 

@@ -32,7 +32,6 @@ namespace Diabetto.iOS.Services
         private static class MetadataKey
         {
             public const string DiabettoOrigin = "diabetto.origin";
-            public const string IsTest = "diabetto.is.test";
 
             public static string GetExternalUUID(int id)
             {
@@ -72,6 +71,8 @@ namespace Diabetto.iOS.Services
 
         public ReactiveCommand<Measure, Unit> AddCommand { get; }
 
+        public ReactiveCommand<Measure, Unit> EditCommand { get; }
+
         public ReactiveCommand<Measure, Unit> DeleteCommand { get; }
 
         public HealthKitService(
@@ -87,27 +88,31 @@ namespace Diabetto.iOS.Services
                 v => AddSamples(GetQuantitySamples(v)));
 
             AddCommand.ThrownExceptions
-                .Subscribe(e => _log.ErrorException("While sync measure", e));
+                .Subscribe(e => _log.ErrorException("While add measure to health kit", e));
 
-            DeleteCommand = ReactiveCommand.CreateFromTask<Measure>(
-                v => DeleteSamples(v));
+            EditCommand = ReactiveCommand.CreateFromTask<Measure>(EditMeasure);
+
+            EditCommand.ThrownExceptions
+                .Subscribe(e => _log.ErrorException("While edit measure to health kit", e));
+
+            DeleteCommand = ReactiveCommand.CreateFromTask<Measure>(DeleteSamples);
 
             DeleteCommand.ThrownExceptions
                 .Subscribe(e => _log.ErrorException("While deleting measure", e));
 
-            var addedMeasures = MessageBus.Current
+            MessageBus.Current
                 .ListenIncludeLatest<MeasureAddedEvent>()
-                .Select(v => v?.Value);
-
-            var changedMeasures = MessageBus.Current
-                .ListenIncludeLatest<MeasureChangedEvent>()
-                .Select(v => v?.Value);
-
-            addedMeasures
-                .Merge(changedMeasures)
+                .Select(v => v?.Value)
                 .Where(v => v != null)
-                .Where(_ => GetStatus())
+                .Where(v => GetStatus())
                 .InvokeCommand(this, v => v.AddCommand);
+
+            MessageBus.Current
+                .ListenIncludeLatest<MeasureChangedEvent>()
+                .Select(v => v?.Value)
+                .Where(v => v != null)
+                .Where(v => GetStatus())
+                .InvokeCommand(this, v => v.EditCommand);
 
             MessageBus.Current
                 .ListenIncludeLatest<MeasureDeletedEvent>()
@@ -122,7 +127,7 @@ namespace Diabetto.iOS.Services
             var measures = await _measureService.GetAllAsync();
 
             var measureSamples = measures
-                .SelectMany(v => GetQuantitySamples(v));
+                .SelectMany(GetQuantitySamples);
 
             await AddSamples(measureSamples);
         }
@@ -225,6 +230,29 @@ namespace Diabetto.iOS.Services
             }
         }
 
+        private async Task EditMeasure(Measure measure)
+        {
+            if (_suppressed)
+            {
+                return;
+            }
+
+            if (!measure.Level.HasValue)
+            {
+                var predicate = HKQuery.GetPredicateForMetadataKey(
+                    HKMetadataKey.ExternalUuid,
+                    new[] { NSObject.FromObject(MetadataKey.GetExternalUUID(measure.Id)) });
+
+                await _healthStore.DeleteObjectsAsync(
+                    HKQuantityType.Create(HKQuantityTypeIdentifier.BloodGlucose),
+                    predicate);
+            }
+
+            var samples = GetQuantitySamples(measure);
+
+            await AddSamples(samples);
+        }
+
         private async Task AddSamples(IEnumerable<HKObject> objects)
         {
             if (_suppressed)
@@ -291,8 +319,6 @@ namespace Diabetto.iOS.Services
                 NSObject.FromObject(true),
                 HKMetadataKey.TimeZone,
                 NSObject.FromObject("UTC"),
-                MetadataKey.IsTest,
-                NSObject.FromObject(true),
                 HKMetadataKey.SyncVersion,
                 NSObject.FromObject(version),
                 HKMetadataKey.WasUserEntered,
@@ -332,8 +358,6 @@ namespace Diabetto.iOS.Services
                         : HKInsulinDeliveryReason.Bolus),
                 HKMetadataKey.TimeZone,
                 NSObject.FromObject("UTC"),
-                MetadataKey.IsTest,
-                NSObject.FromObject(true),
                 HKMetadataKey.ExternalUuid,
                 NSObject.FromObject(MetadataKey.GetExternalUUID(measureId)),
                 HKMetadataKey.WasUserEntered,
