@@ -16,7 +16,8 @@ namespace Diabetto.iOS.Views.Cells.Products
             Nib = UINib.FromName(Key, NSBundle.MainBundle);
         }
 
-        protected ProductSearchResultTableViewCell(IntPtr handle) : base(handle)
+        protected ProductSearchResultTableViewCell(IntPtr handle)
+            : base(handle)
         {
             this.DelayBind(
                 () =>

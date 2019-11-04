@@ -14,6 +14,8 @@ namespace Diabetto.Core.Services.Repositories
         Task<List<Product>> GetByNameAsync(string name);
 
         Task AddAsync(Product value);
+
+        Task DeleteAsync(int productId);
     }
 
     internal sealed class ProductService : SQLiteConnection, IProductService
@@ -71,6 +73,16 @@ namespace Diabetto.Core.Services.Repositories
             lock (_lockObject)
             {
                 this.InsertWithChildren(value, recursive: false);
+            }
+
+            return Task.CompletedTask;
+        }
+
+        public Task DeleteAsync(int productId)
+        {
+            lock (_lockObject)
+            {
+                this.Delete<Product>(productId);
             }
 
             return Task.CompletedTask;

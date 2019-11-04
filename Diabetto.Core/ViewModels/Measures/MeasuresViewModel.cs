@@ -119,8 +119,6 @@ namespace Diabetto.Core.ViewModels.Measures
         {
             var result = await _measureService.GetAsync(Date);
 
-
-
             _measures.Clear();
 
             _measures

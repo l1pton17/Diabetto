@@ -18,12 +18,6 @@ namespace Diabetto.iOS.Views.Cells.Measures
         public static readonly NSString Key = new NSString(nameof(MeasureTableViewCell));
         public static readonly UINib Nib;
 
-        public string Time
-        {
-            get => TimeLabel.Text;
-            set => TimeLabel.Text = value;
-        }
-
         static MeasureTableViewCell()
         {
             Nib = UINib.FromName(Key, NSBundle.MainBundle);

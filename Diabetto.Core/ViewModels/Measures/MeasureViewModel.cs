@@ -20,7 +20,7 @@ using ReactiveUI;
 
 namespace Diabetto.Core.ViewModels.Measures
 {
-    public class MeasureViewModel : MvxReactiveViewModel<Measure, EditResult<Measure>>
+    public sealed class MeasureViewModel : MvxReactiveViewModel<Measure, EditResult<Measure>>
     {
         private readonly IProductMeasureViewModelFactory _productMeasureViewModelFactory;
         private readonly IProductService _productService;

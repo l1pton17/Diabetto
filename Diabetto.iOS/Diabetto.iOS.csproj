@@ -120,6 +120,7 @@
     <Compile Include="Sources\Measures\MeasureTableViewSource.cs" />
     <Compile Include="Sources\Products\ProductSearchResultsTableViewSource.cs" />
     <Compile Include="Sources\ProductMeasures\ProductMeasureTableViewSource.cs" />
+    <Compile Include="Sources\Products\ProductTableViewSource.cs" />
     <Compile Include="ViewModels\Dialogs\PickerDialogViewModel.cs" />
     <Compile Include="Sources\MvxDeleteTableViewSource.cs" />
     <Compile Include="ViewModels\Settings\HealthKitSettingsViewModel.cs" />
@@ -139,6 +140,10 @@
     <Compile Include="Views\Cells\Products\ProductSearchResultTableViewCell.designer.cs">
       <DependentUpon>ProductSearchResultTableViewCell.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\Cells\Products\ProductTableViewCell.cs" />
+    <Compile Include="Views\Cells\Products\ProductTableViewCell.designer.cs">
+      <DependentUpon>ProductTableViewCell.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainView.cs" />
     <Compile Include="Views\Measures\MeasuresView.cs" />
     <Compile Include="Views\Measures\MeasureView.cs" />
@@ -150,6 +155,10 @@
       <DependentUpon>AddProductMeasureView.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\Products\ProductsView.cs" />
+    <Compile Include="Views\Products\ProductView.cs" />
+    <Compile Include="Views\Products\ProductView.designer.cs">
+      <DependentUpon>ProductView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\Settings\HealthKitSettingsView.cs" />
     <Compile Include="Views\Settings\HealthKitSettingsView.designer.cs">
       <DependentUpon>HealthKitSettingsView.cs</DependentUpon>
@@ -164,6 +173,8 @@
     <InterfaceDefinition Include="Views\Measures\MeasureView.storyboard" />
     <InterfaceDefinition Include="Views\Cells\Products\ProductSearchResultTableViewCell.xib" />
     <InterfaceDefinition Include="Views\Settings\HealthKitSettingsView.storyboard" />
+    <InterfaceDefinition Include="Views\Cells\Products\ProductTableViewCell.xib" />
+    <InterfaceDefinition Include="Views\Products\ProductView.storyboard" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="AddMeasureIntentBinding, Version=1.0.7234.38415, Culture=neutral, processorArchitecture=MSIL">

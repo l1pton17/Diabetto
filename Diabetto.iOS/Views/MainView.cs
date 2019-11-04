@@ -26,6 +26,7 @@ namespace Diabetto.iOS.Views
             {
                 _firstTimePresented = false;
                 ViewModel.ShowMeasuresViewModelCommand.Execute(null);
+                ViewModel.ShowProductsViewModelCommand.Execute(null);
                 ViewModel.ShowSettingsViewModelCommand.Execute(null);
             }
         }
