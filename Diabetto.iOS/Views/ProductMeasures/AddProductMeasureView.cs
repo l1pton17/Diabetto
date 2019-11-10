@@ -7,7 +7,9 @@ using UIKit;
 
 namespace Diabetto.iOS.Views.ProductMeasures
 {
-    [MvxChildPresentation(Animated = true)]
+    [MvxModalPresentation(
+        Animated = true,
+        ModalPresentationStyle = UIModalPresentationStyle.FormSheet)]
     public partial class AddProductMeasureView : MvxTableViewController<AddProductMeasureViewModel>
     {
         private ProductSearchResultsTableViewSource _searchResultsSource;
@@ -16,6 +18,7 @@ namespace Diabetto.iOS.Views.ProductMeasures
         {
             base.ViewDidLoad();
 
+            ModalInPresentation = true;
             _searchResultsSource = new ProductSearchResultsTableViewSource(TableView);
 
             TableView.Source = _searchResultsSource;

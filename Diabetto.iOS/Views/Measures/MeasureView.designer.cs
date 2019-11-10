@@ -19,6 +19,10 @@ namespace Diabetto.iOS.Views.Measures
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIButton CancelButton { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIStackView DatePickerRow { get; set; }
 
         [Outlet]
@@ -82,6 +86,11 @@ namespace Diabetto.iOS.Views.Measures
             if (AddProductMeasureButton != null) {
                 AddProductMeasureButton.Dispose ();
                 AddProductMeasureButton = null;
+            }
+
+            if (CancelButton != null) {
+                CancelButton.Dispose ();
+                CancelButton = null;
             }
 
             if (DatePickerRow != null) {

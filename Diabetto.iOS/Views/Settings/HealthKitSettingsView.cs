@@ -1,15 +1,17 @@
 ﻿
 using System;
 using Diabetto.iOS.ViewModels.Settings;
-using MvvmCross.Binding;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using MvvmCross.Platforms.Ios.Views;
+using UIKit;
 
 namespace Diabetto.iOS.Views.Settings
 {
     [MvxFromStoryboard(StoryboardName = "HealthKitSettingsView")]
-    [MvxChildPresentation(Animated = true)]
+    [MvxModalPresentation(
+        Animated = true,
+        ModalPresentationStyle = UIModalPresentationStyle.FormSheet)]
     public partial class HealthKitSettingsView : MvxTableViewController<HealthKitSettingsViewModel>
     {
         public HealthKitSettingsView(IntPtr handle) : base(handle)

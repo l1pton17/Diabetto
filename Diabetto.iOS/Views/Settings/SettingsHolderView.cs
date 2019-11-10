@@ -12,6 +12,7 @@ namespace Diabetto.iOS.Views.Settings
     public sealed class SettingsHolderView : MvxTableViewController<SettingsHolderViewModel>
     {
         private MvxStandardTableViewSource _source;
+        private UIButton _closeButton;
 
         public override void ViewDidLoad()
         {
@@ -28,6 +29,11 @@ namespace Diabetto.iOS.Views.Settings
                 "TitleText Name");
 
             TableView.Source = _source;
+
+            TableView.TableFooterView = new UIButton
+            {
+
+            };
 
             var bindingSet = this.CreateBindingSet<SettingsHolderView, SettingsHolderViewModel>();
 

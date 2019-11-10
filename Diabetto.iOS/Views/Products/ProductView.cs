@@ -5,11 +5,14 @@ using Diabetto.iOS.Extensions;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
 using MvvmCross.Platforms.Ios.Views;
+using UIKit;
 
 namespace Diabetto.iOS.Views.Products
 {
     [MvxFromStoryboard]
-    [MvxChildPresentation(Animated = true)]
+    [MvxModalPresentation(
+        Animated = true,
+        ModalPresentationStyle = UIModalPresentationStyle.FormSheet)]
     public partial class ProductView : MvxTableViewController<ProductViewModel>
     {
         public ProductView(IntPtr handle) : base(handle)
@@ -27,6 +30,8 @@ namespace Diabetto.iOS.Views.Products
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+
+            ModalInPresentation = true;
 
             this.HideKeyboardWhenTappedAround();
 

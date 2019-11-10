@@ -103,6 +103,8 @@ namespace Diabetto.Core.ViewModels.Measures
 
         public ReactiveCommand<Unit, bool> SaveCommand { get; }
 
+        public ReactiveCommand<Unit, bool> CancelCommand { get; }
+
         public MeasureViewModel(
             IMvxNavigationService navigationService,
             IProductMeasureViewModelFactory productMeasureViewModelFactory,
@@ -173,6 +175,8 @@ namespace Diabetto.Core.ViewModels.Measures
 
             SaveCommand = ReactiveCommand.CreateFromTask(Save, canSave);
 
+            CancelCommand = ReactiveCommand.CreateFromTask(Cancel);
+
             AddProductMeasureCommand = ReactiveCommand.CreateFromTask(AddProductMeasure);
 
             EditTagCommand = ReactiveCommand.CreateFromTask(EditTag);
@@ -182,6 +186,13 @@ namespace Diabetto.Core.ViewModels.Measures
 
             ProductMeasureSelectedCommand = ReactiveCommand
                 .CreateFromTask<ProductMeasureViewModel>(ProductMeasureSelected);
+        }
+
+        private async Task<bool> Cancel()
+        {
+            return await _navigationService.Close(
+                this,
+                EditResult.Close<Measure>());
         }
 
         private async Task<bool> Save()
