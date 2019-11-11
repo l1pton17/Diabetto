@@ -5,6 +5,7 @@ using Diabetto.Core.Services;
 using Diabetto.Core.ViewModels.Core;
 using Diabetto.Core.ViewModels.Settings;
 using Diabetto.iOS.Services;
+using MvvmCross.Navigation;
 using ReactiveUI;
 
 namespace Diabetto.iOS.ViewModels.Settings
@@ -27,14 +28,19 @@ namespace Diabetto.iOS.ViewModels.Settings
         public ReactiveCommand<Unit, bool> EnableCommand { get; }
 
         public ReactiveCommand<Unit, Unit> ExportCommand { get; }
+        
+        public ReactiveCommand<Unit, bool> CloseCommand { get; }
 
         public HealthKitSettingsViewModel(
+            IMvxNavigationService navigationService,
             IDialogService dialogService,
             IHealthKitService healthKitService)
         {
             _isEnabled = healthKitService.GetStatus();
 
             DisableCommand = ReactiveCommand.Create(() => healthKitService.Disable());
+
+            CloseCommand = ReactiveCommand.CreateFromTask(() => navigationService.Close(this));
 
             EnableCommand = ReactiveCommand.CreateFromTask<Unit, bool>(_ => healthKitService.Enable());
 

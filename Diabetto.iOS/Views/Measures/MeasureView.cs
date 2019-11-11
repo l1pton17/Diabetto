@@ -36,8 +36,6 @@ namespace Diabetto.iOS.Views.Measures
         {
         }
 
-        #region View lifecycle
-
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
@@ -241,22 +239,5 @@ namespace Diabetto.iOS.Views.Measures
             DateValuePicker.TranslatesAutoresizingMaskIntoConstraints = true;
             DateValuePicker.MaximumDate = (NSDate) DateTime.UtcNow;
         }
-
-        public override void ViewDidAppear(bool animated)
-        {
-            base.ViewDidAppear(animated);
-        }
-
-        public override void ViewWillDisappear(bool animated)
-        {
-            base.ViewWillDisappear(animated);
-        }
-
-        public override void ViewDidDisappear(bool animated)
-        {
-            base.ViewDidDisappear(animated);
-        }
-
-        #endregion
     }
 }

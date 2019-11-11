@@ -84,6 +84,8 @@ namespace Diabetto.Core.ViewModels.ProductMeasures
 
         public ReactiveCommand<ProductSearchItemViewModel, Unit> ProductSelectedCommand { get; }
 
+        public ReactiveCommand<Unit, bool> CloseCommand { get; }
+
         public AddProductMeasureViewModel(
             IMvxNavigationService navigationService,
             IProductService productService,
@@ -102,6 +104,8 @@ namespace Diabetto.Core.ViewModels.ProductMeasures
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(SearchResults)
                 .Subscribe();
+
+            CloseCommand = ReactiveCommand.CreateFromTask(Close);
 
             SearchCommand = ReactiveCommand.CreateFromTask<string, ImmutableArray<ProductSearchItemViewModel>>(Search);
 
@@ -128,6 +132,11 @@ namespace Diabetto.Core.ViewModels.ProductMeasures
         public override void Prepare(AddProductMeasureParameter parameter)
         {
             MeasureId = parameter.MeasureId;
+        }
+
+        private async Task<bool> Close()
+        {
+            return await _navigationService.Close(this, null);
         }
 
         private async Task ProductSelected(ProductSearchItemViewModel item)

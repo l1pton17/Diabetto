@@ -91,6 +91,7 @@
     <Compile Include="Combiners\InsulinMvxValueCombiner.cs" />
     <Compile Include="Combiners\StringFormatCombiner.cs" />
     <Compile Include="Combiners\StringJoinCombiner.cs" />
+    <Compile Include="Controls\PopModalPresentationControllerDelegate.cs" />
     <Compile Include="Converters\TagNameMvxValueConverter.cs" />
     <Compile Include="Constants\NumberFormats.cs" />
     <Compile Include="Controls\Calendar\DTCalendarCell.cs" />

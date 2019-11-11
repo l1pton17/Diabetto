@@ -1,4 +1,5 @@
-﻿using Diabetto.Core.ViewModels.ProductMeasures;
+﻿using Cirrious.FluentLayouts.Touch;
+using Diabetto.Core.ViewModels.ProductMeasures;
 using Diabetto.iOS.Sources.Products;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
@@ -13,6 +14,7 @@ namespace Diabetto.iOS.Views.ProductMeasures
     public partial class AddProductMeasureView : MvxTableViewController<AddProductMeasureViewModel>
     {
         private ProductSearchResultsTableViewSource _searchResultsSource;
+        private UIButton _closeButton;
 
         public override void ViewDidLoad()
         {
@@ -21,7 +23,35 @@ namespace Diabetto.iOS.Views.ProductMeasures
             ModalInPresentation = true;
             _searchResultsSource = new ProductSearchResultsTableViewSource(TableView);
 
+            _closeButton = new UIButton
+            {
+                VerticalAlignment = UIControlContentVerticalAlignment.Center,
+                HorizontalAlignment = UIControlContentHorizontalAlignment.Center,
+                Font = UIFont.SystemFontOfSize(17)
+            };
+
+            _closeButton.SetTitleColor(TableView.TintColor, UIControlState.Normal);
+            _closeButton.SetTitle("Close", UIControlState.Normal);
+
             TableView.Source = _searchResultsSource;
+
+            TableView.TableFooterView = new UIView
+            {
+                BackgroundColor = TableView.BackgroundColor,
+                Frame = new CoreGraphics.CGRect(
+                    0,
+                    0,
+                    View.Frame.Width,
+                    30)
+            };
+
+            TableView.TableFooterView.AddSubviews(_closeButton);
+            TableView.TableFooterView.SubviewsDoNotTranslateAutoresizingMaskIntoConstraints();
+
+            TableView.TableFooterView.AddConstraints(
+                _closeButton.WithSameHeight(TableView.TableFooterView),
+                _closeButton.WithSameWidth(TableView.TableFooterView)
+            );
 
             var searchBar = new UISearchBar();
             searchBar.SizeToFit();
@@ -33,6 +63,10 @@ namespace Diabetto.iOS.Views.ProductMeasures
             DefinesPresentationContext = true;
 
             var bindingSet = this.CreateBindingSet<AddProductMeasureView, AddProductMeasureViewModel>();
+
+            bindingSet
+                .Bind(_closeButton)
+                .To(v => v.CloseCommand);
 
             bindingSet
                 .Bind(searchBar)

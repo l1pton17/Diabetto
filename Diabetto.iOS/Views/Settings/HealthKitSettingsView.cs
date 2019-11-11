@@ -23,7 +23,7 @@ namespace Diabetto.iOS.Views.Settings
             base.ViewDidLoad();
 
             var bindingSet = this.CreateBindingSet<HealthKitSettingsView, HealthKitSettingsViewModel>();
-
+            
             bindingSet
                 .Bind(EnabledSwitch)
                 .To(v => v.IsEnabled);
@@ -31,6 +31,10 @@ namespace Diabetto.iOS.Views.Settings
             bindingSet
                 .Bind(ExportButton)
                 .To(v => v.ExportCommand);
+
+            bindingSet
+                .Bind(CloseButton)
+                .To(v => v.CloseCommand);
 
             bindingSet.Apply();
         }
