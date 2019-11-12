@@ -15,10 +15,6 @@ namespace Diabetto.iOS.Views.Settings
     {
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UIButton CloseButton { get; set; }
-
-        [Outlet]
-        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UISwitch EnabledSwitch { get; set; }
 
         [Outlet]
@@ -27,11 +23,6 @@ namespace Diabetto.iOS.Views.Settings
 
         void ReleaseDesignerOutlets ()
         {
-            if (CloseButton != null) {
-                CloseButton.Dispose ();
-                CloseButton = null;
-            }
-
             if (EnabledSwitch != null) {
                 EnabledSwitch.Dispose ();
                 EnabledSwitch = null;

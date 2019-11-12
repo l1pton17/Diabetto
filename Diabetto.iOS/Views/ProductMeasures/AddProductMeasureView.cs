@@ -23,6 +23,8 @@ namespace Diabetto.iOS.Views.ProductMeasures
             ModalInPresentation = true;
             _searchResultsSource = new ProductSearchResultsTableViewSource(TableView);
 
+            TableView.Source = _searchResultsSource;
+
             _closeButton = new UIButton
             {
                 VerticalAlignment = UIControlContentVerticalAlignment.Center,
@@ -32,8 +34,6 @@ namespace Diabetto.iOS.Views.ProductMeasures
 
             _closeButton.SetTitleColor(TableView.TintColor, UIControlState.Normal);
             _closeButton.SetTitle("Close", UIControlState.Normal);
-
-            TableView.Source = _searchResultsSource;
 
             TableView.TableFooterView = new UIView
             {
