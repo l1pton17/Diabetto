@@ -15,8 +15,6 @@ namespace Diabetto.iOS.Views.Settings
         ModalPresentationStyle = UIModalPresentationStyle.FormSheet)]
     public partial class HealthKitSettingsView : MvxTableViewController<HealthKitSettingsViewModel>
     {
-        private UIButton _closeButton;
-
         public HealthKitSettingsView(IntPtr handle) : base(handle)
         {
         }
@@ -25,33 +23,9 @@ namespace Diabetto.iOS.Views.Settings
         {
             base.ViewDidLoad();
 
-            _closeButton = new UIButton
-            {
-                VerticalAlignment = UIControlContentVerticalAlignment.Center,
-                HorizontalAlignment = UIControlContentHorizontalAlignment.Center,
-                Font = UIFont.SystemFontOfSize(17)
-            };
+            Title = "Health kit";
 
-            _closeButton.SetTitleColor(TableView.TintColor, UIControlState.Normal);
-            _closeButton.SetTitle("Close", UIControlState.Normal);
-
-            TableView.TableFooterView = new UIView
-            {
-                BackgroundColor = TableView.BackgroundColor,
-                Frame = new CoreGraphics.CGRect(
-                    0,
-                    0,
-                    View.Frame.Width,
-                    30)
-            };
-
-            TableView.TableFooterView.AddSubviews(_closeButton);
-            TableView.TableFooterView.SubviewsDoNotTranslateAutoresizingMaskIntoConstraints();
-
-            TableView.TableFooterView.AddConstraints(
-                _closeButton.WithSameHeight(TableView.TableFooterView),
-                _closeButton.WithSameWidth(TableView.TableFooterView)
-            );
+            NavigationItem.LeftBarButtonItem = new UIBarButtonItem(UIBarButtonSystemItem.Close);
 
             var bindingSet = this.CreateBindingSet<HealthKitSettingsView, HealthKitSettingsViewModel>();
             
@@ -64,7 +38,7 @@ namespace Diabetto.iOS.Views.Settings
                 .To(v => v.ExportCommand);
 
             bindingSet
-                .Bind(_closeButton)
+                .Bind(NavigationItem.LeftBarButtonItem)
                 .To(v => v.CloseCommand);
 
             bindingSet.Apply();
