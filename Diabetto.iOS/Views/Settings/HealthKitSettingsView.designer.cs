@@ -13,8 +13,25 @@ namespace Diabetto.iOS.Views.Settings
     [Register ("HealthKitSettingsView")]
     partial class HealthKitSettingsView
     {
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UISwitch EnabledSwitch { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIButton ExportButton { get; set; }
+
         void ReleaseDesignerOutlets ()
         {
+            if (EnabledSwitch != null) {
+                EnabledSwitch.Dispose ();
+                EnabledSwitch = null;
+            }
+
+            if (ExportButton != null) {
+                ExportButton.Dispose ();
+                ExportButton = null;
+            }
         }
     }
 }

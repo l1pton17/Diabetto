@@ -25,7 +25,10 @@ namespace Diabetto.iOS.Views.Settings
                 TableView,
                 UITableViewCellStyle.Default,
                 new NSString("SettingsOptionItem"),
-                "TitleText Name");
+                "TitleText Name")
+            {
+                DeselectAutomatically = true
+            };
 
             TableView.Source = _source;
 

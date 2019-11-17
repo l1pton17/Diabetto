@@ -1,6 +1,4 @@
-﻿
-using System;
-using Cirrious.FluentLayouts.Touch;
+﻿using System;
 using Diabetto.iOS.ViewModels.Settings;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.Platforms.Ios.Presenters.Attributes;
@@ -11,11 +9,13 @@ namespace Diabetto.iOS.Views.Settings
 {
     [MvxFromStoryboard(StoryboardName = "HealthKitSettingsView")]
     [MvxModalPresentation(
+        WrapInNavigationController = true,
         Animated = true,
         ModalPresentationStyle = UIModalPresentationStyle.FormSheet)]
     public partial class HealthKitSettingsView : MvxTableViewController<HealthKitSettingsViewModel>
     {
-        public HealthKitSettingsView(IntPtr handle) : base(handle)
+        public HealthKitSettingsView(IntPtr handle)
+            : base(handle)
         {
         }
 
@@ -24,11 +24,22 @@ namespace Diabetto.iOS.Views.Settings
             base.ViewDidLoad();
 
             Title = "Health kit";
+            ModalInPresentation = true;
 
-            NavigationItem.LeftBarButtonItem = new UIBarButtonItem(UIBarButtonSystemItem.Close);
+            if (ParentViewController is MvxNavigationController parent)
+            {
+                parent.View.BackgroundColor = UIColor.SystemGray5Color;
+            }
+
+            TableView.ContentInset = new UIEdgeInsets(30, 0, 0, 0);
+
+            NavigationItem.LeftBarButtonItem = new UIBarButtonItem
+            {
+                Title = "Close"
+            };
 
             var bindingSet = this.CreateBindingSet<HealthKitSettingsView, HealthKitSettingsViewModel>();
-            
+
             bindingSet
                 .Bind(EnabledSwitch)
                 .To(v => v.IsEnabled);
